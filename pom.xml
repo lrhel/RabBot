@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.github.lrhel</groupId>
+  <artifactId>RabBot</artifactId>
+  <version>0.0.1</version>
+  <name>RabBot</name>
+  <description>The Rabbit Bot </description>
+  
+  <repositories>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>de.btobastian</groupId>
+        <artifactId>Javacord</artifactId>
+        <version>a0c8f86</version>
+    </dependency>
+    
+    <dependency>
+	  <groupId>de.btobastian.sdcf4j</groupId>
+	  <artifactId>sdcf4j-core</artifactId>
+	  <version>v1.0.9</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>de.btobastian.sdcf4j</groupId>
+	  <artifactId>sdcf4j-javacord</artifactId>
+	  <version> c967c87</version>
+	</dependency>
+  </dependencies>
+</project>
