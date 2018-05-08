@@ -31,5 +31,6 @@
 	  <artifactId>sdcf4j-javacord</artifactId>
 	  <version> c967c87</version>
 	</dependency>
+	
   </dependencies>
 </project>

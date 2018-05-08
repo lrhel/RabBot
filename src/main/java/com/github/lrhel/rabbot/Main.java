@@ -18,19 +18,22 @@ public class Main {
 		FallbackLoggerConfiguration.setDebug(false);
 		FallbackLoggerConfiguration.setTrace(false);
 		
-        DiscordApi api = new DiscordApiBuilder().setToken(Config.TOKEN.toString()).login().join();
+        DiscordApi api = new DiscordApiBuilder().setToken(Config.DISCORD.toString()).login().join();
         System.out.println("Logged in!");	
         System.out.println(api.createBotInvite());
 
         //Command Handler & Option
         CommandHandler cmd = new JavacordHandler(api);
-        cmd.setDefaultPrefix("!");
+        cmd.setDefaultPrefix("rb.");
         
         //Registering 
         cmd.registerCommand(new PingCommand());
         cmd.registerCommand(new SandyCommand());
         cmd.registerCommand(new HelpCommand(cmd));
+        cmd.registerCommand(new ChallongeCommand());
         
+        // :EZ:
+        cmd.registerCommand(new ShitpostingCommand());
 
         //Join and Leave
         api.addServerJoinListener(event -> System.out.println("Joined server " + event.getServer().getName()));

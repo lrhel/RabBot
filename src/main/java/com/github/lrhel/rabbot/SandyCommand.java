@@ -11,7 +11,7 @@ import de.btobastian.sdcf4j.CommandExecutor;
 
 public class SandyCommand implements CommandExecutor {
 
-	@Command(aliases = {"sandy"}, description = "Complimente Sandy!", privateMessages = false)
+	@Command(aliases = {"sandy"}, description = "Complimente Sandy!", privateMessages = false, showInHelpPage = false)
 	public String onSandyCommand(TextChannel ch) {
 		MessageBuilder mbuilder = new MessageBuilder();
 		EmbedBuilder ebuilder = new EmbedBuilder();
@@ -23,7 +23,7 @@ public class SandyCommand implements CommandExecutor {
 	}
 	
 	private static String getCompliment() {
-		String table[] = {"belle", "gentille", "sympatoch", "mignonne", "magnifique", "divine"};
+		String table[] = {"belle", "gentille", "sympatoch", "mignonne", "magnifique", "divine", "authentique", "geniiiaaaale", "kawaiiii"};
 		Random rng = new Random(System.currentTimeMillis());
 		return "Sandy est la plus " + table[rng.nextInt(table.length)];
 	}
