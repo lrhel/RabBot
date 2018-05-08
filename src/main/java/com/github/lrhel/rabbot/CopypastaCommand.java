@@ -16,12 +16,12 @@ import com.github.lrhel.rabbot.config.Config;
 import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
 
-public class ShitpostingCommand implements CommandExecutor {
+public class CopypastaCommand implements CommandExecutor {
 
-	@Command(aliases = {"shitposting", "shitpost", "sp"}, description = "Shitposting!", privateMessages = false)
+	@Command(aliases = {"copypasta", "copy", "cp"}, description = "Copypasta!", privateMessages = false)
 	public String onShitpostingCommand(String[] arg, TextChannel ch, User usr) {
 		int nbOfShitposting = 0;
-		String path = "/home/koala/RabBot/shitposting.txt";
+		String path = "/home/koala/RabBot/copypasta.txt";
 		if(arg.length > 0) {
 			try {
 				nbOfShitposting = Integer.parseInt(arg[0]);
@@ -37,7 +37,7 @@ public class ShitpostingCommand implements CommandExecutor {
 						}
 						fw.write("\n");
 						fw.close();
-						ch.sendMessage("Shitposting added!");
+						ch.sendMessage("copypasta added!");
 					} catch (IOException e) {
 						e.printStackTrace();
 					} 
