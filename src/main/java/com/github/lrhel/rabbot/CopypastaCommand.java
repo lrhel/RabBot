@@ -29,7 +29,7 @@ public class CopypastaCommand implements CommandExecutor {
 				nbOfShitposting = 0;
 			}
 			if (nbOfShitposting == 0) {
-				if(arg[0].equals("add") && (usr.isBotOwner() || usr.getIdAsString().contentEquals(Config.SMATHID.toString()))) {
+				if(arg[0].equals("add") && (usr.isBotOwner() || usr.getIdAsString().contentEquals(Config.SMATHID.toString()) || usr.getIdAsString().contentEquals(Config.THUGA.toString()))) {
 					try {
 						FileWriter fw = new FileWriter(new File(path), true);
 						for(int i = 1; i < arg.length; i++) {
@@ -40,7 +40,7 @@ public class CopypastaCommand implements CommandExecutor {
 						ch.sendMessage("copypasta added!");
 					} catch (IOException e) {
 						e.printStackTrace();
-					} 
+					}
 				}
 			}
 		} else {
