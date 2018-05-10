@@ -35,6 +35,7 @@ public class Main {
         // :EZ:
         cmd.registerCommand(new ShitpostingCommand());
         cmd.registerCommand(new CopypastaCommand());
+        cmd.registerCommand(new ActiveCommand());
 
         //Join and Leave
         api.addServerJoinListener(event -> System.out.println("Joined server " + event.getServer().getName()));
