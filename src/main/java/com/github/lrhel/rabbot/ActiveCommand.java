@@ -19,10 +19,42 @@ public class ActiveCommand	implements CommandExecutor {
 				ArrayList<User> userList = new ArrayList<User>(server.getMembers());
 				String msg = "<@" + userList.get(rng.nextInt(userList.size())).getIdAsString() + "> y so active xdxdxd";
 				ch.sendMessage(msg);
-			} else {
+			} 
+			else if(arg.length == 2) {
 				ArrayList<User> userList = new ArrayList<User>(message.getMentionedUsers());
 				String msg;
-				if(userList.size() != 0) {
+				int i;
+				try {
+					i = Integer.parseInt(arg[1]);
+				} catch (NumberFormatException e) {
+					i = -1;
+				}
+				if(i == 0)
+					return "";
+				if(userList.size() == 1 && i != -1) {
+					for(User usr : userList) {
+						for(int j = 0; j <= i; j++) {
+							msg = usr.getMentionTag() + " y so active xdxdxd";
+							ch.sendMessage(msg);
+						}
+					}
+				} else {
+					userList = new ArrayList<User>(server.getMembers());
+					for(int j = 0; j <= i; j++) {
+					    for(User usr : userList) {
+					    	if(usr.getName().toLowerCase().contains(arg[0].toLowerCase()) || (usr.getNickname(server).isPresent() && usr.getNickname(server).get().toLowerCase().contains(arg[0].toLowerCase()))) {
+					    		msg = usr.getMentionTag() + " y so active xdxdxd";
+					    		ch.sendMessage(msg);
+					    		break;
+					    	}
+					    }
+					}
+				}
+			}	
+			else {
+				ArrayList<User> userList = new ArrayList<User>(message.getMentionedUsers());
+				String msg;
+				if(userList.size() != 0) {					
 					for(User usr : userList) {
 						msg = usr.getMentionTag() + " y so active xdxdxd";
 						ch.sendMessage(msg);
@@ -32,11 +64,11 @@ public class ActiveCommand	implements CommandExecutor {
 					userList = new ArrayList<User>(server.getMembers());
 					for(String args : arg) {
 					    for(User usr : userList) {
-						if(usr.getName().toLowerCase().contains(args.toLowerCase()) || (usr.getNickname(server).isPresent() && usr.getNickname(server).get().toLowerCase().contains(args.toLowerCase()))) {
-							msg = usr.getMentionTag() + " y so active xdxdxd";
-							ch.sendMessage(msg);
-							break;
-						}
+					    	if(usr.getName().toLowerCase().contains(args.toLowerCase()) || (usr.getNickname(server).isPresent() && usr.getNickname(server).get().toLowerCase().contains(args.toLowerCase()))) {
+					    		msg = usr.getMentionTag() + " y so active xdxdxd";
+					    		ch.sendMessage(msg);
+					    		break;
+					    	}
 					    }
 					}
 				}

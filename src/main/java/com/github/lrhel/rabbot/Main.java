@@ -31,6 +31,7 @@ public class Main {
         cmd.registerCommand(new SandyCommand());
         cmd.registerCommand(new HelpCommand(cmd));
         cmd.registerCommand(new ChallongeCommand());
+        cmd.registerCommand(new EchoCommand());
         
         // :EZ:
         cmd.registerCommand(new ShitpostingCommand());
