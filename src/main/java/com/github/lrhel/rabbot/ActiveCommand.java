@@ -13,8 +13,9 @@ import de.btobastian.sdcf4j.CommandExecutor;
 
 public class ActiveCommand	implements CommandExecutor {
 		@Command(aliases = {"active"}, privateMessages = false, description = "Ping someone and send active message!", showInHelpPage = false)
-		public String onActiveCommand(String[] arg, Server server, TextChannel ch, Message message) {
+		public String onActiveCommand(String[] arg, User users, Server server, TextChannel ch, Message message) {
 			Random rng = new Random(System.currentTimeMillis());
+			System.out.println(users.getName() + ": " + String.join(" ", arg));
 			if(arg.length == 0) {
 				ArrayList<User> userList = new ArrayList<User>(server.getMembers());
 				String msg = "<@" + userList.get(rng.nextInt(userList.size())).getIdAsString() + "> y so active xdxdxd";
