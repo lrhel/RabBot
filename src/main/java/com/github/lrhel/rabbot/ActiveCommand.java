@@ -1,6 +1,9 @@
 package com.github.lrhel.rabbot;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 import org.javacord.api.entity.channel.TextChannel;
@@ -15,7 +18,11 @@ public class ActiveCommand	implements CommandExecutor {
 		@Command(aliases = {"active"}, privateMessages = false, description = "Ping someone and send active message!", showInHelpPage = false)
 		public String onActiveCommand(String[] arg, User users, Server server, TextChannel ch, Message message) {
 			Random rng = new Random(System.currentTimeMillis());
-			System.out.println(users.getName() + ": " + String.join(" ", arg));
+			DateFormat df = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
+			Date date = new Date();
+			System.out.println("[" + df.format(date) + "] " + users.getName() + ": " + String.join(" ", arg));
+			ch.sendMessage(users.getMentionTag() + " rip urself");
+			/*
 			if(arg.length == 0) {
 				ArrayList<User> userList = new ArrayList<User>(server.getMembers());
 				String msg = "<@" + userList.get(rng.nextInt(userList.size())).getIdAsString() + "> y so active xdxdxd";
@@ -93,7 +100,7 @@ public class ActiveCommand	implements CommandExecutor {
 					    }
 					}
 				}
-			}
+				}*/
 			return "";
 		}
 }
