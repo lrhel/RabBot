@@ -21,16 +21,35 @@ public class ActiveCommand	implements CommandExecutor {
 			DateFormat df = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
 			Date date = new Date();
 			System.out.println("[" + df.format(date) + "] " + users.getName() + ": " + String.join(" ", arg));
-			ch.sendMessage(users.getMentionTag() + " rip urself");
-			/*
+			
 			if(arg.length == 0) {
 				ArrayList<User> userList = new ArrayList<User>(server.getMembers());
 				String msg = "<@" + userList.get(rng.nextInt(userList.size())).getIdAsString() + "> y so active xdxdxd";
 				ch.sendMessage(msg);
-			} 
-			else if(arg.length == 2) {
+			}
+			else {
 				ArrayList<User> userList = new ArrayList<User>(message.getMentionedUsers());
-				String msg;
+				if(userList.size() != 0) {
+					for(User usr : userList) {
+			    		String msg = usr.getMentionTag() + " y so active xdxdxd";
+			    		ch.sendMessage(msg);
+			    		break;				    	
+				    }
+				}
+				else {
+					userList = new ArrayList<User>(server.getMembers());
+					for(User usr : userList) {
+				    	if(usr.getName().toLowerCase().contains(arg[0].toLowerCase()) || (usr.getNickname(server).isPresent() && usr.getNickname(server).get().toLowerCase().contains(arg[0].toLowerCase()))) {
+				    		String msg = usr.getMentionTag() + " y so active xdxdxd";
+				    		ch.sendMessage(msg);
+				    		break;
+				    	}
+				    }
+				}
+			}
+/* 
+ * Old version 			
+			String msg;
 				int i;
 				try {
 					i = Integer.parseInt(arg[1]);
@@ -100,7 +119,8 @@ public class ActiveCommand	implements CommandExecutor {
 					    }
 					}
 				}
-				}*/
+				}
+*/
 			return "";
 		}
 }
