@@ -13,7 +13,7 @@ import de.btobastian.sdcf4j.handler.JavacordHandler;
 public class Main {
 
 	public static void main(String[] args) {
-		
+			
 		//set logger and tracer
 		FallbackLoggerConfiguration.setDebug(false);
 		FallbackLoggerConfiguration.setTrace(false);
@@ -33,11 +33,17 @@ public class Main {
         cmd.registerCommand(new ChallongeCommand());
         cmd.registerCommand(new EchoCommand());
         
+        //Updating stuff
+        cmd.registerCommand(new UpdateCommand());
+        
         // :EZ:
         cmd.registerCommand(new ShitpostingCommand());
         cmd.registerCommand(new CopypastaCommand());
         cmd.registerCommand(new ActiveCommand());
 
+
+
+        
         //Join and Leave
         api.addServerJoinListener(event -> System.out.println("Joined server " + event.getServer().getName()));
         api.addServerLeaveListener(event -> System.out.println("Leaved server " + event.getServer().getName()));
