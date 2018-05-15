@@ -13,6 +13,8 @@ public class UpdateCommand implements CommandExecutor {
 	@Command(aliases = {"update"}, privateMessages = false, description = "Update RabBot!", showInHelpPage = false)
 	public String onUpdateCommand(User usr) {
 		if(usr.isBotOwner()) {
+			new Thread(new Runnable() {
+				public void run(){
 			try {
 				Process process = new ProcessBuilder("/bin/sh", "update.sh").start();
 				BufferedReader reader = 
@@ -29,7 +31,10 @@ public class UpdateCommand implements CommandExecutor {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}	
+			}
+				}
+			}).start();
+			return "Updated :thinking:";
 		}
 		return "";
 	}
