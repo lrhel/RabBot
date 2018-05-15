@@ -24,6 +24,6 @@ public class UpdateCommand implements CommandExecutor {
 			}).start();
 			return "Updating... :thinking:";
 		}
-		return "";
+		return "Rip you're not the Bot Owner";
 	}
 }
