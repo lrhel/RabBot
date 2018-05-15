@@ -16,25 +16,13 @@ public class UpdateCommand implements CommandExecutor {
 			new Thread(new Runnable() {
 				public void run(){
 					try {
-						Process process = new ProcessBuilder("/bin/sh", "update.sh").start();
-						BufferedReader reader = 
-								new BufferedReader(new InputStreamReader(process.getInputStream()));
-						StringBuilder builder = new StringBuilder();
-						String line = null;
-						while ( (line = reader.readLine()) != null) {
-							builder.append(line);
-							builder.append(System.getProperty("line.separator"));
-						}
-						String result = builder.toString();
-						System.out.println(result);
-						System.exit(0);
+						new ProcessBuilder("/bin/sh", "update.sh").start();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
 			}).start();
-			return "Updated :thinking:";
+			return "Updating... :thinking:";
 		}
 		return "";
 	}
