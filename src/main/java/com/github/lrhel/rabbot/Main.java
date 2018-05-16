@@ -34,8 +34,9 @@ public class Main {
         cmd.registerCommand(new EchoCommand());
         cmd.registerCommand(new StrawpollCommand());
         
-        //Updating stuff
+        //Updating/Restarting stuff
         cmd.registerCommand(new UpdateCommand());
+        cmd.registerCommand(new RestartCommand());
         
         // :EZ:
         cmd.registerCommand(new ShitpostingCommand());
