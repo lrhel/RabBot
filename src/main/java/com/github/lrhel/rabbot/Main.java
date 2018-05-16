@@ -32,6 +32,7 @@ public class Main {
         cmd.registerCommand(new HelpCommand(cmd));
         cmd.registerCommand(new ChallongeCommand());
         cmd.registerCommand(new EchoCommand());
+        cmd.registerCommand(new StrawpollCommand());
         
         //Updating stuff
         cmd.registerCommand(new UpdateCommand());

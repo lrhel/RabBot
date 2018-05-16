@@ -1,8 +1,6 @@
 package com.github.lrhel.rabbot;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import org.javacord.api.entity.user.User;
 
