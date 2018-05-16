@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
@@ -20,7 +21,7 @@ public class ActiveCommand	implements CommandExecutor {
 			Random rng = new Random(System.currentTimeMillis());
 			DateFormat df = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
 			Date date = new Date();
-			System.out.println("[" + df.format(date) + "] " + users.getName() + ": " + String.join(" ", arg));
+			System.out.println("[" + df.format(date) + "] " + users.getName() + ": rb.active " + String.join(" ", arg));
 			
 			if(arg.length == 0) {
 				ArrayList<User> userList = new ArrayList<User>(server.getMembers());
@@ -28,6 +29,23 @@ public class ActiveCommand	implements CommandExecutor {
 				ch.sendMessage(msg);
 			}
 			else {
+				int arg_i;
+				try {
+					arg_i = Integer.parseInt(arg[arg.length - 1]);
+				} catch(NumberFormatException e) {
+					arg_i = 0;
+				} catch(ArrayIndexOutOfBoundsException e) {
+					arg_i = -1;
+				} 
+				if(arg_i == -1) {
+					try {
+						return server.getApi().getOwner().get().getMentionTag() + " Error on command. . . " + String.join(" ", arg);
+					} catch (InterruptedException | ExecutionException e) {
+						e.printStackTrace();
+						return "Error on Error... rip rip";
+					}
+				}
+				
 				ArrayList<User> userList = new ArrayList<User>(message.getMentionedUsers());
 				if(userList.size() != 0) {
 					for(User usr : userList) {
@@ -38,13 +56,18 @@ public class ActiveCommand	implements CommandExecutor {
 				}
 				else {
 					userList = new ArrayList<User>(server.getMembers());
-					for(User usr : userList) {
-				    	if(usr.getName().toLowerCase().contains(arg[0].toLowerCase()) || (usr.getNickname(server).isPresent() && usr.getNickname(server).get().toLowerCase().contains(arg[0].toLowerCase()))) {
-				    		String msg = usr.getMentionTag() + " y so active xdxdxd";
-				    		ch.sendMessage(msg);
-				    		break;
-				    	}
-				    }
+					if(arg_i == 0)
+						arg_i = 1;
+					for(String args : arg) {
+						for(User usr : userList) {
+					    	if(usr.getName().toLowerCase().contains(args.toLowerCase()) || (usr.getNickname(server).isPresent() && usr.getNickname(server).get().toLowerCase().contains(args.toLowerCase()))) {
+					    		String msg = usr.getMentionTag() + " y so active xdxdxd";
+					    		for(int j = 0; j < arg_i; j++)
+					    			ch.sendMessage(msg);
+					    		break;
+					    	}
+					    }
+					}
 				}
 			}
 /* 
