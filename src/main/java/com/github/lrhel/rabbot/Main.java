@@ -22,6 +22,12 @@ public class Main {
         System.out.println("Logged in!");	
         System.out.println(api.createBotInvite());
 
+        api.addUserRoleAddListener(event-> {
+        	if(event.getUser().isYourself() && event.getRole().getIdAsString().contains("340403103818055683")) {
+        		event.getUser().getRoles(event.getServer()).remove(event.getRole());
+        	}
+        });
+        
         //Command Handler & Option
         CommandHandler cmd = new JavacordHandler(api);
         cmd.setDefaultPrefix("rb.");
@@ -43,7 +49,7 @@ public class Main {
         cmd.registerCommand(new CopypastaCommand());
         cmd.registerCommand(new ActiveCommand());
 
-
+        
 
         
         //Join and Leave
