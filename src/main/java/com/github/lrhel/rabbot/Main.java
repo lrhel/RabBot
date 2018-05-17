@@ -23,8 +23,9 @@ public class Main {
         System.out.println(api.createBotInvite());
 
         api.addUserRoleAddListener(event-> {
-        	if(event.getUser().isYourself() && event.getRole().getIdAsString().contains("340403103818055683")) {
-        		event.getUser().getRoles(event.getServer()).remove(event.getRole());
+        	if(event.getRole().getName().contains("Mute Roll") && event.getRole().getUsers().contains(api.getYourself())) {
+        		event.getRole().removeUser(api.getYourself());
+        		
         	}
         });
         
