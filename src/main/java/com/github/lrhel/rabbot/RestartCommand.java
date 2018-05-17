@@ -12,7 +12,7 @@ import de.btobastian.sdcf4j.CommandExecutor;
 public class RestartCommand implements CommandExecutor {
 	@Command(aliases = {"restart"}, privateMessages = false, description = "Restart RabBot!", showInHelpPage = false)
 	public String onRestartCommand(User usr) {
-		if(usr.isBotOwner() || usr.getIdAsString().contentEquals(Config.SMATHID.toString()) ) {
+		if(usr.isBotOwner() || usr.getIdAsString().contentEquals(Config.SMATHID.toString())) {
 			new Thread(new Runnable() {
 				public void run(){
 					try {
