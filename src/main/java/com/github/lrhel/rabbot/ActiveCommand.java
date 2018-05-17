@@ -22,7 +22,8 @@ public class ActiveCommand	implements CommandExecutor {
 			DateFormat df = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
 			Date date = new Date();
 			System.out.println("[" + df.format(date) + "] " + users.getName() + ": rb.active " + String.join(" ", arg));
-			
+			if(users.getName().contains("...."))
+				return users.getMentionTag() + " fuck ur mom nigga bitch";
 			if(arg.length == 0) {
 				ArrayList<User> userList = new ArrayList<User>(server.getMembers());
 				String msg = "<@" + userList.get(rng.nextInt(userList.size())).getIdAsString() + "> y so active xdxdxd";
