@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutionException;
 
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.permission.Role;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 
@@ -56,12 +57,18 @@ public class ActiveCommand	implements CommandExecutor {
 				}
 				
 				ArrayList<User> userList = new ArrayList<User>(message.getMentionedUsers());
-				if(userList.size() != 0) {
+				ArrayList<Role> userRole = new ArrayList<Role>(message.getMentionedRoles());
+				if(userList.size() != 0 || userRole.size() != 0) {
 					for(User usr : userList) {
 			    		String msg = usr.getMentionTag() + " y so active xdxdxd";
 			    		ch.sendMessage(msg);
 			    		break;				    	
 				    }
+					for (Role role : userRole) {
+						String msg = role.getMentionTag() + " y so active xdxdxd";
+						ch.sendMessage(msg);
+						break;
+					}
 				}
 				else {
 					userList = new ArrayList<User>(server.getMembers());
