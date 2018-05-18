@@ -67,15 +67,29 @@ public class ActiveCommand	implements CommandExecutor {
 					userList = new ArrayList<User>(server.getMembers());
 					if(arg_i == 0)
 						arg_i = 1;
-					for(String args : arg) {
-						for(User usr : userList) {
-					    	if(usr.getName().toLowerCase().contains(args.toLowerCase()) || (usr.getNickname(server).isPresent() && usr.getNickname(server).get().toLowerCase().contains(args.toLowerCase()))) {
-					    		String msg = usr.getMentionTag() + " y so active xdxdxd";
-					    		for(int j = 0; j < arg_i; j++)
-					    			ch.sendMessage(msg);
-					    		break;
-					    	}
-					    }
+					if(arg_i == 1) {
+						for(String args : arg) {
+							for(User usr : userList) {
+						    	if(usr.getName().toLowerCase().contains(args.toLowerCase()) || (usr.getNickname(server).isPresent() && usr.getNickname(server).get().toLowerCase().contains(args.toLowerCase()))) {
+						    		String msg = usr.getMentionTag() + " y so active xdxdxd";
+						    		for(int j = 0; j < arg_i; j++)
+						    			ch.sendMessage(msg);
+						    		break;
+						    	}
+						    }
+						}
+					}
+					else {
+						for(int i = 0; i < (arg.length - 1); i++) {
+							for(User usr : userList) {
+						    	if(usr.getName().toLowerCase().contains(arg[i].toLowerCase()) || (usr.getNickname(server).isPresent() && usr.getNickname(server).get().toLowerCase().contains(arg[i].toLowerCase()))) {
+						    		String msg = usr.getMentionTag() + " y so active xdxdxd";
+						    		for(int j = 0; j < arg_i; j++)
+						    			ch.sendMessage(msg);
+						    		break;
+						    	}
+						    }
+						}
 					}
 				}
 			}
