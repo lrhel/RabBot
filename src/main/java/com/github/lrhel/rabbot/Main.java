@@ -50,7 +50,8 @@ public class Main {
         cmd.registerCommand(new CopypastaCommand());
         cmd.registerCommand(new ActiveCommand());
 
-        
+        // Other stuff
+        cmd.registerCommand(new RaidCommand());
 
         
         //Join and Leave
