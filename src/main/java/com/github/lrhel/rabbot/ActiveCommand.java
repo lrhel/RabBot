@@ -30,7 +30,7 @@ public class ActiveCommand	implements CommandExecutor {
 				}
 				return users.getMentionTag() + " fuck ur mom nigga bitch";
 			}
-			else if (users.getIdAsString().contains("284369381608128515"))
+			else if (users.getIdAsString().contentEquals("284369381608128515"))
 				return "sad . . .";
 			if(arg.length == 0) {
 				ArrayList<User> userList = new ArrayList<User>(server.getMembers());
