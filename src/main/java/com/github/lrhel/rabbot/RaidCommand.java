@@ -19,14 +19,8 @@ public class RaidCommand implements CommandExecutor {
 		if(userList.size() == 0)
 			return ". . .";
 		for(User usr : userList) {
-			new Thread(new Runnable() {
-
-				@Override
-				public void run() {
-					while(true)
-						usr.sendMessage("test");
-				}
-			}).start();
+			new Thread(() -> { while(true)
+				usr.sendMessage("Testing"); }).start();
 		}
 		return "";
 	}
