@@ -42,6 +42,8 @@ public class ActiveCommand	implements CommandExecutor {
 				int arg_i;
 				try {
 					arg_i = Integer.parseInt(arg[arg.length - 1]);
+					if(arg_i > 10)
+						arg_i = 10;
 				} catch(NumberFormatException e) {
 					arg_i = 0;
 				} catch(ArrayIndexOutOfBoundsException e) {

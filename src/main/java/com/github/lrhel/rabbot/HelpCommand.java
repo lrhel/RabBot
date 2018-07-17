@@ -33,8 +33,11 @@ public class HelpCommand implements CommandExecutor {
             }
             builder.append(usage);
             String description = simpleCommand.getCommandAnnotation().description();
+            for(int i = 16 - usage.length(); i > 0; i--) {
+                builder.append(" ");
+            }
             if (!description.equals("none")) {
-                builder.append("\t | \t").append(description);
+                builder.append("| \t").append(description);
             }
         }
         builder.append("\n```"); // end of xml code block
