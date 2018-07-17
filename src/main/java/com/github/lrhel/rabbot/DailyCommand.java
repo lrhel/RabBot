@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.util.Random;
 
 public class DailyCommand implements CommandExecutor {
-    private static final int INTERVAL =  60 * 60 * 1000;
+    private static final int INTERVAL =  2 * 60 * 1000;
 
     @Command(aliases = {"daily"}, description = "Daily money!")
     public String dailyCommand(User user){

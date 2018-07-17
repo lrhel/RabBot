@@ -18,13 +18,16 @@ public class PokemonCommand implements CommandExecutor {
     private static int TOTAL_PKMN = 802;
     private static int INTERVAL = 30 * 1000;
 
-    @Command(aliases = {"pokemon", "pkmn"}, description = "Catch a Pokemon")
+    @Command(aliases = {"pokemon", "pkmn"}, description = "Catch a Pokemon", async = true)
     public String onCommand(User user, TextChannel textChannel){
         PokeApi pokeApi = new PokeApiClient();
         Random rng = new Random(System.currentTimeMillis());
         Pokemon pokemon;
-        pokemon = pokeApi.getPokemon(rng.nextInt(TOTAL_PKMN) + 1);
-
+        try {
+            pokemon = pokeApi.getPokemon(rng.nextInt(TOTAL_PKMN) + 1);
+        } catch (Exception e) {
+            return "Sorry... The PokeAPI is down...";
+        }
         String name = pokemon.getName();
         String sql = null;
 

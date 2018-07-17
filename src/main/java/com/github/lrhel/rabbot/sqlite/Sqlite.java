@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 
 public class Sqlite {
 
-    Connection c;
+    private Connection c;
 
     private Sqlite(){
         try {

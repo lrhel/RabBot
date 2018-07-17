@@ -44,6 +44,7 @@ public class Main {
         //Money Stuff
         cmd.registerCommand(new DailyCommand());
         cmd.registerCommand(new MoneyCommand());
+        cmd.registerCommand(new RouletteCommand());
 
 
         //Pokemon Stuff
