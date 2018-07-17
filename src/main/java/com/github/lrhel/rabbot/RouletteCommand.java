@@ -60,7 +60,7 @@ public class RouletteCommand implements CommandExecutor {
                 pstmt.setInt(1, win + money);
                 pstmt.setString(2, user.getIdAsString());
                 pstmt.executeUpdate();
-                return spin + "\nYeaaahhh, you win " + (win + amount);
+                return spin + "\nYeaaahhh, you win " + (win + amount) + "$";
 
 
             } else {
