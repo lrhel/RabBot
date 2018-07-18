@@ -3,6 +3,7 @@ package com.github.lrhel.rabbot;
 import com.github.lrhel.rabbot.sqlite.Sqlite;
 import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
+import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 
 import java.sql.Connection;
@@ -11,7 +12,7 @@ import java.sql.ResultSet;
 
 public class RouletteCommand implements CommandExecutor {
     @Command(aliases = {"roulette"}, description = "Bet money on the Roulette")
-    public String rouletteCommand(User user, String[] param){
+    public String rouletteCommand(User user, Server server, String[] param){
         Connection c = Sqlite.getInstance().getConnection();
         Roulette roulette = Roulette.getInstance();
         int amount;
@@ -36,9 +37,9 @@ public class RouletteCommand implements CommandExecutor {
             if(rs.next()){
                 int money = rs.getInt("money");
                 if(amount <= 0)
-                    return "Not a valid bet";
+                    return  "**" + user.getDisplayName(server) + "** not a valid bet";
                 if(money < amount)
-                    return "Sorry, not enough money!";
+                    return "Sorry **" + user.getDisplayName(server) + "**, not enough money!";
                 String spin = roulette.spin();
                 if(param[1].equalsIgnoreCase(spin.split(" ")[0])){
                     win = 35 * amount;
@@ -52,7 +53,7 @@ public class RouletteCommand implements CommandExecutor {
                     pstmt.setInt(1, money - amount);
                     pstmt.setString(2, user.getIdAsString());
                     pstmt.executeUpdate();
-                    return spin + "\nSorry, you loose";
+                    return "**" + spin + "**" + "\nSorry **" + user.getDisplayName(server) + "**, you lose";
                 }
 
                 sql = "UPDATE money SET money = ? WHERE user_id = ?";
@@ -60,11 +61,11 @@ public class RouletteCommand implements CommandExecutor {
                 pstmt.setInt(1, win + money);
                 pstmt.setString(2, user.getIdAsString());
                 pstmt.executeUpdate();
-                return spin + "\nYeaaahhh, you win " + (win + amount) + "$";
+                return "**" + spin + "**\nYeaaahhh **" + user.getDisplayName(server) + "**, you win **" + (win + amount) + "$**";
 
 
             } else {
-                return "Sorry, not enough money!";
+                return "Sorry **" + user.getDisplayName(server) +  "**, not enough money!";
             }
         } catch (Exception e) {
             e.printStackTrace();
