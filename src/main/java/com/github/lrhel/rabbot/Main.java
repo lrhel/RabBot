@@ -32,8 +32,13 @@ public class Main {
         //Command Handler & Option
         CommandHandler cmd = new JavacordHandler(api);
         cmd.setDefaultPrefix("rb.");
-        
-        //Registering 
+        api.updateActivity("rb.help");
+
+        //Moderation Stuff
+        cmd.registerCommand(new KickCommand());
+        cmd.registerCommand(new BanCommand());
+
+        //Stupid Stuff
         cmd.registerCommand(new PingCommand());
         cmd.registerCommand(new SandyCommand());
         cmd.registerCommand(new HelpCommand(cmd));
@@ -45,6 +50,7 @@ public class Main {
         cmd.registerCommand(new DailyCommand());
         cmd.registerCommand(new MoneyCommand());
         cmd.registerCommand(new RouletteCommand());
+        cmd.registerCommand(new GiveMoneyCommand());
 
 
         //Pokemon Stuff
