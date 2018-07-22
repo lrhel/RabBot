@@ -1,4 +1,4 @@
-package com.github.lrhel.rabbot;
+package com.github.lrhel.rabbot.command.pokemon;
 
 import com.github.lrhel.rabbot.sqlite.Sqlite;
 import de.btobastian.sdcf4j.Command;

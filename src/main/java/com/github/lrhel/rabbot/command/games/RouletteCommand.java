@@ -1,5 +1,6 @@
-package com.github.lrhel.rabbot;
+package com.github.lrhel.rabbot.command.games;
 
+import com.github.lrhel.rabbot.Roulette;
 import com.github.lrhel.rabbot.sqlite.Sqlite;
 import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;

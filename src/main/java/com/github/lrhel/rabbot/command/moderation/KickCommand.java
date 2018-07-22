@@ -1,4 +1,4 @@
-package com.github.lrhel.rabbot;
+package com.github.lrhel.rabbot.command.moderation;
 
 import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;

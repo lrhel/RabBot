@@ -1,4 +1,4 @@
-package com.github.lrhel.rabbot;
+package com.github.lrhel.rabbot.command.misc;
 
 import java.io.BufferedInputStream;
 import java.io.File;

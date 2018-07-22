@@ -1,5 +1,14 @@
 package com.github.lrhel.rabbot;
 
+import com.github.lrhel.rabbot.command.admin.*;
+import com.github.lrhel.rabbot.command.games.RouletteCommand;
+import com.github.lrhel.rabbot.command.misc.*;
+import com.github.lrhel.rabbot.command.moderation.*;
+import com.github.lrhel.rabbot.command.money.DailyCommand;
+import com.github.lrhel.rabbot.command.money.GiveMoneyCommand;
+import com.github.lrhel.rabbot.command.money.MoneyCommand;
+import com.github.lrhel.rabbot.command.pokemon.InventoryCommand;
+import com.github.lrhel.rabbot.command.pokemon.PokemonCommand;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.util.logging.FallbackLoggerConfiguration;
@@ -60,6 +69,7 @@ public class Main {
         //Updating/Restarting stuff
         cmd.registerCommand(new UpdateCommand());
         cmd.registerCommand(new RestartCommand());
+        cmd.registerCommand(new DisconnectCommand());
         
         // :EZ:
         cmd.registerCommand(new ShitpostingCommand());
@@ -68,11 +78,15 @@ public class Main {
 
         // Other stuff
         cmd.registerCommand(new RaidCommand());
+        cmd.registerCommand(new GetServerCommand());
+        cmd.registerCommand(new GetCommand());
 
         
         //Join and Leave
         api.addServerJoinListener(event -> System.out.println("Joined server " + event.getServer().getName()));
         api.addServerLeaveListener(event -> System.out.println("Leaved server " + event.getServer().getName()));
+
+
 	}
 
 }

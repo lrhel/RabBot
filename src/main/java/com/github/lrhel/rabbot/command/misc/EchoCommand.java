@@ -1,4 +1,4 @@
-package com.github.lrhel.rabbot;
+package com.github.lrhel.rabbot.command.misc;
 
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.user.User;

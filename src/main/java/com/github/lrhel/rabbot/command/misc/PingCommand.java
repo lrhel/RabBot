@@ -1,4 +1,4 @@
-package com.github.lrhel.rabbot;
+package com.github.lrhel.rabbot.command.misc;
 
 import java.util.ArrayList;
 import java.util.Random;

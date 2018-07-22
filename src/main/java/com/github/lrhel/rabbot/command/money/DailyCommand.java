@@ -1,4 +1,4 @@
-package com.github.lrhel.rabbot;
+package com.github.lrhel.rabbot.command.money;
 
 import com.github.lrhel.rabbot.sqlite.Sqlite;
 import de.btobastian.sdcf4j.Command;
@@ -36,7 +36,7 @@ public class DailyCommand implements CommandExecutor {
             if (rs.next()) {
                 if ((rs.getInt("timestamp") + INTERVAL) > (System.currentTimeMillis() % Integer.MAX_VALUE)) {
                     int seconde = ((rs.getInt("timestamp") - Math.toIntExact(System.currentTimeMillis() % Integer.MAX_VALUE) + INTERVAL) / (1000));
-                    return "Try in " + (seconde / 60) + "minutes and " + (seconde % 60) + "seconds";
+                    return "Try in " + (seconde / 60) + " minutes and " + (seconde % 60) + " seconds";
                 } else {
                     money += rs.getInt("money");
                     sql = "UPDATE money SET money = ?, timestamp = ? WHERE user_id = ?";
@@ -45,7 +45,7 @@ public class DailyCommand implements CommandExecutor {
                     pstmt.setInt(2, (int) (System.currentTimeMillis() % Integer.MAX_VALUE));
                     pstmt.setString(3, user.getIdAsString());
                     pstmt.executeUpdate();
-                    return "Yeahhh **" + user.getDisplayName(server) + "**, you got **" + (money - rs.getInt("money")) + "$**";
+                    return "Yeahhh **" + user.getName() + "**, you got **" + (money - rs.getInt("money")) + "$**";
                 }
 
             } else {
@@ -55,7 +55,7 @@ public class DailyCommand implements CommandExecutor {
                 pstmt.setInt(2, money);
                 pstmt.setInt(3, (int) (System.currentTimeMillis() % Integer.MAX_VALUE));
                 pstmt.executeUpdate();
-                return "Yeahhh **" + user.getDisplayName(server) + "**, you got **" + money + "$**";
+                return "Yeahhh **" + user.getName() + "**, you got **" + money + "$**";
             }
         } catch (Exception e) {
             e.printStackTrace();

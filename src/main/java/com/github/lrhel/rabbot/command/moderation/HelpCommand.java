@@ -1,4 +1,4 @@
-package com.github.lrhel.rabbot;
+package com.github.lrhel.rabbot.command.moderation;
 
 import org.javacord.api.entity.message.MessageBuilder;
 

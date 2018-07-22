@@ -1,4 +1,4 @@
-package com.github.lrhel.rabbot;
+package com.github.lrhel.rabbot.command.admin;
 
 import java.io.IOException;
 
@@ -11,16 +11,14 @@ public class UpdateCommand implements CommandExecutor {
 	@Command(aliases = {"update"}, privateMessages = false, description = "Update RabBot!", showInHelpPage = false)
 	public String onUpdateCommand(User usr) {
 		if(usr.isBotOwner()) {
-			new Thread(new Runnable() {
-				public void run(){
-					try {
-						new ProcessBuilder("/bin/sh", "update.sh").start();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+			new Thread(() -> {
+				try {
+					new ProcessBuilder("/bin/sh", "update.sh").start();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}).start();
-			return "Updating... :thinking:";
+			return "Updating... :thinking: :rabbit:";
 		}
 		return "Rip you're not the Bot Owner";
 	}
