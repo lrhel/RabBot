@@ -1,6 +1,7 @@
 package com.github.lrhel.rabbot;
 
 import com.github.lrhel.rabbot.command.admin.*;
+import com.github.lrhel.rabbot.command.games.BlackJackCommand;
 import com.github.lrhel.rabbot.command.games.RouletteCommand;
 import com.github.lrhel.rabbot.command.misc.*;
 import com.github.lrhel.rabbot.command.moderation.*;
@@ -60,6 +61,7 @@ public class Main {
         cmd.registerCommand(new MoneyCommand());
         cmd.registerCommand(new RouletteCommand());
         cmd.registerCommand(new GiveMoneyCommand());
+        cmd.registerCommand(new BlackJackCommand());
 
 
         //Pokemon Stuff
