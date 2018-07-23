@@ -6,10 +6,10 @@ import java.util.Collections;
 import java.util.Stack;
 
 public class Cards {
-    public static final int CORAZON = 0;
-    public static final int PIKA = 1;
-    public static final int TREBOL = 2;
-    public static final int DIAMANTE = 3;
+    private static final int CORAZON = 0;
+    private static final int PIKA = 1;
+    private static final int TREBOL = 2;
+    private static final int DIAMANTE = 3;
 
     private Stack<Card> deck;
 
@@ -26,7 +26,7 @@ public class Cards {
         this.shuffle();
     }
 
-    public void shuffle() {
+    private void shuffle() {
         Collections.shuffle(this.deck);
     }
 
@@ -38,16 +38,16 @@ public class Cards {
         private int symbole;
         private int value;
 
-        public Card(int value, int symbole) {
+        Card(int value, int symbole) {
             this.setSymbole(symbole);
             this.setValue(value);
         }
 
-        public int getSymbole() {
+        int getSymbole() {
             return symbole;
         }
 
-        public String getSymboleEmoji(){
+        String getSymboleEmoji(){
             switch (this.getSymbole()) {
                 case CORAZON:
                     return EmojiParser.parseToUnicode(":hearts:");
@@ -74,14 +74,15 @@ public class Cards {
             this.value = value;
         }
 
+        @Override
         public String toString(){
             String string = "";
             switch (this.getValue()) {
                 case 11:
-                    string += "J";
+                    string += " J";
                     break;
                 case 12:
-                    string += "D";
+                    string += "Q";
                     break;
                 case 13:
                     string += "K";
@@ -90,7 +91,7 @@ public class Cards {
                     string += this.getValue();
                     break;
             }
-            return string + " " + this.getSymboleEmoji();
+            return this.getValue() >= 10 ? string + " " + this.getSymboleEmoji() : string + "  " + this.getSymboleEmoji();
         }
     }
 }

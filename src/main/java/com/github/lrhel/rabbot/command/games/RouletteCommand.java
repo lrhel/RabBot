@@ -21,11 +21,11 @@ public class RouletteCommand implements CommandExecutor {
 
         String sql = "SELECT * FROM money WHERE user_id = ?";
 
-        if(param.length != 2){
-            return "Usage: ```rb.roulette [amount] [0-36 | RED/BLACK | ODD/EVEN]```";
+        if(param.length > 2){
+            return showHelp();
         } else {
             try {
-                amount = Integer.parseInt(param[0]);
+                amount = param.length == 1 ? 1 : Integer.parseInt(param[0]);
             } catch (NumberFormatException e) {
                 return "Not a valid bet";
             }
@@ -42,10 +42,18 @@ public class RouletteCommand implements CommandExecutor {
                 if(money < amount)
                     return "Sorry **" + user.getDisplayName(server) + "**, not enough money!";
                 String spin = roulette.spin();
-                if(param[1].equalsIgnoreCase(spin.split(" ")[0])){
+
+                if(param.length == 2 && param[1].equalsIgnoreCase(spin.split(" ")[0])){
                     win = 35 * amount;
                 }
-                else if(param[1].equalsIgnoreCase(spin.split(" ")[1]) || (!spin.split(" ")[0].equalsIgnoreCase("0") && param[1].equalsIgnoreCase(spin.split(" ")[2]))){
+                else if(param.length == 2 && (param[1].equalsIgnoreCase(spin.split(" ")[1]) || (!spin.split(" ")[0].equalsIgnoreCase("0") && param[1].equalsIgnoreCase(spin.split(" ")[2])))){
+                    win = amount;
+                }
+
+                else if(param.length == 1 && param[0].equalsIgnoreCase(spin.split(" ")[0])){
+                    win = 35 * amount;
+                }
+                else if(param.length == 1 && (param[0].equalsIgnoreCase(spin.split(" ")[1]) || (!spin.split(" ")[0].equalsIgnoreCase("0") && param[0].equalsIgnoreCase(spin.split(" ")[2])))){
                     win = amount;
                 }
                 else {
@@ -72,5 +80,9 @@ public class RouletteCommand implements CommandExecutor {
             e.printStackTrace();
         }
         return "";
+    }
+
+    private String showHelp() {
+        return "**Usage:**\n```rb.roulette [amount] [0-36 | RED/BLACK | ODD/EVEN]```";
     }
 }

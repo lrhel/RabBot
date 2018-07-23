@@ -19,7 +19,7 @@ public class InventoryCommand implements CommandExecutor {
         try {
             final String sql = "SELECT PKMN, PKMN_NAME, COUNT(*) as NB FROM CATCH WHERE DISCORD_ID = ? GROUP BY PKMN_NAME ORDER BY PKMN LIMIT ? OFFSET ?";
             final int limit = 20;
-            String result = "```css\n";
+            StringBuilder result = new StringBuilder("```css\n");
             Offset offset = new Offset();
 
             Connection c = Sqlite.getInstance().getConnection();
@@ -29,19 +29,24 @@ public class InventoryCommand implements CommandExecutor {
             pstmt.setInt(3, offset.getOffset());
             ResultSet rs = pstmt.executeQuery();
             while(rs.next()){
-                result += "#" + rs.getString("PKMN");
-                result += Integer.parseInt(rs.getString("PKMN")) < 100 ? " " : "";
-                result += Integer.parseInt(rs.getString("PKMN")) < 10 ? " " : "";
-                result += " " + rs.getString("PKMN_NAME") + " x" + rs.getInt("NB") + "\n";
+                result.append("#");
+                result.append(rs.getString("PKMN"));
+                result.append(Integer.parseInt(rs.getString("PKMN")) < 100 ? " " : "");
+                result.append(Integer.parseInt(rs.getString("PKMN")) < 10 ? " " : "");
+                result.append(" ");
+                result.append(rs.getString("PKMN_NAME"));
+                result.append(" x");
+                result.append(rs.getInt("NB"));
+                result.append("\n");
             }
-            result += "```";
-            Message msg = textChannel.sendMessage(result).get();
+            result.append("```");
+            Message msg = textChannel.sendMessage(result.toString()).get();
             msg.addReaction(EmojiParser.parseToUnicode(":arrow_left:")); //left arrow
             msg.addReaction(EmojiParser.parseToUnicode(":arrow_right:")); //right arrow
             msg.addReaction(EmojiParser.parseToUnicode(":x:"));//X cross❌❌ ❌
             msg.addReactionAddListener(event -> {
                 try {
-                    String result1;
+                    StringBuilder result1 = new StringBuilder();
                     PreparedStatement pstmt1;
                     if (event.getEmoji().equalsEmoji(EmojiParser.parseToUnicode(":arrow_left:")) && event.getUser().getId() == user.getId()) { //left arrow
                         if (offset.getOffset() != 0) {
@@ -51,12 +56,17 @@ public class InventoryCommand implements CommandExecutor {
                             pstmt1.setInt(2, limit);
                             pstmt1.setInt(3, offset.getOffset());
                             ResultSet rs1 = pstmt1.executeQuery();
-                            result1 = "```css\n";
+                            result1.append("```css\n");
                             while (rs1.next()) {
-                                result1 += "#" + rs1.getString("PKMN") + " " + rs1.getString("PKMN_NAME") + " x" + rs1.getInt("NB") + "\n";
+                                result1.append("#");
+                                result1.append(rs1.getString("PKMN"));
+                                result1.append(" ");
+                                result1.append(rs1.getString("PKMN_NAME"));
+                                result1.append(" x");result1.append(rs1.getInt("NB"));
+                                result1.append("\n");
                             }
-                            result1 += "```";
-                            msg.edit(result1);
+                            result1.append("```");
+                            msg.edit(result1.toString());
                         }
                     }
                     if (event.getEmoji().equalsEmoji(EmojiParser.parseToUnicode(":arrow_right:")) && event.getUser().getId() == user.getId()) { //right arrow
@@ -66,13 +76,19 @@ public class InventoryCommand implements CommandExecutor {
                         pstmt1.setInt(2, limit);
                         pstmt1.setInt(3, offset.getOffset());
                         ResultSet rs1 = pstmt1.executeQuery();
-                        result1 = "```css\n";
+                        result1.append("```css\n");
                         while (rs1.next()) {
-                            result1 += "#" + rs1.getString("PKMN") + " " + rs1.getString("PKMN_NAME") + " x" + rs1.getInt("NB") + "\n";
+                            result1.append("#");
+                            result1.append(rs1.getString("PKMN"));
+                            result1.append(" ");
+                            result1.append(rs1.getString("PKMN_NAME"));
+                            result1.append(" x");
+                            result1.append(rs1.getInt("NB"));
+                            result1.append("\n");
                         }
-                        if(!result1.contentEquals("```\n")) {
-                            result1 += "```";
-                            msg.edit(result1);
+                        if(!result1.toString().contentEquals("```css\n")) {
+                            result1.append("```");
+                            msg.edit(result1.toString());
                         }
                         else
                             offset.minusOffset(limit);
@@ -95,19 +111,19 @@ public class InventoryCommand implements CommandExecutor {
     private class Offset{
         private int offset;
 
-        public Offset(){
+        Offset(){
             this.offset = 0;
         }
 
-        public int getOffset() {
+        int getOffset() {
             return offset;
         }
 
-        public void plusOffset(int limit) {
+        void plusOffset(int limit) {
             this.offset += limit;
         }
 
-        public void minusOffset(int limit) {
+        void minusOffset(int limit) {
             this.offset -= limit;
         }
     }

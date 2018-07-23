@@ -15,9 +15,14 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class BlackJackCommand implements CommandExecutor {
     private static final int INTERVAL = 30 * 1000;
-    public static ArrayList<User> using = new ArrayList<>();
+    private static ArrayList<User> using = new ArrayList<>();
 
-    @Command(aliases = {"blackjack"}, description = "BlackJack 21", showInHelpPage = false, async = true)
+
+    private static EmbedBuilder getEmbed(){
+        return new EmbedBuilder().setAuthor("BlackJack 21", "", "");
+    }
+
+    @Command(aliases = {"blackjack", "21"}, description = "BlackJack 21", async = true)
     public String onBlackJackCommand(User user, TextChannel textChannel, String[] arg, DiscordApi api) {
         int amount;
         Cards deck = new Cards();
@@ -46,7 +51,7 @@ public class BlackJackCommand implements CommandExecutor {
         bank.add(deck.draw());
         player.add(deck.draw());
 
-        textChannel.sendMessage(player.addEmbed(bank.addEmbed(new EmbedBuilder().setAuthor("BlackJack 21", "", ""))));
+        textChannel.sendMessage(player.addEmbed(bank.addEmbed(getEmbed())));
         textChannel.sendMessage("`Hit` `Stand`");
 
         final long timestamp = System.currentTimeMillis();
@@ -61,8 +66,8 @@ public class BlackJackCommand implements CommandExecutor {
                         stand.set(true);
                         lm.get().remove();
                     }
-                    if(!stand.is()) {
-                        textChannel.sendMessage(player.addEmbed(bank.addEmbed(new EmbedBuilder().setAuthor("BlackJack 21", "", ""))));
+                    if(stand.isNot()) {
+                        textChannel.sendMessage(player.addEmbed(bank.addEmbed(getEmbed())));
                         textChannel.sendMessage("`Hit` `Stand`");
                     }
                 }
@@ -73,7 +78,7 @@ public class BlackJackCommand implements CommandExecutor {
             }
         }).removeAfter(INTERVAL, TimeUnit.MILLISECONDS));
 
-        while(!stand.is()) {
+        while(stand.isNot()) {
             Thread.onSpinWait();
         }
 
@@ -119,20 +124,20 @@ public class BlackJackCommand implements CommandExecutor {
         private ArrayList<Cards.Card> hand;
         private String name;
 
-        public Player() {
+        Player() {
             hand = new ArrayList<>();
         }
 
-        public Player(String username) {
+        Player(String username) {
             this();
             this.name = username;
         }
 
-        public void add(Cards.Card card) {
+        void add(Cards.Card card) {
             this.hand.add(card);
         }
 
-        public int getTotalValue() {
+        int getTotalValue() {
             int total = 0;
 
             for (Cards.Card card : hand) {
@@ -147,25 +152,23 @@ public class BlackJackCommand implements CommandExecutor {
             return total;
         }
 
-        public String getName() {
+        String getName() {
             return name;
         }
 
-        public EmbedBuilder getEmbed(){
-            return new EmbedBuilder().setAuthor("BlackJack 21", "", "");
-        }
-
-        public synchronized EmbedBuilder addEmbed(EmbedBuilder embedBuilder) {
+        synchronized EmbedBuilder addEmbed(EmbedBuilder embedBuilder) {
             return embedBuilder.addField(this.getName() + "'s hand", this.toString() + "\n").addInlineField("Total: " + String.valueOf(this.getTotalValue()), "\u200b");
         }
 
         @Override
         public synchronized String toString(){
-            String string = "";
+            StringBuilder string = new StringBuilder();
 
-            for(Cards.Card card : hand)
-                string += card.toString() + "\n";
-            return string;
+            for(Cards.Card card : hand) {
+                string.append(card.toString());
+                string.append("\n");
+            }
+            return string.toString();
         }
 
     }
@@ -173,16 +176,16 @@ public class BlackJackCommand implements CommandExecutor {
     private class ExtendedBoolean {
         boolean bool;
 
-        public ExtendedBoolean(boolean value) {
+        ExtendedBoolean(boolean value) {
             this.set(value);
         }
 
-        public void set(boolean bool) {
+        void set(boolean bool) {
             this.bool = bool;
         }
 
-        public boolean is() {
-            return this.bool;
+        boolean isNot() {
+            return !this.bool;
         }
     }
 }
