@@ -52,6 +52,7 @@ public class Main {
         cmd.registerCommand(new PingCommand());
         cmd.registerCommand(new SandyCommand());
         cmd.registerCommand(new HelpCommand(cmd));
+        cmd.registerCommand(new InfoCommand());
         //cmd.registerCommand(new ChallongeCommand());
         cmd.registerCommand(new EchoCommand());
         //cmd.registerCommand(new StrawpollCommand());
