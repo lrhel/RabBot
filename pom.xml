@@ -68,7 +68,7 @@
 		<dependency>
 			<groupId>de.btobastian.sdcf4j</groupId>
 			<artifactId>sdcf4j-javacord</artifactId>
-			<version>c967c87</version>
+			<version>6a08a94</version>
 		</dependency>
 
 		<dependency>

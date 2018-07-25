@@ -1,6 +1,7 @@
 package com.github.lrhel.rabbot.command.games;
 
 import com.github.lrhel.rabbot.Cards;
+import com.github.lrhel.rabbot.Money;
 import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
 import org.javacord.api.DiscordApi;
@@ -26,93 +27,209 @@ public class BlackJackCommand implements CommandExecutor {
     public String onBlackJackCommand(User user, TextChannel textChannel, String[] arg, DiscordApi api) {
         int amount;
         Cards deck = new Cards();
-        Player player;
+        ArrayList<Player> players = new ArrayList<>();
+
         Player bank;
+        ExtendedBoolean splitted = new ExtendedBoolean(false);
+        StringBuilder options = new StringBuilder();
+
+        if(arg.length != 1) {
+            System.out.println("Blackjack: arg lenght not 1, value: " + arg.length);
+
+            return showHelp();
+        }
+        try {
+            amount = Integer.parseInt(arg[0]);
+        } catch (Exception e) {
+            System.out.println("exception");
+            return showHelp();
+        }
+        if(amount <= 0 || amount > Money.getMoney(user)) {
+            System.out.println("Blackjack: not enough money");
+            return showHelp();
+        }
 
         if(using.contains(user))
             return "";
         else
             using.add(user);
-//        if(arg.length != 1)
-//            return showHelp();
-//        try {
-//            amount = Integer.parseInt(arg[0]);
-//        } catch (Exception e) {
-//            return showHelp();
-//        }
-//        if(amount <= 0)
-//            return showHelp();
 
-        player = new Player(user.getName());
         bank = new Player("Bank");
 
-        //Draw one card each
-        player.add(deck.draw());
-        bank.add(deck.draw());
-        player.add(deck.draw());
+        players.add(new Player(user.getName()));
+        Money.removeMoney(user, amount);
 
-        textChannel.sendMessage(player.addEmbed(bank.addEmbed(getEmbed())));
-        textChannel.sendMessage("`Hit` `Stand`");
+        //Draw one card each
+        players.get(0).add(deck.draw());
+        bank.add(deck.draw());
+        players.get(0).add(deck.draw());
+
+        options.append("**`Hit`** **`Stand`**");
+
+        //Check for split
+        if(players.get(0).sameCardsInHand()) {
+            options.append(" **`Split`**");
+        }
+
+        textChannel.sendMessage(players.get(0).addEmbed(bank.addEmbed(getEmbed())));
+        textChannel.sendMessage(options.toString());
 
         final long timestamp = System.currentTimeMillis();
+
         ExtendedBoolean stand = new ExtendedBoolean(false);
 
         AtomicReference<ListenerManager> lm = new AtomicReference<>();
         lm.set(textChannel.addMessageCreateListener(e -> {
-            if(e.getMessage().getUserAuthor().get().getId() == user.getId()) {
-                if(e.getMessage().getContent().equalsIgnoreCase("hit")) {
-                    player.add(deck.draw());
-                    if(player.getTotalValue() > 21) {
+            if (e.getMessage().getUserAuthor().get().getId() == user.getId()) {
+                if (e.getMessage().getContent().equalsIgnoreCase("hit")) {
+                    players.get(0).add(deck.draw());
+
+                    if (players.get(0).getTotalValue() > 21) {
                         stand.set(true);
                         lm.get().remove();
                     }
-                    if(stand.isNot()) {
-                        textChannel.sendMessage(player.addEmbed(bank.addEmbed(getEmbed())));
-                        textChannel.sendMessage("`Hit` `Stand`");
+                    if (stand.isNot()) {
+                        EmbedBuilder embed = bank.addEmbed(getEmbed());
+                        for (Player ply : players) {
+                            embed = ply.addEmbed(embed);
+                        }
+                        textChannel.sendMessage(embed);
+                        textChannel.sendMessage("**`Hit`** **`Stand`**");
                     }
-                }
-                else if(e.getMessage().getContent().equalsIgnoreCase("stand")) {
+
+                } else if (e.getMessage().getContent().equalsIgnoreCase("stand")) {
                     stand.set(true);
                     lm.get().remove();
+                } else if (splitted.isNot() && e.getMessage().getContent().equalsIgnoreCase("split")) {
+                    Money.removeMoney(user, amount);
+                    players.add(players.get(0).split());
+                    for (Player ply : players)
+                        ply.add(deck.draw());
+                    EmbedBuilder embed = bank.addEmbed(getEmbed());
+                    for (Player ply : players) {
+                        embed = ply.addEmbed(embed);
+                    }
+                    textChannel.sendMessage(embed);
+                    textChannel.sendMessage("**`Hit`** **`Stand`**");
+                    splitted.set(true);
                 }
             }
         }).removeAfter(INTERVAL, TimeUnit.MILLISECONDS));
-
-        while(stand.isNot()) {
+        lm.get().addRemoveHandler(() -> {stand.set(true);});
+        while (stand.isNot()) {
             Thread.onSpinWait();
         }
 
         lm.get().remove();
 
+        if(splitted.is()) {
+            EmbedBuilder embed = bank.addEmbed(getEmbed());
+            for (Player ply : players) {
+                embed = ply.addEmbed(embed);
+            }
+            textChannel.sendMessage(embed);
+            textChannel.sendMessage("**`Hit`** **`Stand`**");
+
+            ExtendedBoolean stand1 = new ExtendedBoolean(false);
+
+            AtomicReference<ListenerManager> lm2 = new AtomicReference<>();
+
+            lm2.set(textChannel.addMessageCreateListener(e -> {
+                if (e.getMessage().getUserAuthor().get().getId() == user.getId()) {
+                    if (e.getMessage().getContent().equalsIgnoreCase("hit")) {
+                        players.get(1).add(deck.draw());
+
+                        if (players.get(1).getTotalValue() > 21) {
+                            stand1.set(true);
+                            lm2.get().remove();
+                        }
+                        if (stand1.isNot()) {
+                            EmbedBuilder embed1 = bank.addEmbed(getEmbed());
+                            for (Player ply : players) {
+                                embed1 = ply.addEmbed(embed1);
+                            }
+                            textChannel.sendMessage(embed1);
+                            textChannel.sendMessage("**`Hit`** **`Stand`**");
+                        }
+
+                    } else if (e.getMessage().getContent().equalsIgnoreCase("stand")) {
+                        stand1.set(true);
+                        lm2.get().remove();
+                    }
+                }
+            }).removeAfter(INTERVAL, TimeUnit.MILLISECONDS));
+            lm2.get().addRemoveHandler(() -> {stand1.set(true);});
+
+            while (stand1.isNot()) {
+                Thread.onSpinWait();
+            }
+
+            lm2.get().remove();
+
+        }
+
         bank.add(deck.draw());
 
         while (bank.getTotalValue() <= 16) {
-            if(bank.getTotalValue() > player.getTotalValue() || player.getTotalValue() > 21)
+            if(bank.getTotalValue() > players.get(0).getTotalValue() || players.get(0).getTotalValue() > 21)
                 break;
             bank.add(deck.draw());
         }
-        textChannel.sendMessage(player.addEmbed(bank.addEmbed(new EmbedBuilder().setAuthor("BlackJack 21", "", ""))));
-        String winner;
-        int playerGame = player.getTotalValue();
-        int bankGame = bank.getTotalValue();
 
-        if(playerGame > 21) {
-            winner = "You lose!";
+        EmbedBuilder embed = bank.addEmbed(getEmbed());
+        for (Player ply : players) {
+            embed = ply.addEmbed(embed);
         }
-        else if(playerGame == bankGame) {
-            winner = "Draw!";
+        textChannel.sendMessage(embed);
+
+
+        //Calculate win/winner
+        int bankGame = bank.getTotalValue();
+        int totalWin = 0;
+        StringBuilder winner = new StringBuilder();
+
+
+        for(Player ply : players) {
+            int playerGame = ply.getTotalValue();
+
+            winner.append(ply.getName());
+            winner.append(" game: ");
+            if (playerGame > 21) {
+                winner.append("You lose!");
+            } else if((playerGame == 21) && ((bankGame < 21) || (bankGame > 21)) && splitted.isNot() && (ply.getHandCards() == 2)) {
+                winner.append("You win! [BlackJack]");
+                totalWin += amount * 3;
+            } else if (playerGame == bankGame) {
+                if (playerGame == 21 && ply.getHandCards() == 2 && splitted.isNot()) {
+                    if (bank.getHandCards() == 2) {
+                        winner.append("Draw!");
+                        totalWin += amount;
+                    }
+                    else {
+                        winner.append("You win! [BlackJack]");
+                        totalWin += amount * 3;
+                    }
+                } else {
+                    winner.append("Draw!");
+                    totalWin += amount;
+                }
+            } else if (bankGame > 21) {
+                winner.append("You win!");
+                totalWin += amount * 2;
+            } else if (bankGame > playerGame) {
+                winner.append("You lose!");
+            } else {
+                winner.append("You win!");
+                totalWin += amount * 2;
+            }
+            winner.append("\n");
         }
-        else if(bankGame > 21) {
-            winner = "You win!";
-        }
-        else if(bankGame > playerGame) {
-            winner = "You lose!";
-        }
-        else {
-            winner = "You win!";
-        }
+        winner.append("Total win: **");
+        winner.append(totalWin);
+        winner.append("$**");
+        Money.addMoney(user, totalWin);
         using.remove(user);
-        return winner;
+        return winner.toString();
     }
 
     private String showHelp() {
@@ -137,6 +254,12 @@ public class BlackJackCommand implements CommandExecutor {
             this.hand.add(card);
         }
 
+        Player split() {
+            Player player = new Player(this.getName() + "'s split");
+            player.add(this.hand.remove(0));
+            return player;
+        }
+
         int getTotalValue() {
             int total = 0;
 
@@ -151,6 +274,19 @@ public class BlackJackCommand implements CommandExecutor {
 
             return total;
         }
+
+        int getHandCards() {
+            return this.hand.size();
+        }
+
+        boolean sameCardsInHand() {
+            if(this.getHandCards() == 2) {
+                if(this.hand.get(0).getValue() == this.hand.get(1).getValue())
+                    return true;
+            }
+            return false;
+        }
+
 
         String getName() {
             return name;
@@ -186,6 +322,10 @@ public class BlackJackCommand implements CommandExecutor {
 
         boolean isNot() {
             return !this.bool;
+        }
+
+        boolean is() {
+            return this.bool;
         }
     }
 }

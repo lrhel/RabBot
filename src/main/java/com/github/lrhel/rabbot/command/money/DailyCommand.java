@@ -17,19 +17,19 @@ public class DailyCommand implements CommandExecutor {
         int money = 0;
 
         if(rng.nextInt(100) < 20)
-            money += 400;
+            money += 4000;
         else if(rng.nextInt(100) < 50)
-            money += 200;
+            money += 2000;
         else
-            money += 100;
-        money += rng.nextInt(150);
+            money += 1000;
+        money += rng.nextInt(1500);
 
         if ((timestamp + INTERVAL) > (System.currentTimeMillis() % Integer.MAX_VALUE)) {
-            int seconde = ((timestamp - Math.toIntExact(System.currentTimeMillis() % Integer.MAX_VALUE) + INTERVAL) / (1000));
+            int seconde = ((timestamp - (Math.toIntExact(System.currentTimeMillis() % Integer.MAX_VALUE)) + INTERVAL) / (1000));
             return "Try in " + (seconde / 60) + " minutes and " + (seconde % 60) + " seconds";
         } else {
             totalMoney += money;
-            Money.setMoney(user, totalMoney, (int) System.currentTimeMillis() % Integer.MAX_VALUE);
+            Money.setMoney(user, totalMoney, (int) (System.currentTimeMillis() % Integer.MAX_VALUE));
             return "Yeahhh **" + user.getName() + "**, you got **" + money + "$**";
         }
     }

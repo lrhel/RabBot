@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class MuteCommand implements CommandExecutor {
     @Command(aliases = {"mute"}, showInHelpPage = false)
     public String muteCommand(User user, Message message, Server server) {
-        Permissions userPerm = server.getPermissionsOf(user);
+        Permissions userPerm = server.getPermissions(user);
 
         if(!userPerm.getAllowedPermission().contains(PermissionType.KICK_MEMBERS))
             return "You cannot mute users";
@@ -23,9 +23,9 @@ public class MuteCommand implements CommandExecutor {
         if(userToMuteList.isEmpty())
             return "No user mentioned!";
 
-        for(User userToMute : userToMuteList) {
-
-        }
+//        for(User userToMute : userToMuteList) {
+//
+//        }
 
         return "";
     }

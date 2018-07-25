@@ -21,13 +21,35 @@ public class RouletteCommand implements CommandExecutor {
 
         String sql = "SELECT * FROM money WHERE user_id = ?";
 
-        if(param.length > 2){
+        if(param.length > 2 || param.length == 0){
             return showHelp();
         } else {
             try {
                 amount = param.length == 1 ? 1 : Integer.parseInt(param[0]);
             } catch (NumberFormatException e) {
                 return "Not a valid bet";
+            }
+        }
+
+        if(param.length == 1){
+            try {
+                if(Integer.parseInt(param[0]) > 36)
+                    return showHelp();
+            } catch (Exception e) {
+                if (!param[0].equalsIgnoreCase("black") && !param[0].equalsIgnoreCase("red")
+                        && !param[0].equalsIgnoreCase("even") && !param[0].equalsIgnoreCase("odd"))
+                    return showHelp();
+            }
+        }
+        else {
+            try {
+                int value = Integer.parseInt(param[1]);
+                if(value < 0 || value > 36)
+                    return showHelp();
+            } catch(Exception e) {
+                if (!param[1].equalsIgnoreCase("black") && !param[1].equalsIgnoreCase("red")
+                        && !param[1].equalsIgnoreCase("even") && !param[1].equalsIgnoreCase("odd"))
+                    return showHelp();
             }
         }
         try {
