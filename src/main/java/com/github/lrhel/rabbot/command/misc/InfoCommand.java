@@ -35,6 +35,7 @@ public class InfoCommand implements CommandExecutor {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("[Javacord](https://github.com/Javacord/Javacord)\n");
         stringBuilder.append("[PokeAPI](https://pokeapi.co/)\n");
+        stringBuilder.append("[PokeKotlin](https://github.com/PokeAPI/pokekotlin)");
 
         return stringBuilder;
     }

@@ -25,7 +25,7 @@ public class BlackJackCommand implements CommandExecutor {
 
     @Command(aliases = {"blackjack", "21"}, description = "BlackJack 21", async = true)
     public String onBlackJackCommand(User user, TextChannel textChannel, String[] arg, DiscordApi api) {
-        int amount;
+        int amounts;
         Cards deck = new Cards();
         ArrayList<Player> players = new ArrayList<>();
 
@@ -33,17 +33,17 @@ public class BlackJackCommand implements CommandExecutor {
         ExtendedBoolean splitted = new ExtendedBoolean(false);
         StringBuilder options = new StringBuilder();
 
-        if(arg.length != 1) {
+        if(arg.length > 1) {
             System.out.println("Blackjack: arg lenght not 1, value: " + arg.length);
 
             return showHelp();
         }
         try {
-            amount = Integer.parseInt(arg[0]);
+            amounts = Integer.parseInt(arg[0]);
         } catch (Exception e) {
-            System.out.println("exception");
-            return showHelp();
+            amounts = 1;
         }
+        final int amount = amounts;
         if(amount <= 0 || amount > Money.getMoney(user)) {
             System.out.println("Blackjack: not enough money");
             return showHelp();
@@ -115,7 +115,7 @@ public class BlackJackCommand implements CommandExecutor {
                 }
             }
         }).removeAfter(INTERVAL, TimeUnit.MILLISECONDS));
-        lm.get().addRemoveHandler(() -> {stand.set(true);});
+        lm.get().addRemoveHandler(() -> stand.set(true));
         while (stand.isNot()) {
             Thread.onSpinWait();
         }
@@ -158,7 +158,7 @@ public class BlackJackCommand implements CommandExecutor {
                     }
                 }
             }).removeAfter(INTERVAL, TimeUnit.MILLISECONDS));
-            lm2.get().addRemoveHandler(() -> {stand1.set(true);});
+            lm2.get().addRemoveHandler(() -> stand1.set(true));
 
             while (stand1.isNot()) {
                 Thread.onSpinWait();
@@ -280,10 +280,8 @@ public class BlackJackCommand implements CommandExecutor {
         }
 
         boolean sameCardsInHand() {
-            if(this.getHandCards() == 2) {
-                if(this.hand.get(0).getValue() == this.hand.get(1).getValue())
-                    return true;
-            }
+            if(this.getHandCards() == 2)
+                return this.hand.get(0).getValue() == this.hand.get(1).getValue();
             return false;
         }
 
