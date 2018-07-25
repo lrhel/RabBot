@@ -47,6 +47,8 @@ public class Main {
         //Moderation Stuff
         cmd.registerCommand(new KickCommand());
         cmd.registerCommand(new BanCommand());
+        cmd.registerCommand(new MuteCommand());
+        cmd.registerCommand(new UnmuteCommand());
 
         //Stupid Stuff
         cmd.registerCommand(new PingCommand());

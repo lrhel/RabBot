@@ -2,7 +2,6 @@ package com.github.lrhel.rabbot.command.moderation;
 
 import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
-import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.permission.PermissionType;
 import org.javacord.api.entity.permission.Permissions;
@@ -12,16 +11,16 @@ import org.javacord.api.entity.user.User;
 
 import java.util.ArrayList;
 
-public class MuteCommand implements CommandExecutor {
-    @Command(aliases = {"mute"}, showInHelpPage = false)
-    public String muteCommand(User user, Message message, Server server, String[] arg) {
+public class UnmuteCommand implements CommandExecutor {
+    @Command(aliases = {"unmute"}, showInHelpPage = false)
+    public String unmuteCommand(User user, Message message, Server server, String[] arg) {
         Permissions userPerm = server.getPermissions(user);
 
         if(!server.canYouManageRoles())
-            return "Rabbot cannot give mute roll";
+            return "Rabbot cannot remove mute roll";
 
         if(!userPerm.getAllowedPermission().contains(PermissionType.KICK_MEMBERS))
-            return "You cannot mute users";
+            return "You cannot unmute users";
 
         ArrayList<User> userToMuteList = new ArrayList<>(message.getMentionedUsers());
 
@@ -38,13 +37,13 @@ public class MuteCommand implements CommandExecutor {
 
         for(User userToMute : userToMuteList) {
             if(!server.canKickUser(user, userToMute)) {
-                error.append("You cannot mute ");
+                error.append("You cannot unmute ");
                 error.append(userToMute.getMentionTag());
                 error.append("\n");
             }
             for(Role role : server.getRoles())
                 if(role.getName().toLowerCase().contains("mute"))
-                    userToMute.addRole(role, reason).join();
+                    userToMute.removeRole(role, reason).join();
         }
 
         return error.toString();
