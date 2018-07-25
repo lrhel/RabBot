@@ -1,14 +1,16 @@
 package com.github.lrhel.rabbot.command.misc;
 
-import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.user.User;
+import org.javacord.api.entity.message.Message;
 
 import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
 
 public class EchoCommand implements CommandExecutor {
 	@Command(aliases = {"echo"}, privateMessages = false, description = "Echo what I say!", showInHelpPage = false)
-	public String onEchoCommand(String[] arg, TextChannel ch, User usr) {
+	public String onEchoCommand(String[] arg, Message msg) {
+		if(msg.canYouDelete())
+			msg.delete();
+
 		return String.join(" ", arg);
 	}
 }
