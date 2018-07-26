@@ -9,8 +9,8 @@ import org.javacord.api.entity.user.User;
 import java.util.ArrayList;
 
 public class KickCommand implements CommandExecutor {
-    @Command(aliases = {"kick"}, showInHelpPage = false)
-    public String kickCommand(User user, Message message, Server server) {
+    @Command(aliases = {"kick"}, description = "Kick a user(s)")
+    public String kickCommand(User user, Message message, Server server, String[] arg) {
         if(!server.canYouKickUsers())
             return "Rabbot cannot kick users!";
         if(!server.canKickUsers(user))
@@ -21,12 +21,20 @@ public class KickCommand implements CommandExecutor {
 
         if(userToKickList.isEmpty())
             return "No user mentioned";
+
+        String reason = String.join(" ", arg);
+
+        for(User userToKick : userToKickList) {
+            reason = reason.replace(userToKick.getMentionTag(), "");
+            reason = reason.replace(userToKick.getNicknameMentionTag(), "");
+        }
+
         for(User userToKick : userToKickList){
             if(!server.canYouKickUser(userToKick)) {
                 message.getServerTextChannel().get().sendMessage("Rabbot cannot kick " + userToKick.getMentionTag());
             }
             else if(server.canKickUser(user, userToKick)) {
-                server.kickUser(userToKick);
+                server.kickUser(userToKick, reason).join();
                 message.getServerTextChannel().get().sendMessage(userToKick.getMentionTag() + " kicked");
             }
             else

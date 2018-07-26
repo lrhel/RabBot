@@ -13,7 +13,7 @@ import org.javacord.api.entity.user.User;
 import java.util.ArrayList;
 
 public class MuteCommand implements CommandExecutor {
-    @Command(aliases = {"mute"}, showInHelpPage = false)
+    @Command(aliases = {"mute"}, description = "Add \"mute\" role(s) to the user")
     public String muteCommand(User user, Message message, Server server, String[] arg) {
         Permissions userPerm = server.getPermissions(user);
 

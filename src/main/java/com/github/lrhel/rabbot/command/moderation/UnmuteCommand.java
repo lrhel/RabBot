@@ -12,7 +12,7 @@ import org.javacord.api.entity.user.User;
 import java.util.ArrayList;
 
 public class UnmuteCommand implements CommandExecutor {
-    @Command(aliases = {"unmute"}, showInHelpPage = false)
+    @Command(aliases = {"unmute"}, description = "Remove \"mute\" role(s) from the user")
     public String unmuteCommand(User user, Message message, Server server, String[] arg) {
         Permissions userPerm = server.getPermissions(user);
 

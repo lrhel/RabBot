@@ -48,12 +48,6 @@ public class Main {
         cmd.registerCommand(new HelpCommand(cmd));
         cmd.registerCommand(new InfoCommand());
 
-        //Moderation Stuff
-        cmd.registerCommand(new KickCommand());
-        cmd.registerCommand(new BanCommand());
-        cmd.registerCommand(new MuteCommand());
-        cmd.registerCommand(new UnmuteCommand());
-
         //Stupid Stuff
         cmd.registerCommand(new PingCommand());
         cmd.registerCommand(new SandyCommand());
@@ -81,6 +75,13 @@ public class Main {
         cmd.registerCommand(new ShitpostingCommand());
         cmd.registerCommand(new CopypastaCommand());
         //cmd.registerCommand(new ActiveCommand());
+
+        //Moderation Stuff
+        cmd.registerCommand(new KickCommand());
+        cmd.registerCommand(new BanCommand());
+        cmd.registerCommand(new MuteCommand());
+        cmd.registerCommand(new UnmuteCommand());
+        cmd.registerCommand(new PurgeCommand());
 
         // Other stuff
         cmd.registerCommand(new RaidCommand());
