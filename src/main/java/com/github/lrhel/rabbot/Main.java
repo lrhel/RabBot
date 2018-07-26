@@ -44,6 +44,10 @@ public class Main {
         cmd.setDefaultPrefix("rb.");
         api.updateActivity("rb.help");
 
+        //Information
+        cmd.registerCommand(new HelpCommand(cmd));
+        cmd.registerCommand(new InfoCommand());
+
         //Moderation Stuff
         cmd.registerCommand(new KickCommand());
         cmd.registerCommand(new BanCommand());
@@ -53,8 +57,6 @@ public class Main {
         //Stupid Stuff
         cmd.registerCommand(new PingCommand());
         cmd.registerCommand(new SandyCommand());
-        cmd.registerCommand(new HelpCommand(cmd));
-        cmd.registerCommand(new InfoCommand());
         //cmd.registerCommand(new ChallongeCommand());
         cmd.registerCommand(new EchoCommand());
         //cmd.registerCommand(new StrawpollCommand());
@@ -65,7 +67,6 @@ public class Main {
         cmd.registerCommand(new RouletteCommand());
         cmd.registerCommand(new GiveMoneyCommand());
         cmd.registerCommand(new BlackJackCommand());
-
 
         //Pokemon Stuff
         cmd.registerCommand(new PokemonCommand());
@@ -86,11 +87,9 @@ public class Main {
         cmd.registerCommand(new GetServerCommand());
         cmd.registerCommand(new GetCommand());
 
-        
         //Join and Leave
         api.addServerJoinListener(event -> System.out.println("Joined server " + event.getServer().getName()));
         api.addServerLeaveListener(event -> System.out.println("Leaved server " + event.getServer().getName()));
-
 
 	}
 
