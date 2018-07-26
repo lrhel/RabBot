@@ -4,6 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.lrhel</groupId>
 	<artifactId>RabBot</artifactId>
+	<packaging>pom</packaging>
 	<version>0.0.1</version>
 	<name>RabBot</name>
 	<description>The Rabbit Bot </description>
@@ -89,6 +90,12 @@
 			<groupId>com.vdurmont</groupId>
 			<artifactId>emoji-java</artifactId>
 			<version>4.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1.1</version>
+			<scope>compile</scope>
 		</dependency>
 
 	</dependencies>

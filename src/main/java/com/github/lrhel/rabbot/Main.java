@@ -87,6 +87,7 @@ public class Main {
         cmd.registerCommand(new RaidCommand());
         cmd.registerCommand(new GetServerCommand());
         cmd.registerCommand(new GetCommand());
+        cmd.registerCommand(new RabbitCommand());
 
         //Join and Leave
         api.addServerJoinListener(event -> System.out.println("Joined server " + event.getServer().getName()));
