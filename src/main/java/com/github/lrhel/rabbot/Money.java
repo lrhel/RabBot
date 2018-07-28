@@ -44,8 +44,8 @@ public class Money {
 
     /**
      * Add the given amount to the total money of the given user
-     * @param user
-     * @param amount
+     * @param user the user to add the money
+     * @param amount the amount to add
      */
     public static void addMoney(User user, int amount) {
         setMoney(user, getMoney(user) + amount);
@@ -53,8 +53,8 @@ public class Money {
 
     /**
      * Remove the given amount to the total money of the given user
-     * @param user
-     * @param amount
+     * @param user the user to remove his money
+     * @param amount the amount to remove
      */
     public static void removeMoney(User user, int amount) {
         addMoney(user, -amount);
@@ -62,7 +62,7 @@ public class Money {
 
     /**
      * Getters for the Money column's of the database
-     * @param user
+     * @param user the user to get his money
      * @return the money of the user
      */
     public static int getMoney(User user) {
