@@ -1,16 +1,19 @@
 package com.github.lrhel.rabbot.command.money;
 
 import com.github.lrhel.rabbot.Money;
+import com.github.lrhel.rabbot.utility.Utility;
 import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
+import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.user.User;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class DailyCommand implements CommandExecutor {
     private static final int INTERVAL =  60 * 60 * 1000;
 
     @Command(aliases = {"daily"}, description = "Daily money!")
-    public String onDailyCommand(User user){
+    public String onDailyCommand(User user, TextChannel textChannel){
         Random rng = new Random(System.currentTimeMillis());
         int totalMoney = Money.getMoney(user);
         int timestamp = Money.getTimestamp(user);
@@ -25,8 +28,9 @@ public class DailyCommand implements CommandExecutor {
         money += rng.nextInt(1500);
 
         if ((timestamp + INTERVAL) > (System.currentTimeMillis() % Integer.MAX_VALUE)) {
-            int seconde = ((timestamp - (Math.toIntExact(System.currentTimeMillis() % Integer.MAX_VALUE)) + INTERVAL) / (1000));
-            return "Try in " + (seconde / 60) + " minutes and " + (seconde % 60) + " seconds";
+            int second = ((timestamp - (Math.toIntExact(System.currentTimeMillis() % Integer.MAX_VALUE)) + INTERVAL) / (1000));
+            textChannel.sendMessage("Try in " + (second / 60) + " minutes and " + (second % 60) + " seconds").thenAccept(Utility.getMessageDeleter(3, TimeUnit.SECONDS));
+            return "";
         } else {
             totalMoney += money;
             Money.setMoney(user, totalMoney, (int) (System.currentTimeMillis() % Integer.MAX_VALUE));
