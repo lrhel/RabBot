@@ -4,16 +4,19 @@ import com.github.lrhel.rabbot.Roulette;
 import com.github.lrhel.rabbot.sqlite.Sqlite;
 import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
+import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.concurrent.TimeUnit;
 
 public class RouletteCommand implements CommandExecutor {
     @Command(aliases = {"roulette"}, description = "Bet money on the Roulette")
-    public String rouletteCommand(User user, Server server, String[] param){
+    public String rouletteCommand(User user, Server server, String[] param, TextChannel textChannel){
         Connection c = Sqlite.getInstance().getConnection();
         Roulette roulette = Roulette.getInstance();
         int amount;
@@ -26,8 +29,12 @@ public class RouletteCommand implements CommandExecutor {
         } else {
             try {
                 amount = param.length == 1 ? 1 : Integer.parseInt(param[0]);
-            } catch (NumberFormatException e) {
-                return "Not a valid bet";
+            } catch (NumberFormatException nfe) {
+                Message lm = textChannel.sendMessage("Sorry **" + user.getDisplayName(server) +  "**, not a valid!")
+                        .join();
+                lm.addMessageEditListener(e -> {}).removeAfter(5, TimeUnit.SECONDS)
+                        .addRemoveHandler(() -> lm.delete().join());
+                return "";
             }
         }
 
@@ -59,10 +66,20 @@ public class RouletteCommand implements CommandExecutor {
 
             if(rs.next()){
                 int money = rs.getInt("money");
-                if(amount <= 0)
-                    return  "**" + user.getDisplayName(server) + "** not a valid bet";
-                if(money < amount)
-                    return "Sorry **" + user.getDisplayName(server) + "**, not enough money!";
+                if(amount <= 0) {
+                    Message lm = textChannel.sendMessage("Sorry **" + user.getDisplayName(server) +  "**, not a valid!")
+                            .join();
+                    lm.addMessageEditListener(e -> {}).removeAfter(5, TimeUnit.SECONDS)
+                            .addRemoveHandler(() -> lm.delete().join());
+                    return "";
+                }
+                if(money < amount){
+                    Message lm = textChannel.sendMessage("Sorry **" + user.getDisplayName(server) +  "**, not enough money!")
+                            .join();
+                    lm.addMessageEditListener(e -> {}).removeAfter(5, TimeUnit.SECONDS)
+                            .addRemoveHandler(() -> lm.delete().join());
+                    return "";
+                }
                 String spin = roulette.spin();
 
                 if(param.length == 2 && param[1].equalsIgnoreCase(spin.split(" ")[0])){
@@ -96,7 +113,11 @@ public class RouletteCommand implements CommandExecutor {
 
 
             } else {
-                return "Sorry **" + user.getDisplayName(server) +  "**, not enough money!";
+                Message lm = textChannel.sendMessage("Sorry **" + user.getDisplayName(server) +  "**, not enough money!")
+                        .join();
+                lm.addMessageEditListener(e -> {}).removeAfter(5, TimeUnit.SECONDS)
+                        .addRemoveHandler(() -> lm.delete().join());
+                return "";
             }
         } catch (Exception e) {
             e.printStackTrace();
