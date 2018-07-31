@@ -1,6 +1,7 @@
 package com.github.lrhel.rabbot;
 
 import com.github.lrhel.rabbot.command.admin.*;
+import com.github.lrhel.rabbot.command.games.AkiCommand;
 import com.github.lrhel.rabbot.command.games.BlackJackCommand;
 import com.github.lrhel.rabbot.command.games.RouletteCommand;
 import com.github.lrhel.rabbot.command.misc.*;
@@ -49,6 +50,7 @@ public class Main {
         cmd.registerCommand(new InfoCommand());
 
         //Stupid Stuff
+        cmd.registerCommand(new AkiCommand());
         cmd.registerCommand(new PingCommand());
         cmd.registerCommand(new SandyCommand());
         //cmd.registerCommand(new ChallongeCommand());

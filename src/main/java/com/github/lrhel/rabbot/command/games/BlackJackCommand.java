@@ -2,6 +2,7 @@ package com.github.lrhel.rabbot.command.games;
 
 import com.github.lrhel.rabbot.Cards;
 import com.github.lrhel.rabbot.Money;
+import com.github.lrhel.rabbot.utility.ExtendedBoolean;
 import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
 import org.javacord.api.DiscordApi;
@@ -307,23 +308,4 @@ public class BlackJackCommand implements CommandExecutor {
 
     }
 
-    private class ExtendedBoolean {
-        boolean bool;
-
-        ExtendedBoolean(boolean value) {
-            this.set(value);
-        }
-
-        void set(boolean bool) {
-            this.bool = bool;
-        }
-
-        boolean isNot() {
-            return !this.bool;
-        }
-
-        boolean is() {
-            return this.bool;
-        }
-    }
 }
