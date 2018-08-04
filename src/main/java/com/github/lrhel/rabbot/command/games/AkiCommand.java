@@ -9,6 +9,7 @@ import com.markozajc.akiwrapper.core.entities.Server;
 import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
 import org.javacord.api.DiscordApi;
+import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.user.User;
@@ -25,7 +26,8 @@ public class AkiCommand implements CommandExecutor {
 
 
     @Command(aliases = {"akinator", "aki"}, description = "Play with Akinator", async = true)
-    public void onAkiCommand(User user, TextChannel textChannel, String[] arg, DiscordApi api) {
+    public void onAkiCommand(User user, TextChannel textChannel, String[] arg, DiscordApi api, ServerTextChannel serverTextChannel) {
+        AkiwrapperBuilder akiwrapperBuilder;
         Akiwrapper aki;
 
         ArrayList<String> guessList = new ArrayList<>();
@@ -40,13 +42,22 @@ public class AkiCommand implements CommandExecutor {
             using.add(user);
         }
 
+
         if(arg.length == 0) {
-            aki = setLanguage("en");
+            akiwrapperBuilder = setLanguage("en");
         }
         else {
             String language = arg[0].toLowerCase();
-            aki = setLanguage(language);
+            akiwrapperBuilder = setLanguage(language);
         }
+
+        if(serverTextChannel.isNsfw()) {
+            akiwrapperBuilder.setFilterProfanity(false);
+        } else {
+            akiwrapperBuilder.setFilterProfanity(true);
+        }
+
+        aki = akiwrapperBuilder.setName(user.getName()).build();
 
         questionAtomicReference.set(aki.getCurrentQuestion());
 
@@ -342,17 +353,17 @@ public class AkiCommand implements CommandExecutor {
         return null;
     }
 
-    private Akiwrapper setLanguage(String language) {
+    private AkiwrapperBuilder setLanguage(String language) {
         switch (language) {
             case "fr":
-                return new AkiwrapperBuilder().setLocalization(Server.Language.FRENCH).build();
+                return new AkiwrapperBuilder().setLocalization(Server.Language.FRENCH);
             case "nl":
-                return new AkiwrapperBuilder().setLocalization(Server.Language.DUTCH).build();
+                return new AkiwrapperBuilder().setLocalization(Server.Language.DUTCH);
             case "pt":
-                return new AkiwrapperBuilder().setLocalization(Server.Language.PORTUGUESE).build();
+                return new AkiwrapperBuilder().setLocalization(Server.Language.PORTUGUESE);
             case "en":
             default:
-                return new AkiwrapperBuilder().setLocalization(Server.Language.ENGLISH).build();
+                return new AkiwrapperBuilder().setLocalization(Server.Language.ENGLISH);
         }
     }
 }
