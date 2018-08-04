@@ -8,6 +8,7 @@ import com.markozajc.akiwrapper.core.entities.Question;
 import com.markozajc.akiwrapper.core.entities.Server;
 import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
+import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.user.User;
@@ -24,7 +25,7 @@ public class AkiCommand implements CommandExecutor {
 
 
     @Command(aliases = {"akinator", "aki"}, description = "Play with Akinator", async = true)
-    public void onAkiCommand(User user, TextChannel textChannel, String[] arg) {
+    public void onAkiCommand(User user, TextChannel textChannel, String[] arg, DiscordApi api) {
         Akiwrapper aki;
 
         ArrayList<String> guessList = new ArrayList<>();
@@ -59,10 +60,15 @@ public class AkiCommand implements CommandExecutor {
                         String content = event.getMessage().getContent().toLowerCase();
                         if(content.equalsIgnoreCase("stop")) {
                             using.remove(user);
+                            answered.set(true);
+                            next.set(false);
                             return;
                         }
-                        questionAtomicReference.set(aki.answerCurrentQuestion(getAnswer(content)));
-                        answered.set(true);
+                        Akiwrapper.Answer answer = getAnswer(content);
+                        if(answer != null) {
+                            questionAtomicReference.set(aki.answerCurrentQuestion(answer));
+                            answered.set(true);
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                         textChannel.sendMessage("Something went wrong... Rabbot is investigating");
@@ -79,22 +85,46 @@ public class AkiCommand implements CommandExecutor {
 
             // GUESSING BLOCK
             try {
-                for (Guess guess : aki.getGuessesAboveProbability(0.85)) {
+                for (Guess guess : aki.getGuessesAboveProbability(0.80)) {
 
                     if (guessList.contains(guess.getName())) {
                         continue;
                     }
 
-                    EmbedBuilder embedBuilder = new EmbedBuilder()
-                            .setAuthor(guess.getName() + " ?", "", "")
-                            .addField("Description", guess.getDescription());
+                    String guessName;
+                    String guessDesc = null;
+                    String guessImg = null;
                     try {
-                        embedBuilder = embedBuilder.setImage(guess.getImage().toString());
+                        guessName = guess.getName();
                     } catch (Exception ignored) {
-                        //in case no image was provided by the API
+                        continue;
+                    }
+                    try {
+                        guessDesc = guess.getDescription();
+                    } catch (Exception ignored) {
+
+                    }
+                    try {
+                        guessImg = guess.getImage().toString();
+                    } catch (Exception ignored) {
+
+                    }
+                    EmbedBuilder embedBuilder = new EmbedBuilder();
+
+                    if (guessName != null && !guessName.isEmpty()) {
+                        embedBuilder.setAuthor(guess.getName() + " ?", "", "");
+                    } else {
+                        continue;
+                    }
+                    if (guessDesc != null && !guessDesc.isEmpty()) {
+                        embedBuilder.addField("Description", guessDesc);
+                    }
+                    if (guessImg != null && !guessImg.isEmpty()) {
+                        embedBuilder.setImage(guessImg);
                     }
                     textChannel.sendMessage(embedBuilder).join();
                     answered.set(false);
+
 
                     //Waiting for the answer
                     listenerManagerAtomicReference.set(textChannel.addMessageCreateListener(event -> {
@@ -149,15 +179,114 @@ public class AkiCommand implements CommandExecutor {
             } catch (IOException e) {
                 e.printStackTrace();
                 textChannel.sendMessage("Something went wrong...");
+                using.remove(user);
                 return;
             }
             //If the API doesn't have any question
             if(questionAtomicReference.get() == null) {
+                // GUESSING BLOCK
+                try {
+                    for (Guess guess : aki.getGuesses()) {
+
+                        if (guessList.contains(guess.getName())) {
+                            continue;
+                        }
+
+                        String guessName;
+                        String guessDesc = null;
+                        String guessImg = null;
+                        try {
+                            guessName = guess.getName();
+                        } catch (Exception ignored) {
+                            continue;
+                        }
+                        try {
+                            guessDesc = guess.getDescription();
+                        } catch (Exception ignored) {
+
+                        }
+                        try {
+                            guessImg = guess.getImage().toString();
+                        } catch (Exception ignored) {
+
+                        }
+                        EmbedBuilder embedBuilder = new EmbedBuilder();
+
+                        if (guessName != null && !guessName.isEmpty()) {
+                            embedBuilder.setAuthor(guess.getName() + " ?", "", "");
+                        } else {
+                            continue;
+                        }
+                        if (guessDesc != null && !guessDesc.isEmpty()) {
+                            embedBuilder.addField("Description", guessDesc);
+                        }
+                        if (guessImg != null && !guessImg.isEmpty()) {
+                            embedBuilder.setImage(guessImg);
+                        }
+                        textChannel.sendMessage(embedBuilder).join();
+                        answered.set(false);
+
+
+                        //Waiting for the answer
+                        listenerManagerAtomicReference.set(textChannel.addMessageCreateListener(event -> {
+                            if (event.getMessage().getUserAuthor().get().getId() == user.getId()) {
+                                String content = event.getMessage().getContent().toLowerCase();
+                                if (content.equalsIgnoreCase("yes")
+                                        || content.equalsIgnoreCase("stop")
+                                        || content.equalsIgnoreCase("no")
+                                        || content.equalsIgnoreCase("oui")
+                                        || content.equalsIgnoreCase("non")
+                                        || content.equalsIgnoreCase("y")
+                                        || content.equalsIgnoreCase("n")
+                                        || content.equalsIgnoreCase("s")
+                                        || content.equalsIgnoreCase("sim")
+                                        || content.equalsIgnoreCase("si")
+                                        || content.equalsIgnoreCase("nao")
+                                        ) {
+                                    switch (content) {
+                                        case "y":
+                                        case "yes":
+                                        case "oui":
+                                        case "si":
+                                        case "sim":
+                                        case "s":
+                                            textChannel.sendMessage("Akinator won!").join();
+                                            next.set(false);
+                                            answered.set(true);
+                                            break;
+                                        case "n":
+                                        case "no":
+                                        case "non":
+                                        case "nao":
+                                            guessList.add(guess.getName());
+                                            answered.set(true);
+                                            break;
+                                        case "stop":
+                                            next.set(false);
+                                            answered.set(true);
+                                            break;
+                                    }
+                                    listenerManagerAtomicReference.get().remove();
+                                }
+
+                            }
+                        }).removeAfter(30, TimeUnit.SECONDS));
+                        listenerManagerAtomicReference.get().addRemoveHandler(() -> answered.set(true));
+                        while (answered.isNot()) {
+                            Thread.onSpinWait();
+                        }
+
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    textChannel.sendMessage("Something went wrong...");
+                    using.remove(user);
+                    return;
+                }
                 textChannel.sendMessage("You won!");
                 break;
             }
         }
-
         //After the game ended
         using.remove(user);
     }
@@ -173,6 +302,12 @@ public class AkiCommand implements CommandExecutor {
                 || toCheck.equalsIgnoreCase("sim")
                 || toCheck.equalsIgnoreCase("si")
                 || toCheck.equalsIgnoreCase("nao")
+                || toCheck.equalsIgnoreCase("i don't know")
+                || toCheck.equalsIgnoreCase("i dont know")
+                || toCheck.equalsIgnoreCase("i")
+                || toCheck.equalsIgnoreCase("idk")
+                || toCheck.equalsIgnoreCase("j")
+                || toCheck.equalsIgnoreCase("jsp")
                 ) {
             switch (toCheck) {
                 case "oui":
