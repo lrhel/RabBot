@@ -27,7 +27,7 @@ public class DailyCommand implements CommandExecutor {
             money += 1000;
         money += rng.nextInt(1500);
 
-        if ((timestamp + INTERVAL) > (System.currentTimeMillis() % Integer.MAX_VALUE)) {
+        if ((timestamp + INTERVAL) > (System.currentTimeMillis() % Integer.MAX_VALUE) && (timestamp - (Math.toIntExact(System.currentTimeMillis() % Integer.MAX_VALUE)) + INTERVAL) <= INTERVAL) {
             int second = ((timestamp - (Math.toIntExact(System.currentTimeMillis() % Integer.MAX_VALUE)) + INTERVAL) / (1000));
             textChannel.sendMessage("Try in " + (second / 60) + " minutes and " + (second % 60) + " seconds").thenAccept(Utility.getMessageDeleter(3, TimeUnit.SECONDS));
             return "";

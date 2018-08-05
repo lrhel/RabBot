@@ -53,7 +53,7 @@ public class PokemonCommand implements CommandExecutor {
 
             while(rs.next()) {
                 int ts = rs.getInt("TIMESTAMP");
-                if((ts + INTERVAL )> Math.toIntExact(System.currentTimeMillis() % Integer.MAX_VALUE)) {
+                if((ts + INTERVAL )> Math.toIntExact(System.currentTimeMillis() % Integer.MAX_VALUE) && (ts - Math.toIntExact(System.currentTimeMillis() % Integer.MAX_VALUE) + INTERVAL) <= INTERVAL) {
                     return "Try again in " + ((ts - Math.toIntExact(System.currentTimeMillis() % Integer.MAX_VALUE) + INTERVAL) / 1000) + " seconds";
                 }
             }
