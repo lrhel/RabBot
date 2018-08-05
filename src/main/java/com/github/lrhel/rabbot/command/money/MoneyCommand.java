@@ -11,10 +11,10 @@ import java.util.concurrent.TimeUnit;
 
 public class MoneyCommand implements CommandExecutor {
     @Command(aliases = {"money", "cash"}, description = "Show your current money")
-    public String MoneyCommand(User user, TextChannel textChannel) {
+    public String onMoneyCommand(User user, TextChannel textChannel) {
         int money = Money.getMoney(user);
         if (money > 0) {
-            return "You have " + money + "$";
+            return "You have **" + money + "$**";
         }
         else {
             textChannel.sendMessage("You have 0$... Try the **daily** command").thenAccept(Utility.getMessageDeleter(3, TimeUnit.SECONDS)).join();

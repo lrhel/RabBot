@@ -17,23 +17,28 @@ public class DailyCommand implements CommandExecutor {
         Random rng = new Random(System.currentTimeMillis());
         int totalMoney = Money.getMoney(user);
         int timestamp = Money.getTimestamp(user);
+        int now = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
         int money = 0;
 
-        if(rng.nextInt(100) < 20)
+        if(rng.nextInt(100) < 20) {
             money += 4000;
-        else if(rng.nextInt(100) < 50)
+        }
+        else if(rng.nextInt(100) < 50) {
             money += 2000;
-        else
+        }
+        else {
             money += 1000;
+        }
+
         money += rng.nextInt(1500);
 
-        if ((timestamp + INTERVAL) > (System.currentTimeMillis() % Integer.MAX_VALUE) && (timestamp - (Math.toIntExact(System.currentTimeMillis() % Integer.MAX_VALUE)) + INTERVAL) <= INTERVAL) {
-            int second = ((timestamp - (Math.toIntExact(System.currentTimeMillis() % Integer.MAX_VALUE)) + INTERVAL) / (1000));
+        if ((timestamp + INTERVAL) > now && (timestamp - now + INTERVAL) <= INTERVAL) {
+            int second = (timestamp - now + INTERVAL) / 1000;
             textChannel.sendMessage("Try in " + (second / 60) + " minutes and " + (second % 60) + " seconds").thenAccept(Utility.getMessageDeleter(3, TimeUnit.SECONDS));
             return "";
         } else {
             totalMoney += money;
-            Money.setMoney(user, totalMoney, (int) (System.currentTimeMillis() % Integer.MAX_VALUE));
+            Money.setMoney(user, totalMoney, now);
             return "Yeahhh **" + user.getName() + "**, you got **" + money + "$**";
         }
     }
