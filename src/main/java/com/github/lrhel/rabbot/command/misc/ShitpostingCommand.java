@@ -53,6 +53,7 @@ public class ShitpostingCommand implements CommandExecutor {
 				while (sc.hasNextLine()) {
 					String msg = sc.nextLine();
 					if(random == j) {
+						System.out.println(msg);
 						ch.sendMessage(msg);
 						break;
 					}
