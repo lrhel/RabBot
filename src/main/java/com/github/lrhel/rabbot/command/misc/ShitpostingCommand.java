@@ -1,8 +1,6 @@
 package com.github.lrhel.rabbot.command.misc;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
@@ -15,6 +13,8 @@ import com.github.lrhel.rabbot.config.Config;
 
 import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
+
+import static com.github.lrhel.rabbot.command.misc.CopypastaCommand.getLineCount;
 
 public class ShitpostingCommand implements CommandExecutor {
 
@@ -52,8 +52,9 @@ public class ShitpostingCommand implements CommandExecutor {
 				int random = rng.nextInt(count);
 				while (sc.hasNextLine()) {
 					String msg = sc.nextLine();
-					if(random == j) {
-						System.out.println(msg);
+					System.out.println(msg);
+
+                    if(random == j) {
 						ch.sendMessage(msg);
 						break;
 					}
@@ -66,37 +67,5 @@ public class ShitpostingCommand implements CommandExecutor {
 		}
 
 		return "";
-	}
-	public static int getLineCount(File file) throws IOException {
-
-		try (BufferedInputStream is = new BufferedInputStream(new FileInputStream(file), 1024)) {
-
-			byte[] c = new byte[1024];
-			boolean empty = true,
-					lastEmpty = false;
-			int count = 0;
-			int read;
-			while ((read = is.read(c)) != -1) {
-				for (int i = 0; i < read; i++) {
-					if (c[i] == '\n') {
-						count++;
-						lastEmpty = true;
-					} else if (lastEmpty) {
-						lastEmpty = false;
-					}
-				}
-				empty = false;
-			}
-
-			if (!empty) {
-				if (count == 0) {
-					count = 1;
-				} else if (!lastEmpty) {
-					count++;
-				}
-			}
-
-			return count;
-		}
 	}
 }
