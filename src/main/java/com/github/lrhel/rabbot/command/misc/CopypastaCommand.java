@@ -80,5 +80,6 @@ public class CopypastaCommand implements CommandExecutor {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return 0;
 	}
 }
