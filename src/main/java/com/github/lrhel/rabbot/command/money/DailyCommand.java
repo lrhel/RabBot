@@ -13,7 +13,7 @@ public class DailyCommand implements CommandExecutor {
     private static final int INTERVAL =  60 * 60 * 1000;
 
     @Command(aliases = {"daily"}, description = "Daily money!")
-    public String onDailyCommand(User user, TextChannel textChannel){
+    public void onDailyCommand(User user, TextChannel textChannel){
         Random rng = new Random(System.currentTimeMillis());
         int totalMoney = Money.getMoney(user);
         int timestamp = Money.getTimestamp(user);
@@ -35,11 +35,10 @@ public class DailyCommand implements CommandExecutor {
         if ((timestamp + INTERVAL) > now && (timestamp - now + INTERVAL) <= INTERVAL) {
             int second = (timestamp - now + INTERVAL) / 1000;
             textChannel.sendMessage("Try in " + (second / 60) + " minutes and " + (second % 60) + " seconds").thenAccept(Utility.getMessageDeleter(5, TimeUnit.SECONDS));
-            return "";
         } else {
             totalMoney += money;
             Money.setMoney(user, totalMoney, now);
-            return "Yeahhh **" + user.getName() + "**, you got **" + money + "$**";
+            textChannel.sendMessage("Yeahhh **" + user.getName() + "**, you got **" + money + "$**");
         }
     }
 }

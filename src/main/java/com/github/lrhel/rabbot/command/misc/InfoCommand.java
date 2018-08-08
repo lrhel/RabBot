@@ -22,7 +22,7 @@ public class InfoCommand implements CommandExecutor {
                 .addInlineField("Author", api.getOwner().join().getDiscriminatedName())
                 .addInlineField("Guild count", String.valueOf(api.getServers().size()))
                 .addInlineField("Support Server", "[Rabbot Support Server](https://discord.gg/g88Wrfa)")
-                .addInlineField("Github's page", "[Rabbot's Respository](https://github.com/lrhel/RabBot)")
+                .addInlineField("Github's page", "[RabBot's Respository](https://github.com/lrhel/RabBot)")
                 .addInlineField("Invite link", "[Bot's invite link](" + api.createBotInvite() + ")")
                 .addField("API", apiList().toString())
                 ;
@@ -37,6 +37,7 @@ public class InfoCommand implements CommandExecutor {
         stringBuilder.append("[PokeAPI](https://pokeapi.co/)\n");
         stringBuilder.append("[PokeKotlin](https://github.com/PokeAPI/pokekotlin)\n");
         stringBuilder.append("[Unsplash](https://www.unsplash.com)\n");
+        stringBuilder.append("[AkiWrapper](https://github.com/markozajc/Akiwrapper)\n");
 
 
         return stringBuilder;

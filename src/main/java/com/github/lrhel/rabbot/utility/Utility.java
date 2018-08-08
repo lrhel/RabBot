@@ -16,4 +16,8 @@ public interface Utility {
     static Consumer<Message> getMessageDeleter(long delay, TimeUnit timeUnit) {
         return msg -> msg.getApi().getThreadPool().getScheduler().schedule((Runnable) msg::delete, delay, timeUnit);
     }
+
+    static String firstUpper(String str) {
+        return str.substring(0,1).toUpperCase() + str.substring(1);
+    }
 }

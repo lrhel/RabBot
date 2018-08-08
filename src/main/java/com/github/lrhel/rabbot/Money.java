@@ -7,7 +7,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class Money {
+import static com.github.lrhel.rabbot.sqlite.Sqlite.getTimestampFromSql;
+
+public interface Money {
 
     /**
      * Set the user total amount to the given amount
@@ -15,7 +17,7 @@ public class Money {
      * @param amount the amount to set
      * @param timestamp of the last time daily command was used
      */
-    public static void setMoney(User user, int amount, int timestamp) {
+     static void setMoney(User user, int amount, int timestamp) {
         Connection c = Sqlite.getInstance().getConnection();
         String sql = "SELECT * FROM money WHERE user_id = ?";
         try {
@@ -38,7 +40,7 @@ public class Money {
         }
     }
 
-    public static void setMoney(User user, int amount) {
+    static void setMoney(User user, int amount) {
         Money.setMoney(user, amount, getTimestamp(user));
     }
 
@@ -47,7 +49,7 @@ public class Money {
      * @param user the user to add the money
      * @param amount the amount to add
      */
-    public static void addMoney(User user, int amount) {
+    static void addMoney(User user, int amount) {
         setMoney(user, getMoney(user) + amount);
     }
 
@@ -56,7 +58,7 @@ public class Money {
      * @param user the user to remove his money
      * @param amount the amount to remove
      */
-    public static void removeMoney(User user, int amount) {
+    static void removeMoney(User user, int amount) {
         addMoney(user, -amount);
     }
 
@@ -65,7 +67,7 @@ public class Money {
      * @param user the user to get his money
      * @return the money of the user
      */
-    public static int getMoney(User user) {
+     static int getMoney(User user) {
         Connection c = Sqlite.getInstance().getConnection();
         String sql = "SELECT * FROM money WHERE user_id = ?";
         try {
@@ -84,23 +86,11 @@ public class Money {
 
     /**
      * Get the timestamp of the last time the given user used the daily command
-     * @param user
-     * @return
+     * @param user the user to get the last timestamp of the daily command
+     * @return the timestamp
      */
-    public static int getTimestamp(User user) {
-        Connection c = Sqlite.getInstance().getConnection();
+    static int getTimestamp(User user) {
         String sql = "SELECT * FROM money WHERE user_id = ?";
-        try {
-            PreparedStatement pstmt = c.prepareStatement(sql);
-            pstmt.setString(1, user.getIdAsString());
-            ResultSet rs = pstmt.executeQuery();
-            if(rs.next()) {
-                return rs.getInt("timestamp");
-            }
-            else
-                return 0;
-        } catch (Exception e) {
-            return 0;
-        }
+        return getTimestampFromSql(user, sql);
     }
 }
