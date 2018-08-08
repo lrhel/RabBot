@@ -21,17 +21,38 @@ public class GiveMoneyCommand implements CommandExecutor {
 
         Optional optional = Stream.of(args).filter(Number.class::isInstance).findAny();
 
-        if (userList.isEmpty() || !user.isBotOwner() || !optional.isPresent()) {
+        if (userList.isEmpty() || !optional.isPresent()) {
             return "";
         }
 
         amount = (Number) optional.get();
 
-        for (User users : userList) {
-            Money.addMoney(users, amount.intValue());
-            returnMessage.append(users.getName()).append(" ");
+        if (user.isBotOwner()) {
+
+            for (User users : userList) {
+                Money.addMoney(users, amount.intValue());
+                returnMessage.append(users.getName()).append(" ");
+            }
+
+            return returnMessage.append("got **").append(amount).append("$**").toString();
+
+        }
+        else {
+            if (Money.getMoney(user) < amount.intValue() * userList.size()) {
+                return "Not enough money";
+            }
+            else {
+                for (User users : userList) {
+                    Money.addMoney(users, amount.intValue());
+                    Money.removeMoney(user, amount.intValue());
+                    returnMessage.append(users.getName())
+                                 .append(" got **")
+                                 .append(amount).append("$**\n");
+                }
+
+                return returnMessage.toString();
+            }
         }
 
-        return returnMessage.append("got **").append(amount).append("$**").toString();
     }
 }

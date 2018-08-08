@@ -29,7 +29,7 @@ public class PokemonCommand implements CommandExecutor {
     private static int INTERVAL = 30 * 1000;
 
     @Command(aliases = {"pokemon", "pkmn"}, description = "Catch a Pokemon", async = true)
-    public void onCommand(User user, TextChannel textChannel){
+    public void onPokemonCommand(User user, TextChannel textChannel){
         PokeApi pokeApi = new PokeApiClient();
         Random rng = new Random(System.currentTimeMillis());
         Pokemon pokemon;

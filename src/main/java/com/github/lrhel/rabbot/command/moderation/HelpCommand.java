@@ -1,10 +1,15 @@
 package com.github.lrhel.rabbot.command.moderation;
 
-import org.javacord.api.entity.message.MessageBuilder;
-
 import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
 import de.btobastian.sdcf4j.CommandHandler;
+import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.message.embed.EmbedBuilder;
+import org.javacord.api.entity.permission.PermissionType;
+import org.javacord.api.entity.server.Server;
+import org.javacord.api.entity.user.User;
+
+import java.awt.*;
 
 public class HelpCommand implements CommandExecutor {
 
@@ -15,33 +20,75 @@ public class HelpCommand implements CommandExecutor {
     }
 
     @Command(aliases = {"help", "commands"}, description = "Shows this page!")
-    public String onHelpCommand() {
-        MessageBuilder builder = new MessageBuilder();
-        builder.append("```xml"); // a xml code block looks fancy
-        for (CommandHandler.SimpleCommand simpleCommand : commandHandler.getCommands()) {
-            if (!simpleCommand.getCommandAnnotation().showInHelpPage()) {
-                continue; // skip command
-            }
-            builder.append("\n");
-            if (!simpleCommand.getCommandAnnotation().requiresMention()) {
-                // the default prefix only works if the command does not require a mention
-                builder.append(commandHandler.getDefaultPrefix());
-            }
-            String usage = simpleCommand.getCommandAnnotation().usage();
-            if (usage.isEmpty()) { // no usage provided, using the first alias
-                usage = simpleCommand.getCommandAnnotation().aliases()[0];
-            }
-            builder.append(usage);
-            String description = simpleCommand.getCommandAnnotation().description();
-            for(int i = 16 - usage.length(); i > 0; i--) {
-                builder.append(" ");
-            }
-            if (!description.equals("none")) {
-                builder.append("| \t").append(description);
-            }
+    public void onHelpCommand(TextChannel textChannel, Server server, User user) {
+
+        EmbedBuilder embedBuilder = new EmbedBuilder().setAuthor("Help Page", "", "");
+
+        getInfo(embedBuilder);
+        getGames(embedBuilder);
+        getMoney(embedBuilder);
+        getPokemon(embedBuilder);
+        getMisc(embedBuilder);
+
+        if(server.canBanUsers(user) || server.canKickUsers(user)
+                                    || server.getPermissions(user).getAllowedPermission().contains(PermissionType.MANAGE_MESSAGES)) {
+            getModeration(embedBuilder, user, server);
         }
-        builder.append("\n```"); // end of xml code block
-        
-        return builder.getStringBuilder().toString();
+
+
+        textChannel.sendMessage(embedBuilder.setColor(Color.CYAN));
+
+    }
+
+    private EmbedBuilder getInfo(EmbedBuilder embedBuilder) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("**rb.info** *Show the info page*\n");
+        sb.append("**rb.help** *Show this help page*\n");
+        return embedBuilder.addField("__Info__", sb.toString());
+    }
+
+    private EmbedBuilder getGames(EmbedBuilder embedBuilder) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("**rb.blackjack** *Play BlackJack against the Bot*\n");
+        sb.append("**rb.roulette** *Play Europea Roulette*\n");
+        sb.append("**rb.akinator** *[beta] Play with Akinator*\n");
+        return embedBuilder.addField("__Games__", sb.toString());
+    }
+
+    private EmbedBuilder getMoney(EmbedBuilder embedBuilder) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("**rb.daily** *Get your daily money*\n");
+        sb.append("**rb.givemoney** *Give money to someone*\n");
+        return embedBuilder.addField("__Money__", sb.toString());
+    }
+
+    private EmbedBuilder getPokemon(EmbedBuilder embedBuilder) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("**rb.pokemon** *Catch a random Pokemon*\n");
+        sb.append("**rb.inventory** *View your Pokemon inventory*\n");
+        return embedBuilder.addField("__Pokemon__", sb.toString());
+    }
+
+    private EmbedBuilder getMisc(EmbedBuilder embedBuilder) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("**rb.rabbit** *Get a Rabbit Picture* :rabbit:\n");
+        sb.append("**rb.shitposting** *Get a random shitpost*\n");
+        sb.append("**rb.copypasta** *Get a random copypasta*\n");
+        return embedBuilder.addField("__Misc__", sb.toString());
+    }
+
+    private EmbedBuilder getModeration(EmbedBuilder embedBuilder, User user, Server server) {
+        StringBuilder sb = new StringBuilder();
+        if (server.getPermissions(user).getAllowedPermission().contains(PermissionType.MANAGE_MESSAGES)) {
+            sb.append("**rb.purge** *Purge message from the channel*\n");
+        }
+        if (server.canKickUsers(user)) {
+            sb.append("**rb.kick** *Kick a member of the server*\n");
+            sb.append("**rb.mute** *Mute a member of the server (give him all \"mute\" role)*\n");
+        }
+        if (server.canBanUsers(user)) {
+            sb.append("**rb.ban** *Ban a member of the server*\n");
+        }
+        return embedBuilder.addField("__Moderation__", sb.toString());
     }
 }
