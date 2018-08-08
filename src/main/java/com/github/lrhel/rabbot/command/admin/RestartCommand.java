@@ -20,6 +20,6 @@ public class RestartCommand implements CommandExecutor {
             }).start();
             return "Restarting... :thinking: :rabbit:";
         }
-        return "Rip you're not the Bot Owner";
+        return "";
     }
 }

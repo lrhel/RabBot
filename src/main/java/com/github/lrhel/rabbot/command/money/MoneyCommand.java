@@ -17,7 +17,8 @@ public class MoneyCommand implements CommandExecutor {
             return "You have **" + money + "$**";
         }
         else {
-            textChannel.sendMessage("You have 0$... Try the **daily** command").thenAccept(Utility.getMessageDeleter(3, TimeUnit.SECONDS)).join();
+            Money.setMoney(user, 0, 0);
+            textChannel.sendMessage("You have 0$... Try the **daily** command").thenAccept(Utility.getMessageDeleter(5, TimeUnit.SECONDS)).join();
             return "";
         }
     }

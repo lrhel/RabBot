@@ -11,6 +11,7 @@ import org.javacord.api.entity.user.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
 public class InventoryCommand implements CommandExecutor {
@@ -19,8 +20,10 @@ public class InventoryCommand implements CommandExecutor {
         try {
             final String sql = "SELECT PKMN, PKMN_NAME, COUNT(*) as NB FROM CATCH WHERE DISCORD_ID = ? GROUP BY PKMN_NAME ORDER BY PKMN LIMIT ? OFFSET ?";
             final int limit = 20;
-            StringBuilder result = new StringBuilder("```css\n");
+            StringBuilder result = new StringBuilder();
             Offset offset = new Offset();
+
+            result.append("```css\n");
 
             Connection c = Sqlite.getInstance().getConnection();
             PreparedStatement pstmt = c.prepareStatement(sql);
@@ -57,14 +60,7 @@ public class InventoryCommand implements CommandExecutor {
                             pstmt1.setInt(3, offset.getOffset());
                             ResultSet rs1 = pstmt1.executeQuery();
                             result1.append("```css\n");
-                            while (rs1.next()) {
-                                result1.append("#");
-                                result1.append(rs1.getString("PKMN"));
-                                result1.append(" ");
-                                result1.append(rs1.getString("PKMN_NAME"));
-                                result1.append(" x");result1.append(rs1.getInt("NB"));
-                                result1.append("\n");
-                            }
+                            getResult(rs1, result1);
                             result1.append("```");
                             msg.edit(result1.toString());
                         }
@@ -77,15 +73,7 @@ public class InventoryCommand implements CommandExecutor {
                         pstmt1.setInt(3, offset.getOffset());
                         ResultSet rs1 = pstmt1.executeQuery();
                         result1.append("```css\n");
-                        while (rs1.next()) {
-                            result1.append("#");
-                            result1.append(rs1.getString("PKMN"));
-                            result1.append(" ");
-                            result1.append(rs1.getString("PKMN_NAME"));
-                            result1.append(" x");
-                            result1.append(rs1.getInt("NB"));
-                            result1.append("\n");
-                        }
+                        getResult(rs1, result1);
                         if(!result1.toString().contentEquals("```css\n")) {
                             result1.append("```");
                             msg.edit(result1.toString());
@@ -99,13 +87,25 @@ public class InventoryCommand implements CommandExecutor {
                 } catch (Exception e){
                     e.printStackTrace();
                 }
-            }).removeAfter(3, TimeUnit.MINUTES);
+            }).removeAfter(5, TimeUnit.MINUTES);
 
 
         } catch (Exception e){
             e.printStackTrace();
         }
         return "";
+    }
+
+    void getResult(ResultSet rs1, StringBuilder result1) throws SQLException {
+        while (rs1.next()) {
+            result1.append("#");
+            result1.append(rs1.getString("PKMN"));
+            result1.append(" ");
+            result1.append(rs1.getString("PKMN_NAME"));
+            result1.append(" x");
+            result1.append(rs1.getInt("NB"));
+            result1.append("\n");
+        }
     }
 
     private class Offset{

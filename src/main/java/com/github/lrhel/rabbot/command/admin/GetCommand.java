@@ -38,8 +38,9 @@ public class GetCommand implements CommandExecutor {
                 return api.createBotInvite();
             case "money":
                 StringBuilder sb = new StringBuilder();
-                for(User usr : message.getMentionedUsers())
+                for(User usr : message.getMentionedUsers()) {
                     sb.append(String.valueOf(Money.getMoney(usr) + "$\n"));
+                }
                 return sb.toString();
         }
         return "";

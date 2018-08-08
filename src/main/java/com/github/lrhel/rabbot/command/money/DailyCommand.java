@@ -34,7 +34,7 @@ public class DailyCommand implements CommandExecutor {
 
         if ((timestamp + INTERVAL) > now && (timestamp - now + INTERVAL) <= INTERVAL) {
             int second = (timestamp - now + INTERVAL) / 1000;
-            textChannel.sendMessage("Try in " + (second / 60) + " minutes and " + (second % 60) + " seconds").thenAccept(Utility.getMessageDeleter(3, TimeUnit.SECONDS));
+            textChannel.sendMessage("Try in " + (second / 60) + " minutes and " + (second % 60) + " seconds").thenAccept(Utility.getMessageDeleter(5, TimeUnit.SECONDS));
             return "";
         } else {
             totalMoney += money;

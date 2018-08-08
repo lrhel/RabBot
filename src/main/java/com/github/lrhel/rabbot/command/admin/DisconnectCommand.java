@@ -7,11 +7,9 @@ import org.javacord.api.entity.user.User;
 
 public class DisconnectCommand implements CommandExecutor {
     @Command(aliases = {"disconnect", "disc"}, showInHelpPage = false)
-    public String onDisconnectCommand(User user, DiscordApi api){
-        if(!user.isBotOwner())
-            return "";
-        api.disconnect();
-        return "Bot disconnected";
+    public void onDisconnectCommand(User user, DiscordApi api) {
+        if (user.isBotOwner()) {
+            api.disconnect();
+        }
     }
-
 }
