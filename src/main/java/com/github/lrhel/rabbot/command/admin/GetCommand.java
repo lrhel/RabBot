@@ -10,9 +10,13 @@ import org.javacord.api.entity.user.User;
 
 import java.util.ArrayList;
 
+import static com.github.lrhel.rabbot.command.pokemon.RabbotPokemon.totalCatchedPokemon;
+
 public class GetCommand implements CommandExecutor {
     @Command(aliases = {"get"}, showInHelpPage = false)
     public String onGetCommand(User user, String[] arg, DiscordApi api, Message message){
+        StringBuilder sb;
+
         if (!user.isBotOwner() || arg.length == 0)
             return "";
         switch (arg[0]) {
@@ -37,11 +41,20 @@ public class GetCommand implements CommandExecutor {
             case "invite":
                 return api.createBotInvite();
             case "money":
-                StringBuilder sb = new StringBuilder();
+                sb = new StringBuilder();
                 for(User usr : message.getMentionedUsers()) {
-                    sb.append(String.valueOf(Money.getMoney(usr) + "$\n"));
+                    sb.append(usr.getName()).append(": ").append(String.valueOf(Money.getMoney(usr) + "$\n"));
                 }
                 return sb.toString();
+            case "pokemon":
+                try {
+                    sb = new StringBuilder();
+                    for(User usr : message.getMentionedUsers()) {
+                        sb.append(usr.getName()).append(": ").append(totalCatchedPokemon(usr)).append("\n");
+                    }
+                    sb.append("Total catch Pokemon: ").append(totalCatchedPokemon());
+                    return sb.toString();
+                } catch (Exception ignored) { }
         }
         return "";
     }
