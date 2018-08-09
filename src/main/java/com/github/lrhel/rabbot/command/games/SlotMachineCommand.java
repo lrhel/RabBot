@@ -53,7 +53,7 @@ public class SlotMachineCommand implements CommandExecutor {
 
     private static ArrayList<User> isPlaying = new ArrayList<>();
 
-    @Command(aliases = {"slotmachine", "slot", "spin"}, description = "Slotmachine 7 7 7", async = true)
+    @Command(aliases = {"slotmachine", "slot", "spin", "slots"}, description = "Slotmachine 7 7 7", async = true)
     public String onSlotMachineCommand(User user, TextChannel textChannel, String[] arg) {
         int amount;
         int option;

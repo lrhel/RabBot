@@ -49,6 +49,7 @@ public class Main {
         //Information
         cmd.registerCommand(new HelpCommand(cmd));
         cmd.registerCommand(new InfoCommand());
+        cmd.registerCommand(new InviteCommand());
 
         //Stupid Stuff
         cmd.registerCommand(new AkiCommand());

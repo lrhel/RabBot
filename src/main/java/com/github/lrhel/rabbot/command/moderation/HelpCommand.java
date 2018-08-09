@@ -30,9 +30,11 @@ public class HelpCommand implements CommandExecutor {
         getPokemon(embedBuilder);
         getMisc(embedBuilder);
 
-        if(server.canBanUsers(user) || server.canKickUsers(user)
-                                    || server.getPermissions(user).getAllowedPermission().contains(PermissionType.MANAGE_MESSAGES)) {
-            getModeration(embedBuilder, user, server);
+        if(server.canYouKickUsers() || server.canYouBanUsers() || server.canYouManage()) {
+            if (server.canBanUsers(user) || server.canKickUsers(user)
+                    || server.getPermissions(user).getAllowedPermission().contains(PermissionType.MANAGE_MESSAGES)) {
+                getModeration(embedBuilder, user, server);
+            }
         }
 
         textChannel.sendMessage(embedBuilder.setColor(Color.CYAN));
@@ -79,14 +81,14 @@ public class HelpCommand implements CommandExecutor {
 
     private EmbedBuilder getModeration(EmbedBuilder embedBuilder, User user, Server server) {
         StringBuilder sb = new StringBuilder();
-        if (server.getPermissions(user).getAllowedPermission().contains(PermissionType.MANAGE_MESSAGES)) {
+        if (server.getPermissions(user).getAllowedPermission().contains(PermissionType.MANAGE_MESSAGES) && server.canYouManage()) {
             sb.append("**rb.purge** *Purge message from the channel*\n");
         }
-        if (server.canKickUsers(user)) {
+        if (server.canKickUsers(user) && server.canYouKickUsers()) {
             sb.append("**rb.kick** *Kick a member of the server*\n");
             sb.append("**rb.mute** *Mute a member of the server (give him all \"mute\" role)*\n");
         }
-        if (server.canBanUsers(user)) {
+        if (server.canBanUsers(user) && server.canYouBanUsers()) {
             sb.append("**rb.ban** *Ban a member of the server*\n");
         }
         return embedBuilder.addField("__Moderation__", sb.toString());
