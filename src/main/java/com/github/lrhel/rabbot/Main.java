@@ -93,6 +93,7 @@ public class Main {
         cmd.registerCommand(new GetServerCommand());
         cmd.registerCommand(new GetCommand());
         cmd.registerCommand(new RabbitCommand());
+        cmd.registerCommand(new UnsplashCommand());
 
         //Join and Leave
         api.addServerJoinListener(event -> System.out.println("Joined server " + event.getServer().getName()));

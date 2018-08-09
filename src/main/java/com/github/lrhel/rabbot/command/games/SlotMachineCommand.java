@@ -139,7 +139,7 @@ public class SlotMachineCommand implements CommandExecutor {
             messageBuilder.append("\nYou have won **" + amount * win + "$**");
         }
         else {
-            messageBuilder.append("You have lost **" + amount + "$**");
+            messageBuilder.append("You have lost **" + amount * option + "$**");
         }
 
         Money.addMoney(user, amount * win);

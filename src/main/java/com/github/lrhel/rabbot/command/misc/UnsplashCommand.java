@@ -8,14 +8,14 @@ import de.btobastian.sdcf4j.CommandExecutor;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 
-public class RabbitCommand implements CommandExecutor {
-    @Command(aliases = {"rabbit", "rb"}, description = "Show a Rabbit picture")
-    public void onRabbitCommand(TextChannel textChannel) {
+public class UnsplashCommand implements CommandExecutor {
+    @Command(aliases = {"image", "img", "unsplash"}, description = "Splash a random image from Unsplash")
+    public void onUnsplashCommand(TextChannel textChannel) {
         UnsplashApi unsplashApi = new UnsplashApi(Config.UNSPLASH.toString());
         try {
-            UnsplashImage image = unsplashApi.getRandomImage("bunny");
+            UnsplashImage image = unsplashApi.getRandomImage();
             String url = image.getUrls().get("full");
-            EmbedBuilder embed = new EmbedBuilder().setAuthor("(\\/) Author: " + image.getAuthor().getName(), "https://unsplash.com/@" + image.getAuthor().getUsername() + "?utm_source=RabBot&utm_medium=referral", "")
+            EmbedBuilder embed = new EmbedBuilder().setAuthor("Author: " + image.getAuthor().getName(), "https://unsplash.com/@" + image.getAuthor().getUsername() + "?utm_source=RabBot&utm_medium=referral", "")
                     .setImage(url)
                     .setColor(image.getColor())
                     .setFooter("Powered by Unsplash.com", "https://cdn-images-1.medium.com/letterbox/42/36/50/50/1*TWuSZbKAMGfRYVaYy2PvMA.png?source=logoAvatar-lo_KIiiIO0WHepJ---1597a02d5bf9");
