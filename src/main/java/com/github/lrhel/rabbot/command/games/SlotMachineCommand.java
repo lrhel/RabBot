@@ -89,6 +89,7 @@ public class SlotMachineCommand implements CommandExecutor {
 
         if(Money.getMoney(user) < amount * option) {
             textChannel.sendMessage("Not enough money. . .").thenAccept(getMessageDeleter(5, TimeUnit.SECONDS));
+            return "";
         }
 
         isPlaying.add(user);
