@@ -42,6 +42,9 @@ public class GiveMoneyCommand implements CommandExecutor {
                 return "Not enough money";
             }
             else {
+                if(amount.intValue() < 1) {
+                    return "Give a real amount";
+                }
                 for (User users : userList) {
                     Money.addMoney(users, amount.intValue());
                     Money.removeMoney(user, amount.intValue());
