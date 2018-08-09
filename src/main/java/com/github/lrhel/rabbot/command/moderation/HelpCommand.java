@@ -35,7 +35,6 @@ public class HelpCommand implements CommandExecutor {
             getModeration(embedBuilder, user, server);
         }
 
-
         textChannel.sendMessage(embedBuilder.setColor(Color.CYAN));
 
     }
@@ -51,6 +50,7 @@ public class HelpCommand implements CommandExecutor {
         StringBuilder sb = new StringBuilder();
         sb.append("**rb.blackjack** *Play BlackJack against the Bot*\n");
         sb.append("**rb.roulette** *Play Europea Roulette*\n");
+        sb.append("**rb.slotmachine** *Play Slotmachine 777*\n");
         sb.append("**rb.akinator** *[beta] Play with Akinator*\n");
         return embedBuilder.addField("__Games__", sb.toString());
     }

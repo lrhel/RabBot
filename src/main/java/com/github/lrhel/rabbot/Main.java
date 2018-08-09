@@ -4,6 +4,7 @@ import com.github.lrhel.rabbot.command.admin.*;
 import com.github.lrhel.rabbot.command.games.AkiCommand;
 import com.github.lrhel.rabbot.command.games.BlackJackCommand;
 import com.github.lrhel.rabbot.command.games.RouletteCommand;
+import com.github.lrhel.rabbot.command.games.SlotMachineCommand;
 import com.github.lrhel.rabbot.command.misc.*;
 import com.github.lrhel.rabbot.command.moderation.*;
 import com.github.lrhel.rabbot.command.money.DailyCommand;
@@ -63,6 +64,7 @@ public class Main {
         cmd.registerCommand(new RouletteCommand());
         cmd.registerCommand(new GiveMoneyCommand());
         cmd.registerCommand(new BlackJackCommand());
+        cmd.registerCommand(new SlotMachineCommand());
 
         //Pokemon Stuff
         cmd.registerCommand(new PokemonCommand());
