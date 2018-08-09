@@ -30,7 +30,7 @@ public class HelpCommand implements CommandExecutor {
         getPokemon(embedBuilder);
         getMisc(embedBuilder);
 
-        if(server.canYouKickUsers() || server.canYouBanUsers() || server.canYouManage()) {
+        if(server.canYouKickUsers() || server.canYouBanUsers() || textChannel.canYouManageMessages()) {
             if (server.canBanUsers(user) || server.canKickUsers(user)
                     || server.getPermissions(user).getAllowedPermission().contains(PermissionType.MANAGE_MESSAGES)) {
                 getModeration(embedBuilder, user, server);
@@ -82,7 +82,7 @@ public class HelpCommand implements CommandExecutor {
 
     private EmbedBuilder getModeration(EmbedBuilder embedBuilder, User user, Server server) {
         StringBuilder sb = new StringBuilder();
-        if (server.getPermissions(user).getAllowedPermission().contains(PermissionType.MANAGE_MESSAGES) && server.canYouManage()) {
+        if (server.getPermissions(user).getAllowedPermission().contains(PermissionType.MANAGE_MESSAGES)) {
             sb.append("**rb.purge** *Purge message from the channel*\n");
         }
         if (server.canKickUsers(user) && server.canYouKickUsers()) {
