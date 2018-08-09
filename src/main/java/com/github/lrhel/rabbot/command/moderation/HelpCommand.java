@@ -45,6 +45,7 @@ public class HelpCommand implements CommandExecutor {
         StringBuilder sb = new StringBuilder();
         sb.append("**rb.info** *Show the info page*\n");
         sb.append("**rb.help** *Show this help page*\n");
+        sb.append("**rb.invite** *Get an invite link for RabBot :rabbit:");
         return embedBuilder.addField("__Info__", sb.toString());
     }
 
