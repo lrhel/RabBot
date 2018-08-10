@@ -24,7 +24,7 @@ public class BlackJackCommand implements CommandExecutor {
         return new EmbedBuilder().setAuthor("BlackJack 21", "", "");
     }
 
-    @Command(aliases = {"blackjack", "21"}, description = "BlackJack 21", async = true)
+    @Command(aliases = {"blackjack", "21", "bj"}, description = "BlackJack 21", async = true)
     public String onBlackJackCommand(User user, TextChannel textChannel, String[] arg, DiscordApi api) {
         int amounts;
         Cards deck = new Cards();
@@ -35,7 +35,7 @@ public class BlackJackCommand implements CommandExecutor {
         StringBuilder options = new StringBuilder();
 
         if(arg.length > 1) {
-            System.out.println("Blackjack: arg lenght not 1, value: " + arg.length);
+            System.out.println(user.getName() + ": Blackjack: arg lenght not 1, value: " + arg.length);
 
             return showHelp();
         }
@@ -45,9 +45,13 @@ public class BlackJackCommand implements CommandExecutor {
             amounts = 1;
         }
         final int amount = amounts;
-        if(amount <= 0 || amount > Money.getMoney(user)) {
-            System.out.println("Blackjack: not enough money");
-            return showHelp();
+        if (amount <= 0) {
+            System.out.println(user.getName() + ": Negative amount");
+            return "Try with a positive amount";
+        } else if (amount > Money.getMoney(user)) {
+            System.out.println(user.getName() + ": Blackjack: not enough money");
+            Money.setMoney(user, 0, 0);
+            return "Not enough money, try the **daily** command";
         }
 
         if(using.contains(user))
