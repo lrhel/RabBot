@@ -10,7 +10,7 @@ import java.net.URL;
 
 public class UnsplashApi {
     private final StringBuilder clientId;
-    public static final StringBuilder URL_BASE = new StringBuilder("https://api.unsplash.com/");
+    private static final StringBuilder URL_BASE = new StringBuilder("https://api.unsplash.com/");
 
     public UnsplashApi(String client_id) {
         this.clientId = new StringBuilder("client_id=").append(client_id);

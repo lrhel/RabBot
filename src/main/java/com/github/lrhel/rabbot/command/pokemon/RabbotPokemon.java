@@ -36,6 +36,19 @@ public interface RabbotPokemon {
         return preparedStatement.executeQuery().getInt("count");
     }
 
+    static int totalUniqueCatchedPokemon() throws SQLException {
+        String sql = "SELECT COUNT(DISTINCT PKMN_NAME) as count FROM catch";
+        PreparedStatement preparedStatement = Sqlite.getInstance().getConnection().prepareStatement(sql);
+        return preparedStatement.executeQuery().getInt("count");
+    }
+
+    static int totalUniqueCatchedPokemon(User user) throws SQLException {
+        String sql  = "SELECT COUNT(DISTINCT PKMN_NAME) as count FROM catch WHERE discord_id = ?";
+        PreparedStatement preparedStatement = Sqlite.getInstance().getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, user.getIdAsString());
+        return preparedStatement.executeQuery().getInt("count");
+    }
+
     /*
      * Get the timestamp of the last time the given user used the pokemon command
      * @param user

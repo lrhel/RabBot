@@ -75,6 +75,7 @@ public class HelpCommand implements CommandExecutor {
     private EmbedBuilder getMisc(EmbedBuilder embedBuilder) {
         StringBuilder sb = new StringBuilder();
         sb.append("**rb.rabbit** *Get a Rabbit Picture* :rabbit:\n");
+        sb.append("**rb.image** *Get a Random Picture*\n");
 //        sb.append("**rb.shitposting** *Get a random shitpost*\n");
 //        sb.append("**rb.copypasta** *Get a random copypasta*\n");
         return embedBuilder.addField("__Misc__", sb.toString());

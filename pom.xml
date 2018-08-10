@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.lrhel</groupId>
 	<artifactId>RabBot</artifactId>
@@ -140,11 +140,19 @@
 			<version>1.3.3</version>
 		</dependency>
 
+
+		<dependency>
+			<groupId>com.github.DiscordBotList</groupId>
+			<artifactId>DBL-Java-Library</artifactId>
+			<version>d0ca728</version>
+		</dependency>
+
+
 		<!-- Kaleidox Utility -->
 		<!--<dependency>-->
-			<!--<groupId>com.github.Kaleidox00</groupId>-->
-			<!--<artifactId>JavacordBotUtilities</artifactId>-->
-			<!--<version>0b454250c4</version>-->
+		<!--<groupId>com.github.Kaleidox00</groupId>-->
+		<!--<artifactId>JavacordBotUtilities</artifactId>-->
+		<!--<version>0b454250c4</version>-->
 		<!--</dependency>-->
 
 	</dependencies>

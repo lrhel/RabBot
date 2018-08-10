@@ -12,35 +12,39 @@ import com.github.lrhel.rabbot.command.money.GiveMoneyCommand;
 import com.github.lrhel.rabbot.command.money.MoneyCommand;
 import com.github.lrhel.rabbot.command.pokemon.InventoryCommand;
 import com.github.lrhel.rabbot.command.pokemon.PokemonCommand;
+import com.github.lrhel.rabbot.config.Config;
+import de.btobastian.sdcf4j.CommandHandler;
+import de.btobastian.sdcf4j.handler.JavacordHandler;
+import org.discordbots.api.client.DiscordBotListAPI;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.util.logging.FallbackLoggerConfiguration;
 
-import com.github.lrhel.rabbot.config.Config;
-
-import de.btobastian.sdcf4j.CommandHandler;
-import de.btobastian.sdcf4j.handler.JavacordHandler;
-
 
 public class Main {
 
-	public static void main(String[] args) {
-			
-		//set logger and tracer
-		FallbackLoggerConfiguration.setDebug(false);
-		FallbackLoggerConfiguration.setTrace(false);
-		
+    public static void main(String[] args) {
+
+        //set logger and tracer
+        FallbackLoggerConfiguration.setDebug(false);
+        FallbackLoggerConfiguration.setTrace(false);
+
         DiscordApi api = new DiscordApiBuilder().setToken(Config.DISCORD.toString()).login().join();
-        System.out.println("Logged in!");	
+        System.out.println("Logged in!");
         System.out.println(api.createBotInvite());
 
+        DiscordBotListAPI discordBotListAPI = new DiscordBotListAPI.Builder()
+                .token(Config.DISCORDLIST.toString())
+                .botId(Config.BOTID.toString())
+                .build();
+
         api.addUserRoleAddListener(event-> {
-        	if(event.getRole().getName().contains("Mute Roll") && event.getRole().getUsers().contains(api.getYourself())) {
-        		event.getRole().removeUser(api.getYourself());
-        		
-        	}
+            if(event.getRole().getName().contains("Mute Roll") && event.getRole().getUsers().contains(api.getYourself())) {
+                event.getRole().removeUser(api.getYourself());
+
+            }
         });
-        
+
         //Command Handler & Option
         CommandHandler cmd = new JavacordHandler(api);
         cmd.setDefaultPrefix("rb.");
@@ -75,7 +79,7 @@ public class Main {
         cmd.registerCommand(new UpdateCommand());
         cmd.registerCommand(new RestartCommand());
         cmd.registerCommand(new DisconnectCommand());
-        
+
         // :EZ:
         cmd.registerCommand(new ShitpostingCommand());
         cmd.registerCommand(new CopypastaCommand());
@@ -91,14 +95,26 @@ public class Main {
         // Other stuff
         cmd.registerCommand(new RaidCommand());
         cmd.registerCommand(new GetServerCommand());
-        cmd.registerCommand(new GetCommand());
+        cmd.registerCommand(new GetCommand(discordBotListAPI));
         cmd.registerCommand(new RabbitCommand());
         cmd.registerCommand(new UnsplashCommand());
+        cmd.registerCommand(new SetServerCountCommand(discordBotListAPI, api));
 
         //Join and Leave
-        api.addServerJoinListener(event -> System.out.println("Joined server " + event.getServer().getName()));
-        api.addServerLeaveListener(event -> System.out.println("Leaved server " + event.getServer().getName()));
+        api.addServerJoinListener(event -> {
+            System.out.println("Joined server " + event.getServer().getName());
+            postServerCount(discordBotListAPI, api);
+        });
 
-	}
+        api.addServerLeaveListener(event -> {
+            System.out.println("Leaved server " + event.getServer().getName());
+            postServerCount(discordBotListAPI, api);
+        });
+
+    }
+
+    public static void postServerCount(DiscordBotListAPI discordBotListAPI, DiscordApi discordApi) {
+        discordBotListAPI.setStats(discordApi.getServers().size());
+    }
 
 }
