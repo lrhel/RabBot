@@ -5,8 +5,8 @@ import de.btobastian.sdcf4j.CommandExecutor;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
+
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class BanCommand implements CommandExecutor {
     @Command(aliases = {"ban"}, description = "Ban a user(s)")
@@ -19,7 +19,7 @@ public class BanCommand implements CommandExecutor {
         ArrayList<User> userToBanList;
         userToBanList = new ArrayList<>(message.getMentionedUsers());
 
-        if(userToBanList.isEmpty())
+        if(userToBanList.size() == 0)
             return "No user mentioned";
         String reason = String.join(" ", arg);
 
@@ -34,9 +34,8 @@ public class BanCommand implements CommandExecutor {
             }
             else if(server.canBanUser(user, userToBan)) {
                 server.banUser(userToBan, 7, reason).join();
-                Message msg = message.getServerTextChannel().get().sendMessage(userToBan.getMentionTag() + " banned")
+                message.getServerTextChannel().get().sendMessage(userToBan.getMentionTag() + " banned")
                 .join();
-                msg.addMessageEditListener(e -> {}).removeAfter(3, TimeUnit.SECONDS).addRemoveHandler(() -> msg.delete().join());
             }
             else
                 message.getServerTextChannel().get().sendMessage("Something went wrong ... ");

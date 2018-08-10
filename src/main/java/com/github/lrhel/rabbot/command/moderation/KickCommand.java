@@ -19,7 +19,7 @@ public class KickCommand implements CommandExecutor {
         ArrayList<User> userToKickList;
         userToKickList = new ArrayList<>(message.getMentionedUsers());
 
-        if(userToKickList.isEmpty())
+        if(userToKickList.size() == 0)
             return "No user mentioned";
 
         String reason = String.join(" ", arg);
