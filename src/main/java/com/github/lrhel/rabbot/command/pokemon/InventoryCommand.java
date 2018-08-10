@@ -46,7 +46,7 @@ public class InventoryCommand implements CommandExecutor {
             Message msg = textChannel.sendMessage(result.toString()).get();
             msg.addReaction(EmojiParser.parseToUnicode(":arrow_left:")); //left arrow
             msg.addReaction(EmojiParser.parseToUnicode(":arrow_right:")); //right arrow
-            msg.addReaction(EmojiParser.parseToUnicode(":x:"));//X cross❌❌ ❌
+            msg.addReaction(EmojiParser.parseToUnicode(":x:"));//X cross
             msg.addReactionAddListener(event -> {
                 try {
                     StringBuilder result1 = new StringBuilder();
