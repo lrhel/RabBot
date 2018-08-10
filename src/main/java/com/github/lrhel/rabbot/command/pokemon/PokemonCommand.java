@@ -28,7 +28,7 @@ import static com.github.lrhel.rabbot.utility.Utility.getMessageDeleter;
 
 
 public class PokemonCommand implements CommandExecutor {
-    private static int TOTAL_PKMN = 802;
+    public static int TOTAL_PKMN = 802;
     private static int INTERVAL = 30 * 1000;
     private static int SHINY_RATE = 4096;
 

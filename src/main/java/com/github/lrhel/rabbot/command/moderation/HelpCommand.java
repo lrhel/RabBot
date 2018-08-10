@@ -3,6 +3,7 @@ package com.github.lrhel.rabbot.command.moderation;
 import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
 import de.btobastian.sdcf4j.CommandHandler;
+import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.permission.PermissionType;
@@ -20,7 +21,7 @@ public class HelpCommand implements CommandExecutor {
     }
 
     @Command(aliases = {"help", "commands"}, description = "Shows this page!")
-    public void onHelpCommand(TextChannel textChannel, Server server, User user) {
+    public void onHelpCommand(TextChannel textChannel, Server server, User user, DiscordApi api) {
 
         EmbedBuilder embedBuilder = new EmbedBuilder().setAuthor("Help Page", "", "");
 
@@ -36,6 +37,7 @@ public class HelpCommand implements CommandExecutor {
                 getModeration(embedBuilder, user, server);
             }
         }
+
 
         textChannel.sendMessage(embedBuilder.setColor(Color.CYAN));
 
@@ -61,6 +63,7 @@ public class HelpCommand implements CommandExecutor {
     private EmbedBuilder getMoney(EmbedBuilder embedBuilder) {
         StringBuilder sb = new StringBuilder();
         sb.append("**rb.daily** *Get your daily money*\n");
+        sb.append("**rb.bonus** *Get a Bonus for Voting*\n");
         sb.append("**rb.givemoney** *Give money to someone*\n");
         return embedBuilder.addField("__Money__", sb.toString());
     }
@@ -76,8 +79,8 @@ public class HelpCommand implements CommandExecutor {
         StringBuilder sb = new StringBuilder();
         sb.append("**rb.rabbit** *Get a Rabbit Picture* :rabbit:\n");
         sb.append("**rb.image** *Get a Random Picture*\n");
-//        sb.append("**rb.shitposting** *Get a random shitpost*\n");
-//        sb.append("**rb.copypasta** *Get a random copypasta*\n");
+        sb.append("**rb.shitposting** *Get a random shitpost*\n");
+        sb.append("**rb.copypasta** *Get a random copypasta*\n");
         return embedBuilder.addField("__Misc__", sb.toString());
     }
 

@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import static com.github.lrhel.rabbot.sqlite.Sqlite.getBonusTimestampFromSql;
 import static com.github.lrhel.rabbot.sqlite.Sqlite.getTimestampFromSql;
 
 public interface Money {
@@ -40,8 +41,27 @@ public interface Money {
         }
     }
 
-    static void addBonus(User user, int amount) {
-
+    static void addBonus(User user, int amount, int timestamp) {
+        Connection c = Sqlite.getInstance().getConnection();
+        String sql = "SELECT * FROM money WHERE user_id = ?";
+        try {
+            PreparedStatement pstmt = c.prepareStatement(sql);
+            pstmt.setString(1, user.getIdAsString());
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()) {
+                sql = "UPDATE money SET money = ?, bonus_timestamp = ? WHERE user_id = ?";
+            }
+            else {
+                sql = "INSERT INTO money(money, bonus_timestamp, user_id) VALUES(?, ?, ?)";
+            }
+            pstmt = c.prepareStatement(sql);
+            pstmt.setInt(1, getMoney(user) + amount);
+            pstmt.setInt(2, timestamp);
+            pstmt.setString(3, user.getIdAsString());
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     static void setMoney(User user, int amount) {
@@ -96,5 +116,15 @@ public interface Money {
     static int getTimestamp(User user) {
         String sql = "SELECT * FROM money WHERE user_id = ?";
         return getTimestampFromSql(user, sql);
+    }
+
+    /**
+     * Get the timestamp of the last time the given user used the daily command
+     * @param user the user to get the last timestamp of the daily command
+     * @return the timestamp
+     */
+    static int getBonusTimestamp(User user) {
+        String sql = "SELECT * FROM money WHERE user_id = ?";
+        return getBonusTimestampFromSql(user, sql);
     }
 }

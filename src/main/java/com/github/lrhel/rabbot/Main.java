@@ -7,6 +7,7 @@ import com.github.lrhel.rabbot.command.games.RouletteCommand;
 import com.github.lrhel.rabbot.command.games.SlotMachineCommand;
 import com.github.lrhel.rabbot.command.misc.*;
 import com.github.lrhel.rabbot.command.moderation.*;
+import com.github.lrhel.rabbot.command.money.BonusCommand;
 import com.github.lrhel.rabbot.command.money.DailyCommand;
 import com.github.lrhel.rabbot.command.money.GiveMoneyCommand;
 import com.github.lrhel.rabbot.command.money.MoneyCommand;
@@ -74,6 +75,7 @@ public class Main {
         //Pokemon Stuff
         cmd.registerCommand(new PokemonCommand(discordBotListAPI));
         cmd.registerCommand(new InventoryCommand());
+        cmd.registerCommand(new BonusCommand(discordBotListAPI));
 
         //Updating/Restarting stuff
         cmd.registerCommand(new UpdateCommand());
