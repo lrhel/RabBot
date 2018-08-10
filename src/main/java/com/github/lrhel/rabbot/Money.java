@@ -40,6 +40,10 @@ public interface Money {
         }
     }
 
+    static void addBonus(User user, int amount) {
+
+    }
+
     static void setMoney(User user, int amount) {
         Money.setMoney(user, amount, getTimestamp(user));
     }

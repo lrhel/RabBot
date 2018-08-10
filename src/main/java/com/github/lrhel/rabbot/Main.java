@@ -72,7 +72,7 @@ public class Main {
         cmd.registerCommand(new SlotMachineCommand());
 
         //Pokemon Stuff
-        cmd.registerCommand(new PokemonCommand());
+        cmd.registerCommand(new PokemonCommand(discordBotListAPI));
         cmd.registerCommand(new InventoryCommand());
 
         //Updating/Restarting stuff

@@ -21,7 +21,7 @@ public class InfoCommand implements CommandExecutor {
                 .setColor(Color.GRAY)
                 .addInlineField("Author", api.getOwner().join().getDiscriminatedName())
                 .addInlineField("Guild count", String.valueOf(api.getServers().size()))
-                .addInlineField("Support Server", "[Rabbot Support Server](https://discord.gg/g88Wrfa)")
+                .addInlineField("Support Server", "[Rabbot Support Server](https://discord.gg/N5c9zfP)")
                 .addInlineField("Github's page", "[RabBot's Respository](https://github.com/lrhel/RabBot)")
                 .addInlineField("Invite link", "[Bot's invite link](" + api.createBotInvite() + ")")
                 .addField("API", apiList().toString())
