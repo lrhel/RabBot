@@ -24,6 +24,7 @@ public class InfoCommand implements CommandExecutor {
                 .addInlineField("Support Server", "[Rabbot Support Server](https://discord.gg/N5c9zfP)")
                 .addInlineField("Github's page", "[RabBot's Respository](https://github.com/lrhel/RabBot)")
                 .addInlineField("Invite link", "[Bot's invite link](" + api.createBotInvite() + ")")
+                .addInlineField("Upvote", "[Vote 4 RabBot](https://discordbots.org/bot/441010449757110273/vote)")
                 .addField("API", apiList().toString())
                 ;
         textChannel.sendMessage(embed);
@@ -38,6 +39,8 @@ public class InfoCommand implements CommandExecutor {
         stringBuilder.append("[PokeKotlin](https://github.com/PokeAPI/pokekotlin)\n");
         stringBuilder.append("[Unsplash](https://www.unsplash.com)\n");
         stringBuilder.append("[AkiWrapper](https://github.com/markozajc/Akiwrapper)\n");
+        stringBuilder.append("[DBL Java Library](https://github.com/DiscordBotList/DBL-Java-Library)");
+
 
 
         return stringBuilder;
