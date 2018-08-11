@@ -5,6 +5,8 @@ import de.btobastian.sdcf4j.CommandExecutor;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
+import org.javacord.api.entity.permission.PermissionType;
+import org.javacord.api.entity.permission.PermissionsBuilder;
 import org.javacord.api.entity.user.User;
 
 import java.awt.*;
@@ -15,6 +17,11 @@ public class InfoCommand implements CommandExecutor {
     @Command(aliases = {"info"}, description = "Show the info page!")
     public String onInfoCommand(TextChannel textChannel, DiscordApi api) {
         User bot = api.getYourself();
+        String invite = api.createBotInvite(new PermissionsBuilder().setAllowed(
+                PermissionType.READ_MESSAGES, PermissionType.ATTACH_FILE,
+                PermissionType.SEND_MESSAGES, PermissionType.EMBED_LINKS,
+                PermissionType.ADD_REACTIONS, PermissionType.READ_MESSAGE_HISTORY
+        ).build());
         EmbedBuilder embed = new EmbedBuilder().setThumbnail(bot.getAvatar())
                 .setAuthor(bot.getDiscriminatedName().replace(bot.getDiscriminator(), "").replace("#",""), api.createBotInvite(), "")
                 .setDescription(description)
@@ -23,7 +30,7 @@ public class InfoCommand implements CommandExecutor {
                 .addInlineField("Guild count", String.valueOf(api.getServers().size()))
                 .addInlineField("Support Server", "[Rabbot Support Server](https://discord.gg/N5c9zfP)")
                 .addInlineField("Github's page", "[RabBot's Respository](https://github.com/lrhel/RabBot)")
-                .addInlineField("Invite link", "[Bot's invite link](" + api.createBotInvite() + ")")
+                .addInlineField("Invite link", "[Bot's invite link](" + invite + ")")
                 .addInlineField("Upvote", "[Vote 4 RabBot](https://discordbots.org/bot/441010449757110273/vote)")
                 .addField("API", apiList().toString())
                 ;

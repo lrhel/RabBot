@@ -19,6 +19,8 @@ import de.btobastian.sdcf4j.handler.JavacordHandler;
 import org.discordbots.api.client.DiscordBotListAPI;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
+import org.javacord.api.entity.permission.PermissionType;
+import org.javacord.api.entity.permission.PermissionsBuilder;
 import org.javacord.api.util.logging.FallbackLoggerConfiguration;
 
 
@@ -32,7 +34,11 @@ public class Main {
 
         DiscordApi api = new DiscordApiBuilder().setToken(Config.DISCORD.toString()).login().join();
         System.out.println("Logged in!");
-        System.out.println(api.createBotInvite());
+        System.out.println(api.createBotInvite(new PermissionsBuilder().setAllowed(
+                PermissionType.READ_MESSAGES, PermissionType.ATTACH_FILE,
+                PermissionType.SEND_MESSAGES, PermissionType.EMBED_LINKS,
+                PermissionType.ADD_REACTIONS, PermissionType.READ_MESSAGE_HISTORY
+        ).build()));
 
         DiscordBotListAPI discordBotListAPI = new DiscordBotListAPI.Builder()
                 .token(Config.DISCORDLIST.toString())

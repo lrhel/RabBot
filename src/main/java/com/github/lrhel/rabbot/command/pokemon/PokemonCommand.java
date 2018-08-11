@@ -138,23 +138,26 @@ public class PokemonCommand implements CommandExecutor {
         }
 
         Message message = textChannel.sendMessage(catchPokemonEmbed).join();
-        message.addReaction(EmojiParser.parseToUnicode(":arrow_right:"));
+        try {
+            message.addReaction(EmojiParser.parseToUnicode(":arrow_right:"));
 
-        lm.set(message.addReactionAddListener(e -> {
-            if (e.getUser().getId() == user.getId() && e.getEmoji().equalsEmoji(EmojiParser.parseToUnicode(":arrow_right:"))) {
-                message.edit(pokedexEntryEmbed);
-                lm.get().remove();
-            }
-        }).removeAfter(5, TimeUnit.MINUTES));
+            lm.set(message.addReactionAddListener(e -> {
+                if (e.getUser().getId() == user.getId() && e.getEmoji().equalsEmoji(EmojiParser.parseToUnicode(":arrow_right:"))) {
+                    message.edit(pokedexEntryEmbed);
+                    lm.get().remove();
+                }
+            }).removeAfter(5, TimeUnit.MINUTES));
 
-        lm2.set(message.addReactionRemoveListener(e -> {
-            if(e.getUser().getId() == user.getId() && e.getEmoji().equalsEmoji(EmojiParser.parseToUnicode(":arrow_right:"))) {
-                message.edit(finalEmbed);
-                message.removeAllReactions().join();
-                lm2.get().remove();
-            }
-        }).removeAfter(5, TimeUnit.MINUTES));
-
+            lm2.set(message.addReactionRemoveListener(e -> {
+                if (e.getUser().getId() == user.getId() && e.getEmoji().equalsEmoji(EmojiParser.parseToUnicode(":arrow_right:"))) {
+                    message.edit(finalEmbed);
+                    try {
+                        message.removeAllReactions().join();
+                    } catch (Exception ignored) { }
+                    lm2.get().remove();
+                }
+            }).removeAfter(5, TimeUnit.MINUTES));
+        } catch (Exception ignored) { }
         playing.remove(user);
     }
 }

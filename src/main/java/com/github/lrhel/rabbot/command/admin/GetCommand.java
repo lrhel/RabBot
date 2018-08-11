@@ -9,6 +9,8 @@ import org.discordbots.api.client.DiscordBotListAPI;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.permission.PermissionType;
+import org.javacord.api.entity.permission.PermissionsBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 
@@ -52,7 +54,11 @@ public class GetCommand implements CommandExecutor {
                 return list.toString();
             case "inv":
             case "invite":
-                return api.createBotInvite();
+                return api.createBotInvite(new PermissionsBuilder().setAllowed(
+                        PermissionType.READ_MESSAGES, PermissionType.ATTACH_FILE,
+                        PermissionType.SEND_MESSAGES, PermissionType.EMBED_LINKS,
+                        PermissionType.ADD_REACTIONS, PermissionType.READ_MESSAGE_HISTORY
+                ).build());
             case "money":
                 sb = new StringBuilder();
                 for (User usr : message.getMentionedUsers()) {
