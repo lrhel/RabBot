@@ -24,7 +24,7 @@ import static com.github.lrhel.rabbot.utility.Utility.firstUpper;
 
 public class BonusCommand implements CommandExecutor {
     private DiscordBotListAPI discordBotListAPI;
-    private static int INTERVAL = 12 * 60 * 60 * 1000;
+    private static int INTERVAL = 4 * 60 * 60 * 1000;
 
     private static ArrayList<User> using = new ArrayList<>(10);
 
