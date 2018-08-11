@@ -60,9 +60,16 @@ public class AkiCommand implements CommandExecutor {
         aki = akiwrapperBuilder.setName(user.getName()).build();
 
         questionAtomicReference.set(aki.getCurrentQuestion());
+        AtomicReference<Integer> questionCount = new AtomicReference<>();
+        questionCount.set(0);
 
         /* GAME LOOP */
         while (next.is()) {
+            if(questionCount.get() == 2) {
+                using.remove(user);
+                textChannel.sendMessage("```rb.akinator: ended timout```");
+                return;
+            }
             textChannel.sendMessage(questionAtomicReference.get().getQuestion()).join();
             ExtendedBoolean answered = new ExtendedBoolean(false);
             listenerManagerAtomicReference.set(textChannel.addMessageCreateListener(event -> {
@@ -78,7 +85,9 @@ public class AkiCommand implements CommandExecutor {
                         Akiwrapper.Answer answer = getAnswer(content);
                         if(answer != null) {
                             questionAtomicReference.set(aki.answerCurrentQuestion(answer));
+                            questionCount.set(0);
                             answered.set(true);
+
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -168,6 +177,7 @@ public class AkiCommand implements CommandExecutor {
                                     case "no":
                                     case "non":
                                     case "nao":
+                                        questionCount.set(0);
                                         guessList.add(guess.getName());
                                         answered.set(true);
                                         break;
@@ -287,6 +297,7 @@ public class AkiCommand implements CommandExecutor {
                             Thread.onSpinWait();
                         }
 
+
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -297,6 +308,7 @@ public class AkiCommand implements CommandExecutor {
                 textChannel.sendMessage("You won!");
                 break;
             }
+            questionCount.set(questionCount.get() + 1);
         }
         //After the game ended
         using.remove(user);
