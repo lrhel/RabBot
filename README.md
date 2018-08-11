@@ -34,7 +34,7 @@ You can also define those permission to RabBot for more functionality
 
 <center>
 
-[![Invite Link](http://image.noelshack.com/fichiers/2018/32/6/1533999452-bouton-invite-link.png)](https://discordapp.com/oauth2/authorize?client_id=441010449757110273&scope=bot&permissions=117824) [![Support Server](http://image.noelshack.com/fichiers/2018/32/6/1533999452-bouton-invite-link.png)](https://discord.gg/g88Wrfa) [![Vote](http://image.noelshack.com/fichiers/2018/32/5/1533934610-bouton-vote-for-rabbot.png)](https://discordbots.org/bot/441010449757110273/vote)
+[![Invite Link](http://image.noelshack.com/fichiers/2018/32/6/1533999452-bouton-invite-link.png)](https://discordapp.com/oauth2/authorize?client_id=441010449757110273&scope=bot&permissions=117824) [![Support Server](http://image.noelshack.com/fichiers/2018/32/6/1533999452-bouton-support-server.png)](https://discord.gg/g88Wrfa) [![Vote](http://image.noelshack.com/fichiers/2018/32/5/1533934610-bouton-vote-for-rabbot.png)](https://discordbots.org/bot/441010449757110273/vote)
 
 [![Discord Bots](https://discordbots.org/api/widget/441010449757110273.svg)](https://discordbots.org/bot/441010449757110273)
 
