@@ -61,13 +61,14 @@ public class BonusCommand implements CommandExecutor {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append("You got **20.000$** ");
                 Money.addBonus(user, 20000, now);
+                embedBuilder = new EmbedBuilder();
                 try {
                     pokemon = pokeApi.getPokemon(rng.nextInt(TOTAL_PKMN) + 1);
                     stringBuilder.append("and a Shiny ").append(firstUpper(pokemon.getName()));
                     RabbotPokemon.addPokemon(user, pokemon, true);
+                    embedBuilder.setThumbnail(pokemon.getSprites().getFrontShiny());
                 } catch (Exception e) { }
-                embedBuilder = new EmbedBuilder()
-                        .setAuthor("RabBot's Bonus", "https://discordbots.org/bot/441010449757110273", api.getYourself().getAvatar())
+                embedBuilder.setAuthor("RabBot's Bonus", "https://discordbots.org/bot/441010449757110273", api.getYourself().getAvatar())
                         .addField("Congratulation",stringBuilder.toString());
             } else {
                 embedBuilder = new EmbedBuilder()
