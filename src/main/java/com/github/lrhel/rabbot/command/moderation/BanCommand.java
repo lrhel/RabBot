@@ -11,6 +11,8 @@ import java.util.ArrayList;
 public class BanCommand implements CommandExecutor {
     @Command(aliases = {"ban"}, description = "Ban a user(s)")
     public String banCommand(User user, Message message, Server server, String[] arg) {
+        if (user.isBot()) { return ""; }
+
         if(!server.canYouBanUsers())
             return "Rabbot cannot ban users!";
         if(!server.canBanUsers(user))

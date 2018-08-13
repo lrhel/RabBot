@@ -28,6 +28,8 @@ public class GetCommand implements CommandExecutor {
 
     @Command(aliases = {"get"}, showInHelpPage = false)
     public String onGetCommand(User user, String[] arg, DiscordApi api, Message message, TextChannel textChannel){
+        if (user.isBot()) { return ""; }
+
         StringBuilder sb;
         DblApi dblApi = new DblApi().setId(Config.BOTID.toString());
 

@@ -15,7 +15,9 @@ public class InfoCommand implements CommandExecutor {
     private static final String description = "(\\\\/) Rabbot the Bot that jump in your Server! (\\\\/)";
 
     @Command(aliases = {"info"}, description = "Show the info page!")
-    public String onInfoCommand(TextChannel textChannel, DiscordApi api) {
+    public String onInfoCommand(User user, TextChannel textChannel, DiscordApi api) {
+        if (user.isBot()) { return ""; }
+
         User bot = api.getYourself();
         String invite = api.createBotInvite(new PermissionsBuilder().setAllowed(
                 PermissionType.READ_MESSAGES, PermissionType.ATTACH_FILE,

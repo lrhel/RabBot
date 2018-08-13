@@ -9,12 +9,15 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
+import org.javacord.api.entity.user.User;
 
 import java.util.concurrent.TimeUnit;
 
 public class PornhubCommand implements CommandExecutor {
     @Command(aliases = {"pornhub", "ph"})
-    public void onPornhubCommand(Message message, TextChannel textChannel, String[] args) {
+    public void onPornhubCommand(User user, Message message, TextChannel textChannel, String[] args) {
+        if (user.isBot()) { return ; }
+
         if(message.getServerTextChannel().isPresent()) { //if send in a server
             if(!message.getServerTextChannel().get().isNsfw()) { //if it's not labelled nsfw
                 return;

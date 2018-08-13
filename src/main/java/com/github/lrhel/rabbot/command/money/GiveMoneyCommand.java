@@ -13,6 +13,8 @@ import java.util.stream.Stream;
 public class GiveMoneyCommand implements CommandExecutor {
     @Command(aliases = {"givemoney"}, showInHelpPage = false)
     public String giveMoneyCommand(User user, Message message, Object[] args) {
+        if (user.isBot()) { return ""; }
+
 
         Number amount;
 

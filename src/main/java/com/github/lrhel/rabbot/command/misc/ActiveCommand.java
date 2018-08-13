@@ -1,5 +1,13 @@
 package com.github.lrhel.rabbot.command.misc;
 
+import de.btobastian.sdcf4j.Command;
+import de.btobastian.sdcf4j.CommandExecutor;
+import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.permission.Role;
+import org.javacord.api.entity.server.Server;
+import org.javacord.api.entity.user.User;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,18 +15,11 @@ import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
-import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.message.Message;
-import org.javacord.api.entity.permission.Role;
-import org.javacord.api.entity.server.Server;
-import org.javacord.api.entity.user.User;
-
-import de.btobastian.sdcf4j.Command;
-import de.btobastian.sdcf4j.CommandExecutor;
-
 public class ActiveCommand	implements CommandExecutor {
 		@Command(aliases = {"active"}, privateMessages = false, description = "Ping someone and send active message!", showInHelpPage = false)
 		public String onActiveCommand(String[] arg, User users, Server server, TextChannel ch, Message message) {
+			if (users.isBot()) { return ""; }
+
 			Random rng = new Random(System.currentTimeMillis());
 			DateFormat df = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
 			Date date = new Date();

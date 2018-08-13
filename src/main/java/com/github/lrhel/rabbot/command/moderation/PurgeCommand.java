@@ -4,10 +4,8 @@ import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
-import org.javacord.api.entity.permission.PermissionState;
 import org.javacord.api.entity.permission.PermissionType;
 import org.javacord.api.entity.permission.Permissions;
-import org.javacord.api.entity.permission.PermissionsBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 
@@ -16,6 +14,8 @@ import java.util.ArrayList;
 public class PurgeCommand implements CommandExecutor {
     @Command(aliases = {"purge", "bulk"}, description = "Clean text channels", async = true)
     public String onPurgeCommand(User user, Server server, TextChannel textChannel, String[] arg, Message message) {
+        if (user.isBot()) { return ""; }
+
         Permissions userPermission = server.getPermissions(user);
 
         if(userPermission.getAllowedPermission().contains(PermissionType.MANAGE_MESSAGES)) {

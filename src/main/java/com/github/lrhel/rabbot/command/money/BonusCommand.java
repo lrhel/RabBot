@@ -34,6 +34,8 @@ public class BonusCommand implements CommandExecutor {
 
     @Command(aliases = {"bonus"}, description = "Bonus if you voted the Bot", async = true)
     public void onBonusCommand(User user, TextChannel textChannel, DiscordApi api) {
+        if (user.isBot()) { return ; }
+
         int timestamp = Money.getBonusTimestamp(user);
         int now = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
 
@@ -69,7 +71,8 @@ public class BonusCommand implements CommandExecutor {
                     embedBuilder.setThumbnail(pokemon.getSprites().getFrontShiny());
                 } catch (Exception e) { }
                 embedBuilder.setAuthor("RabBot's Bonus", "https://discordbots.org/bot/441010449757110273", api.getYourself().getAvatar())
-                        .addField("Congratulations",stringBuilder.toString());
+                        .addField("Congratulations" +
+                                "",stringBuilder.toString());
             } else {
                 embedBuilder = new EmbedBuilder()
                         .setAuthor("RabBot's Bonus", "https://discordbots.org/bot/441010449757110273", api.getYourself().getAvatar())

@@ -2,7 +2,6 @@ package com.github.lrhel.rabbot.command.moderation;
 
 import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
-import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.permission.PermissionType;
 import org.javacord.api.entity.permission.Permissions;
@@ -15,6 +14,8 @@ import java.util.ArrayList;
 public class MuteCommand implements CommandExecutor {
     @Command(aliases = {"mute"}, description = "Add \"mute\" role(s) to the user")
     public String muteCommand(User user, Message message, Server server, String[] arg) {
+        if (user.isBot()) { return ""; }
+
         Permissions userPerm = server.getPermissions(user);
 
         if(!server.canYouManageRoles())

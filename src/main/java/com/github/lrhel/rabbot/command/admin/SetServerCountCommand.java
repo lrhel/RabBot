@@ -18,6 +18,8 @@ public class SetServerCountCommand implements CommandExecutor {
 
     @Command(aliases = {"setservercount"})
     public String onSetServerCountCommand(User user) {
+        if (user.isBot()) { return ""; }
+
         if(user.isBotOwner()) {
             Main.postServerCount(dblapi, api);
             return "Done";

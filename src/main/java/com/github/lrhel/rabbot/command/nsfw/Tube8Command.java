@@ -9,12 +9,15 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
+import org.javacord.api.entity.user.User;
 
 import java.util.concurrent.TimeUnit;
 
 public class Tube8Command implements CommandExecutor {
     @Command(aliases = {"tube8", "t8"})
-    public void onTube8Command(Message message, TextChannel textChannel, String[] args) {
+    public void onTube8Command(User user, Message message, TextChannel textChannel, String[] args) {
+        if (user.isBot()) { return ; }
+
         if(message.getServerTextChannel().isPresent()) { //if send in a server
             if(!message.getServerTextChannel().get().isNsfw()) { //if it's not labelled nsfw
                 return;

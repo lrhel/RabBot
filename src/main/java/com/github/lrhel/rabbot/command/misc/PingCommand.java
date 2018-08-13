@@ -13,7 +13,9 @@ import java.time.Instant;
 public class PingCommand implements CommandExecutor {
 
 	@Command(aliases = {"ping"}, privateMessages = false, description = "Send Pong back!", showInHelpPage = false)
-	public void onPingCommand(String[] arg, User usr, TextChannel ch, Server server, Message message) {
+	public void onPingCommand(String[] arg, User user, TextChannel ch, Server server, Message message) {
+		if (user.isBot()) { return ; }
+
 		Instant now = Instant.now();
 
 		Instant msgTimestamp = message.getCreationTimestamp();

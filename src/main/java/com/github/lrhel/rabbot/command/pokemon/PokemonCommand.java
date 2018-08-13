@@ -42,6 +42,8 @@ public class PokemonCommand implements CommandExecutor {
 
     @Command(aliases = {"pokemon", "pkmn"}, description = "Catch a Pokemon", async = true)
     public void onPokemonCommand(User user, TextChannel textChannel) {
+        if (user.isBot()) { return ; }
+
         PokeApi pokeApi = new PokeApiClient();
         Random rng = new Random(System.currentTimeMillis());
         Pokemon pokemon = null;

@@ -14,6 +14,8 @@ import java.util.ArrayList;
 public class UnmuteCommand implements CommandExecutor {
     @Command(aliases = {"unmute"}, description = "Remove \"mute\" role(s) from the user")
     public String unmuteCommand(User user, Message message, Server server, String[] arg) {
+        if (user.isBot()) { return ""; }
+
         Permissions userPerm = server.getPermissions(user);
 
         if(!server.canYouManageRoles())

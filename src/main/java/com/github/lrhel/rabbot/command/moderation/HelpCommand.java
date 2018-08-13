@@ -24,6 +24,8 @@ public class HelpCommand implements CommandExecutor {
     @Command(aliases = {"help", "commands"}, description = "Shows this page!")
     public void onHelpCommand(TextChannel textChannel, Server server, User user, DiscordApi api) {
 
+        if (user.isBot()) { return; }
+
         EmbedBuilder embedBuilder = new EmbedBuilder().setAuthor("Help Page", "", "");
 
         getInfo(embedBuilder);

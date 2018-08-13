@@ -17,6 +17,8 @@ import java.util.concurrent.TimeUnit;
 public class RouletteCommand implements CommandExecutor {
     @Command(aliases = {"roulette"}, description = "Bet money on the Roulette")
     public String rouletteCommand(User user, Server server, String[] param, TextChannel textChannel){
+        if (user.isBot()) { return ""; }
+
         Connection c = Sqlite.getInstance().getConnection();
         Roulette roulette = Roulette.getInstance();
         int amount;

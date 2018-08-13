@@ -17,6 +17,8 @@ import java.util.concurrent.TimeUnit;
 public class InventoryCommand implements CommandExecutor {
     @Command(aliases = {"inventory", "inv"}, description = "Pokemon inventory")
     public String onCommand(User user, TextChannel textChannel){
+        if (user.isBot()) { return ""; }
+
         try {
             final String sql = "SELECT PKMN, PKMN_NAME, COUNT(*) as NB FROM CATCH WHERE DISCORD_ID = ? GROUP BY PKMN_NAME ORDER BY PKMN LIMIT ? OFFSET ?";
             final int limit = 20;

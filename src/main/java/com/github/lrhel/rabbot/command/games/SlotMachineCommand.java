@@ -55,6 +55,8 @@ public class SlotMachineCommand implements CommandExecutor {
 
     @Command(aliases = {"slotmachine", "slot", "spin", "slots"}, description = "Slotmachine 7 7 7", async = true)
     public String onSlotMachineCommand(User user, TextChannel textChannel, String[] arg) {
+        if (user.isBot()) { return ""; }
+
         int amount;
         int option;
 

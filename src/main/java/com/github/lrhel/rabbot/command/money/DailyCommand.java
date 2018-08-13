@@ -14,6 +14,8 @@ public class DailyCommand implements CommandExecutor {
 
     @Command(aliases = {"daily"}, description = "Daily money!")
     public void onDailyCommand(User user, TextChannel textChannel){
+        if (user.isBot()) { return ; }
+
         Random rng = new Random(System.currentTimeMillis());
         int totalMoney = Money.getMoney(user);
         int timestamp = Money.getTimestamp(user);

@@ -14,7 +14,9 @@ import java.util.stream.Collectors;
 public class ShitpostingCommand implements CommandExecutor {
 
 	@Command(aliases = {"shitposting", "shitpost", "sp"}, description = "Shitposting!", privateMessages = false)
-	public String onShitpostingCommand(String[] arg, TextChannel ch, User usr) {
+	public String onShitpostingCommand(User user, String[] arg, TextChannel ch, User usr) {
+		if (user.isBot()) { return ""; }
+
 		int nbOfShitposting = 0;
 		String path = "/home/koala/RabBot/shitposting.txt";
 		if(arg.length > 0) {

@@ -7,10 +7,13 @@ import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
+import org.javacord.api.entity.user.User;
 
 public class UnsplashCommand implements CommandExecutor {
     @Command(aliases = {"image", "img", "unsplash"}, description = "Splash a random image from Unsplash")
-    public void onUnsplashCommand(TextChannel textChannel) {
+    public void onUnsplashCommand(User user, TextChannel textChannel) {
+        if (user.isBot()) { return ; }
+
         UnsplashApi unsplashApi = new UnsplashApi(Config.UNSPLASH.toString());
         try {
             UnsplashImage image = unsplashApi.getRandomImage();

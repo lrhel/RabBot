@@ -1,18 +1,20 @@
 package com.github.lrhel.rabbot.command.misc;
 
-import java.util.Random;
-
+import de.btobastian.sdcf4j.Command;
+import de.btobastian.sdcf4j.CommandExecutor;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
+import org.javacord.api.entity.user.User;
 
-import de.btobastian.sdcf4j.Command;
-import de.btobastian.sdcf4j.CommandExecutor;
+import java.util.Random;
 
 public class SandyCommand implements CommandExecutor {
 
 	@Command(aliases = {"sandy"}, description = "Complimente Sandy!", privateMessages = false, showInHelpPage = false)
-	public String onSandyCommand(TextChannel ch) {
+	public String onSandyCommand(User user, TextChannel ch) {
+		if (user.isBot()) { return ""; }
+
 		MessageBuilder mbuilder = new MessageBuilder();
 		EmbedBuilder ebuilder = new EmbedBuilder();
 		ebuilder.setTitle("WOW!!")

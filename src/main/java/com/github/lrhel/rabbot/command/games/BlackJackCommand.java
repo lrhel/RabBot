@@ -26,6 +26,8 @@ public class BlackJackCommand implements CommandExecutor {
 
     @Command(aliases = {"blackjack", "21", "bj"}, description = "BlackJack 21", async = true)
     public String onBlackJackCommand(User user, TextChannel textChannel, String[] arg, DiscordApi api) {
+        if (user.isBot()) { return ""; }
+
         int amounts;
         Cards deck = new Cards();
         ArrayList<Player> players = new ArrayList<>();

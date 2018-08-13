@@ -3,12 +3,14 @@ package com.github.lrhel.rabbot.command.misc;
 import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
 import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.user.User;
 
 import java.util.Random;
 
 public class AsciiCommand implements CommandExecutor {
     @Command(aliases = {"ascii"})
-    public void onAsciiCommand(TextChannel textChannel) {
+    public void onAsciiCommand(User user, TextChannel textChannel) {
+        if (user.isBot()) { return ; }
         textChannel.sendMessage(randomRabbit());
     }
 

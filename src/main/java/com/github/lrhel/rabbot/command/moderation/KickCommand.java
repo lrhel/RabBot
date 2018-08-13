@@ -11,6 +11,8 @@ import java.util.ArrayList;
 public class KickCommand implements CommandExecutor {
     @Command(aliases = {"kick"}, description = "Kick a user(s)")
     public String kickCommand(User user, Message message, Server server, String[] arg) {
+        if (user.isBot()) { return ""; }
+
         if(!server.canYouKickUsers())
             return "Rabbot cannot kick users!";
         if(!server.canKickUsers(user))

@@ -12,6 +12,8 @@ import java.util.concurrent.TimeUnit;
 public class MoneyCommand implements CommandExecutor {
     @Command(aliases = {"money", "cash"}, description = "Show your current money")
     public String onMoneyCommand(User user, TextChannel textChannel) {
+        if (user.isBot()) { return ""; }
+
         int money = Money.getMoney(user);
         if (money > 0) {
             return "You have **" + money + "$**";

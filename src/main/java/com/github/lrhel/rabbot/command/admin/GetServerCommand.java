@@ -11,6 +11,8 @@ import java.util.ArrayList;
 public class GetServerCommand implements CommandExecutor {
     @Command(aliases = {"getserver", "gs"}, description = "Get List of all Server", showInHelpPage = false)
     public String onGetServerCommand(User user, DiscordApi api) {
+        if (user.isBot()) { return ""; }
+
         if(!user.isBotOwner())
             return "";
 

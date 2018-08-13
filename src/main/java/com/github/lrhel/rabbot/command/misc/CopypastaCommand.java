@@ -1,27 +1,25 @@
 package com.github.lrhel.rabbot.command.misc;
 
-import java.io.*;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.stream.Collectors;
-
+import com.github.lrhel.rabbot.config.Config;
+import de.btobastian.sdcf4j.Command;
+import de.btobastian.sdcf4j.CommandExecutor;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.user.User;
 
-import com.github.lrhel.rabbot.config.Config;
-
-import de.btobastian.sdcf4j.Command;
-import de.btobastian.sdcf4j.CommandExecutor;
+import java.io.*;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 public class CopypastaCommand implements CommandExecutor {
 
 	@Command(aliases = {"copypasta", "copy", "cp"}, description = "Copypasta!", privateMessages = false)
-	public String onShitpostingCommand(String[] arg, TextChannel ch, User usr) {
+	public String onShitpostingCommand(String[] arg, TextChannel ch, User user) {
+		if (user.isBot()) { return ""; }
 
 		String path = "/home/koala/RabBot/copypasta.txt";
 		if(arg.length > 0) {
-			if(arg[0].equals("add") && (usr.isBotOwner() || usr.getIdAsString().contentEquals(Config.SMATHID.toString()) || usr.getIdAsString().contentEquals(Config.THUGA.toString()))) {
+			if(arg[0].equals("add") && (user.isBotOwner() || user.getIdAsString().contentEquals(Config.SMATHID.toString()) || user.getIdAsString().contentEquals(Config.THUGA.toString()))) {
 				try {
 					FileWriter fw = new FileWriter(new File(path), true);
 					for(int i = 1; i < arg.length; i++) {

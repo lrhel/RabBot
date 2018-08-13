@@ -27,6 +27,8 @@ public class AkiCommand implements CommandExecutor {
 
     @Command(aliases = {"akinator", "aki"}, description = "Play with Akinator", async = true)
     public void onAkiCommand(User user, TextChannel textChannel, String[] arg, DiscordApi api, ServerTextChannel serverTextChannel) {
+        if (user.isBot()) { return ; }
+
         AkiwrapperBuilder akiwrapperBuilder;
         Akiwrapper aki;
 

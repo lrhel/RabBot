@@ -17,6 +17,8 @@ public class StrawpollCommand implements CommandExecutor {
     private static ArrayList<User> using = new ArrayList<>();
     @Command(aliases = {"strawpoll", "sp"}, privateMessages = false, description = "Make a strawpoll!", showInHelpPage = false, async = true)
     public String onStrawpollCommand(User user, String[] args, TextChannel textChannel) {
+        if (user.isBot()) { return ""; }
+
         if(args.length == 0) {
             return showHelpMessage();
         }
