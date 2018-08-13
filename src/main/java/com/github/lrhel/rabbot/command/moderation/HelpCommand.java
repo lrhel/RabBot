@@ -80,6 +80,7 @@ public class HelpCommand implements CommandExecutor {
 
     private EmbedBuilder getMisc(EmbedBuilder embedBuilder) {
         StringBuilder sb = new StringBuilder();
+        sb.append("**rb.strawpoll** *Make or Check a StrawPoll");
         sb.append("**rb.rabbit** *Get a Rabbit Picture* :rabbit:\n");
         sb.append("**rb.image** *Get a Random Picture*\n");
         sb.append("**rb.shitposting** *Get a random shitpost*\n");

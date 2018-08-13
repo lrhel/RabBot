@@ -62,7 +62,7 @@ public class SlotMachineCommand implements CommandExecutor {
             return "";
         }
 
-        if(arg.length > 2) {
+        if(arg.length > 1) {
             return showHelp();
         }
         if(arg.length > 0 && arg[0].equalsIgnoreCase("help")) {
@@ -75,26 +75,16 @@ public class SlotMachineCommand implements CommandExecutor {
             amount = 1;
         }
 
-        try {
-            option = Integer.parseInt(arg[1]);
-            if(option > 3) {
-                option = 3;
-            }
-            else if (option < 1) {
-                option = 1;
-            }
-        } catch (Exception ignored) {
-            option = 1;
-        }
+        option = 3;
 
-        if(Money.getMoney(user) < amount * option) {
+        if(Money.getMoney(user) < amount) {
             textChannel.sendMessage("Not enough money. . .").thenAccept(getMessageDeleter(5, TimeUnit.SECONDS));
             return "";
         }
 
         isPlaying.add(user);
 
-        Money.removeMoney(user, amount * option);
+        Money.removeMoney(user, amount);
 
         SlotMachine slotMachine = new SlotMachine();
 
@@ -136,13 +126,13 @@ public class SlotMachineCommand implements CommandExecutor {
 
         int win = slotMachine.win(option);
         if(win > 0) {
+            Money.addMoney(user, amount * win);
             messageBuilder.append("\nYou have won **" + amount * win + "$**");
         }
         else {
-            messageBuilder.append("You have lost **" + amount * option + "$**");
+            messageBuilder.append("You have lost **" + amount + "$**");
         }
 
-        Money.addMoney(user, amount * win);
 
         message.edit(messageBuilder.getStringBuilder().toString()).join();
 
@@ -153,11 +143,7 @@ public class SlotMachineCommand implements CommandExecutor {
     }
 
     private String showHelp() {
-        return "**Usage: ** ```rb.slotmachine [amount] [option]"
-                + "\nOption:\n" +
-                " * 1 : Line 2 (Default)\n" +
-                " * 2 : Line 1 & 2 & 3\n" +
-                " * 3 : Line 1 & 2 & 3 & Diagonales\n```"
+        return "**Usage: ** ```rb.slotmachine [amount]```"
                 ;
     }
 
@@ -227,11 +213,11 @@ public class SlotMachineCommand implements CommandExecutor {
             switch (option) {
                 case 3:
                     if(band1.get(pointerBand1).equalsIgnoreCase(band2.get((pointerBand2 + 1) % 10))
-                            && band2.get((pointerBand1 + 1) % 10).equalsIgnoreCase(band3.get((pointerBand3 + 2) % 10))
+                            && band2.get((pointerBand2 + 1) % 10).equalsIgnoreCase(band3.get((pointerBand3 + 2) % 10))
                     ) {
                         multiplicator += gain(band1.get(pointerBand1));
                     }
-                    else if (band3.get(pointerBand3).equalsIgnoreCase(band2.get((pointerBand2 + 1) % 10))
+                    if (band3.get(pointerBand3).equalsIgnoreCase(band2.get((pointerBand2 + 1) % 10))
                             && band2.get((pointerBand2 + 1) % 10).equalsIgnoreCase(band1.get((pointerBand1 + 2) % 10))
                     ) {
                         multiplicator += gain(band3.get(pointerBand3));
@@ -242,7 +228,7 @@ public class SlotMachineCommand implements CommandExecutor {
                     ) {
                         multiplicator += gain(band1.get(pointerBand1));
                     }
-                    else if(band3.get(pointerBand3).equalsIgnoreCase(band3.get((pointerBand3 + 1) % 10))
+                    if(band3.get(pointerBand3).equalsIgnoreCase(band3.get((pointerBand3 + 1) % 10))
                             && band3.get(pointerBand3).equalsIgnoreCase(band3.get((pointerBand3 + 2) % 10))
                     ) {
                         multiplicator += gain(band3.get(pointerBand3));

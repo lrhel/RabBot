@@ -14,10 +14,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class StrawpollCommand implements CommandExecutor {
+    private static ArrayList<User> using = new ArrayList<>();
     @Command(aliases = {"strawpoll", "sp"}, privateMessages = false, description = "Make a strawpoll!", showInHelpPage = false, async = true)
     public String onStrawpollCommand(User user, String[] args, TextChannel textChannel) {
         if(args.length == 0) {
             return showHelpMessage();
+        }
+        if(using.contains(user)) {
+            return "";
         }
 
         switch (args[0].toLowerCase()) {
@@ -30,8 +34,10 @@ public class StrawpollCommand implements CommandExecutor {
                 check(user, textChannel, args);
                 break;
             default:
+                using.remove(user);
                 return showHelpMessage();
         }
+        using.remove(user);
 
         return "";
     }
