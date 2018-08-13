@@ -69,7 +69,7 @@ public class BonusCommand implements CommandExecutor {
                     embedBuilder.setThumbnail(pokemon.getSprites().getFrontShiny());
                 } catch (Exception e) { }
                 embedBuilder.setAuthor("RabBot's Bonus", "https://discordbots.org/bot/441010449757110273", api.getYourself().getAvatar())
-                        .addField("Congratulation",stringBuilder.toString());
+                        .addField("Congratulations",stringBuilder.toString());
             } else {
                 embedBuilder = new EmbedBuilder()
                         .setAuthor("RabBot's Bonus", "https://discordbots.org/bot/441010449757110273", api.getYourself().getAvatar())

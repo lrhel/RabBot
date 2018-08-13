@@ -4,7 +4,7 @@
 
 RabBot is an easy-to-use Discord Bot that do exactly what most of Discord's Bot do :
 * Money Command like getting your __hourly__ dailies
-* Pokemon Command to Gotta Catch 'Em All
+* Pokémon Command to Catch 'Em All
 * BlackJack Command to learn counting Cards before entering a real Casino
 * Roulette Command because European Roulette is fun
 * SlotMachine Command because every bot has one

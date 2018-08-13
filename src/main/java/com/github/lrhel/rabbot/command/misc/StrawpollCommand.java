@@ -60,7 +60,7 @@ public class StrawpollCommand implements CommandExecutor {
         StrawPoll strawPoll;
         StringBuilder response = new StringBuilder();
 
-        textChannel.sendMessage("The titel of the Strawpoll?").join();
+        textChannel.sendMessage("The title of the Strawpoll?").join();
         listenerManager.set(textChannel.addMessageCreateListener(messageCreateEvent -> {
             Message message = messageCreateEvent.getMessage();
             if(message.getUserAuthor().isPresent() && message.getUserAuthor().get().getId() == user.getId()) {
@@ -72,6 +72,11 @@ public class StrawpollCommand implements CommandExecutor {
         listenerManager.get().addRemoveHandler(() -> waiting.set(false));
 
         while (waiting.get()) { Thread.onSpinWait(); }
+
+        if(title.get() == null) {
+            textChannel.sendMessage("No StrawPoll has been generated").join();
+            return;
+        }
 
         //Option part
         textChannel.sendMessage("Now we will handle the options, say `STOP` if you don't want to add any more options");
@@ -90,17 +95,25 @@ public class StrawpollCommand implements CommandExecutor {
                     forWaiting.set(false);
                     listenerManager.get().remove();
                 }
-            }).removeAfter(3, TimeUnit.MINUTES));
+            }).removeAfter(3, TimeUnit.SECONDS));
             listenerManager.get().addRemoveHandler(() -> forWaiting.set(false));
 
             while (forWaiting.get()) { Thread.onSpinWait(); }
 
-            if(breaking.get()) {
+            try {
+                option.get().get(i - 1);
+            } catch (IndexOutOfBoundsException ignored) {
+                breaking.set(true);
+            }
+
+            if (breaking.get()) {
                 break;
             }
+
         }
 
-        if(option.get().size() == 0) {
+        if(option.get().size() <= 1) {
+            textChannel.sendMessage("No StrawPoll has been generated").join();
             return;
         }
 
