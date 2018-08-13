@@ -11,6 +11,10 @@ import com.github.lrhel.rabbot.command.money.BonusCommand;
 import com.github.lrhel.rabbot.command.money.DailyCommand;
 import com.github.lrhel.rabbot.command.money.GiveMoneyCommand;
 import com.github.lrhel.rabbot.command.money.MoneyCommand;
+import com.github.lrhel.rabbot.command.nsfw.PornhubCommand;
+import com.github.lrhel.rabbot.command.nsfw.RedTubeCommand;
+import com.github.lrhel.rabbot.command.nsfw.Tube8Command;
+import com.github.lrhel.rabbot.command.nsfw.YouPornCommand;
 import com.github.lrhel.rabbot.command.pokemon.InventoryCommand;
 import com.github.lrhel.rabbot.command.pokemon.PokemonCommand;
 import com.github.lrhel.rabbot.config.Config;
@@ -107,6 +111,12 @@ public class Main {
         cmd.registerCommand(new RabbitCommand());
         cmd.registerCommand(new UnsplashCommand());
         cmd.registerCommand(new SetServerCountCommand(discordBotListAPI, api));
+
+        // NSFW
+        cmd.registerCommand(new PornhubCommand());
+        cmd.registerCommand(new Tube8Command());
+        cmd.registerCommand(new RedTubeCommand());
+        cmd.registerCommand(new YouPornCommand());
 
         //Join and Leave
         api.addServerJoinListener(event -> {

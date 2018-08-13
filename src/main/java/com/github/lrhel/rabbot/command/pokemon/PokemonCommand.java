@@ -90,7 +90,7 @@ public class PokemonCommand implements CommandExecutor {
         try {
             addPokemon(user, pokemon, shiny.is());
 
-        } catch (Exception ignored) { }
+        } catch (Exception e) { e.printStackTrace(); }
 
         String flavour = "";
 

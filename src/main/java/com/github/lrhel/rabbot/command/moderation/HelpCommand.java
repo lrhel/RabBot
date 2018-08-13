@@ -4,6 +4,7 @@ import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
 import de.btobastian.sdcf4j.CommandHandler;
 import org.javacord.api.DiscordApi;
+import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.permission.PermissionType;
@@ -30,6 +31,7 @@ public class HelpCommand implements CommandExecutor {
         getMoney(embedBuilder);
         getPokemon(embedBuilder);
         getMisc(embedBuilder);
+        getNsfw(embedBuilder, server);
 
         if(server.canYouKickUsers() || server.canYouBanUsers() || textChannel.canYouManageMessages()) {
             if (server.canBanUsers(user) || server.canKickUsers(user)
@@ -38,6 +40,7 @@ public class HelpCommand implements CommandExecutor {
             }
         }
 
+        embedBuilder.setFooter("Also don't forget our rb.bonus (\\/)");
 
         textChannel.sendMessage(embedBuilder.setColor(Color.CYAN));
 
@@ -97,5 +100,19 @@ public class HelpCommand implements CommandExecutor {
             sb.append("**rb.ban** *Ban a member of the server*\n");
         }
         return embedBuilder.addField("__Moderation__", sb.toString());
+    }
+
+    private EmbedBuilder getNsfw(EmbedBuilder embedBuilder, Server server) {
+        if(server.getTextChannels().stream().anyMatch(ServerTextChannel::isNsfw)) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("*Only in nsfw channel ;)*\n");
+            sb.append("**rb.pornhub** *Get a random video from PornHub*\n");
+            sb.append("**rb.youporn** *Get a random video from YouPorn*\n");
+            sb.append("**rb.redtube** *Get a random video from RedTube*\n");
+            sb.append("**rb.tube8** *Get a random video from Tube8*\n");
+
+            return embedBuilder.addField("__Nsfw__", sb.toString());
+        }
+        return embedBuilder;
     }
 }
