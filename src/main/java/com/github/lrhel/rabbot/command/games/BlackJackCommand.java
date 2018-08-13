@@ -34,6 +34,9 @@ public class BlackJackCommand implements CommandExecutor {
 
         Player bank;
         ExtendedBoolean splitted = new ExtendedBoolean(false);
+        ExtendedBoolean doubling = new ExtendedBoolean(false);
+        ExtendedBoolean canSplit = new ExtendedBoolean(false);
+        ExtendedBoolean canDouble = new ExtendedBoolean(true);
         StringBuilder options = new StringBuilder();
 
         if(arg.length > 1) {
@@ -71,26 +74,29 @@ public class BlackJackCommand implements CommandExecutor {
         bank.add(deck.draw());
         players.get(0).add(deck.draw());
 
-        options.append("**`Hit`** **`Stand`**");
+        options.append("**`Hit`** **`Stand`** **`Double`**");
 
         //Check for split
         if(players.get(0).sameCardsInHand()) {
             options.append(" **`Split`**");
+            canSplit.set(true);
         }
+
 
         textChannel.sendMessage(players.get(0).addEmbed(bank.addEmbed(getEmbed())));
         textChannel.sendMessage(options.toString());
 
-        final long timestamp = System.currentTimeMillis();
-
         ExtendedBoolean stand = new ExtendedBoolean(false);
 
+        //waiting for first response
         AtomicReference<ListenerManager> lm = new AtomicReference<>();
         lm.set(textChannel.addMessageCreateListener(e -> {
             if (e.getMessage().getUserAuthor().get().getId() == user.getId()) {
                 if (e.getMessage().getContent().equalsIgnoreCase("hit")) {
                     players.get(0).add(deck.draw());
-
+                    //if he hit he cannot split or double
+                    canDouble.set(false);
+                    canSplit.set(false);
                     if (players.get(0).getTotalValue() > 21) {
                         stand.set(true);
                         lm.get().remove();
@@ -104,10 +110,12 @@ public class BlackJackCommand implements CommandExecutor {
                         textChannel.sendMessage("**`Hit`** **`Stand`**");
                     }
 
-                } else if (e.getMessage().getContent().equalsIgnoreCase("stand")) {
+                }
+                else if (e.getMessage().getContent().equalsIgnoreCase("stand")) {
                     stand.set(true);
                     lm.get().remove();
-                } else if (splitted.isNot() && e.getMessage().getContent().equalsIgnoreCase("split")) {
+                }
+                else if (canSplit.is() && splitted.isNot() && e.getMessage().getContent().equalsIgnoreCase("split")) {
                     Money.removeMoney(user, amount);
                     players.add(players.get(0).split());
                     for (Player ply : players)
@@ -120,6 +128,14 @@ public class BlackJackCommand implements CommandExecutor {
                     textChannel.sendMessage("**`Hit`** **`Stand`**");
                     splitted.set(true);
                 }
+                //doubling
+                else if(canDouble.is() && e.getMessage().getContent().equalsIgnoreCase("double")) {
+                    Money.removeMoney(user, amount);
+                    players.get(0).add(deck.draw());
+                    doubling.set(true);
+                    stand.set(true);
+                    lm.get().remove();
+                }
             }
         }).removeAfter(INTERVAL, TimeUnit.MILLISECONDS));
         lm.get().addRemoveHandler(() -> stand.set(true));
@@ -129,6 +145,7 @@ public class BlackJackCommand implements CommandExecutor {
 
         lm.get().remove();
 
+        //if splitted
         if(splitted.is()) {
             EmbedBuilder embed = bank.addEmbed(getEmbed());
             for (Player ply : players) {
@@ -177,11 +194,15 @@ public class BlackJackCommand implements CommandExecutor {
 
         bank.add(deck.draw());
 
-        while (bank.getTotalValue() <= 16) {
-            if(bank.getTotalValue() > players.get(0).getTotalValue() || players.get(0).getTotalValue() > 21)
-                break;
-            bank.add(deck.draw());
+        if(doubling.isNot()) {
+            while (bank.getTotalValue() <= 16) {
+                if (bank.getTotalValue() > players.get(0).getTotalValue() || players.get(0).getTotalValue() > 21)
+                    break;
+                bank.add(deck.draw());
+            }
         }
+        //if it hit the double
+
 
         EmbedBuilder embed = bank.addEmbed(getEmbed());
         for (Player ply : players) {
@@ -230,6 +251,9 @@ public class BlackJackCommand implements CommandExecutor {
                 totalWin += amount * 2;
             }
             winner.append("\n");
+        }
+        if(doubling.is()) {
+            totalWin *= 2;
         }
         winner.append("Total win: **");
         winner.append(totalWin);
