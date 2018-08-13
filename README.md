@@ -9,9 +9,10 @@ RabBot is an easy-to-use Discord Bot that do exactly what most of Discord's Bot 
 * Roulette Command because European Roulette is fun
 * SlotMachine Command because every bot has one
 * Akinator Command even if he will never guess the right Character
+* StrawPoll Command to create or check your StrawPoll
 * Moderation Command because kicking/banning member is the basic of Discord
 
-Also RabBot has some hidden command (like splashing Rabbit Pictures)
+Also RabBot has some other fanzy command (like splashing Rabbit Pictures)
 
 ### Permission ###
 
