@@ -54,26 +54,42 @@ public class BonusCommand implements CommandExecutor {
 
         discordBotListAPI.hasVoted(user.getIdAsString()).whenComplete((aBoolean, throwable) -> {
             EmbedBuilder embedBuilder;
-
+            //has voted
             if (aBoolean) {
                 Pokemon pokemon;
+                RabbotPokemon rabbotPokemon;
                 PokeApi pokeApi = new PokeApiClient();
 
                 Random rng = new Random(System.currentTimeMillis());
                 StringBuilder stringBuilder = new StringBuilder();
+                int pokemonId = rng.nextInt(TOTAL_PKMN) + 1;
                 stringBuilder.append("You got **20.000$** ");
                 Money.addBonus(user, 20000, now);
                 embedBuilder = new EmbedBuilder();
-                try {
-                    pokemon = pokeApi.getPokemon(rng.nextInt(TOTAL_PKMN) + 1);
-                    stringBuilder.append("and a Shiny ").append(firstUpper(pokemon.getName()));
-                    RabbotPokemon.addPokemon(user, pokemon, true);
-                    embedBuilder.setThumbnail(pokemon.getSprites().getFrontShiny());
-                } catch (Exception e) { }
+
+                rabbotPokemon = RabbotPokemon.getPokemon(pokemonId);
+                if (rabbotPokemon == null) {
+                    try {
+                        pokemon = pokeApi.getPokemon(pokemonId);
+                        stringBuilder.append("and a Shiny ").append(firstUpper(pokemon.getName()));
+                        RabbotPokemon.addPokemon(user, pokemon, true);
+                        embedBuilder.setThumbnail(pokemon.getSprites().getFrontShiny());
+                    } catch (Exception e) { }
+                }
+                else {
+                    stringBuilder.append("and a Shiny ").append(firstUpper(rabbotPokemon.getPokemonName()));
+                    try {
+                        RabbotPokemon.addPokemon(user, rabbotPokemon, true);
+                    } catch (Exception e) { }
+                    embedBuilder.setThumbnail(rabbotPokemon.getImageShiny());
+                }
                 embedBuilder.setAuthor("RabBot's Bonus", "https://discordbots.org/bot/441010449757110273", api.getYourself().getAvatar())
                         .addField("Congratulations" +
-                                "",stringBuilder.toString());
-            } else {
+                                "", stringBuilder.toString());
+
+            }
+            //has not voted
+            else {
                 embedBuilder = new EmbedBuilder()
                         .setAuthor("RabBot's Bonus", "https://discordbots.org/bot/441010449757110273", api.getYourself().getAvatar())
                         .addField("Unlock the daily Bonus", "[Click here to vote for RabBot and unlock the daily Bonus](https://discordbots.org/bot/441010449757110273/vote)")
