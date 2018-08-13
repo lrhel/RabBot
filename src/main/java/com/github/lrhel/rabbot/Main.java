@@ -73,6 +73,7 @@ public class Main {
         //cmd.registerCommand(new ChallongeCommand());
         cmd.registerCommand(new EchoCommand());
         cmd.registerCommand(new StrawpollCommand());
+        cmd.registerCommand(new AsciiCommand());
 
         //Money Stuff
         cmd.registerCommand(new DailyCommand());

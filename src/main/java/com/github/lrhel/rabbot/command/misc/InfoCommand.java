@@ -47,6 +47,7 @@ public class InfoCommand implements CommandExecutor {
         stringBuilder.append("[Unsplash](https://www.unsplash.com)\n");
         stringBuilder.append("[AkiWrapper](https://github.com/markozajc/Akiwrapper)\n");
         stringBuilder.append("[DBL Java Library](https://github.com/DiscordBotList/DBL-Java-Library)");
+        stringBuilder.append("[ASCII Art](https://asciiart.website)");
 
 
 
