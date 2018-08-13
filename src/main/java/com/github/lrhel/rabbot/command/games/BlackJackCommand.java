@@ -36,7 +36,7 @@ public class BlackJackCommand implements CommandExecutor {
         ExtendedBoolean splitted = new ExtendedBoolean(false);
         ExtendedBoolean doubling = new ExtendedBoolean(false);
         ExtendedBoolean canSplit = new ExtendedBoolean(false);
-        ExtendedBoolean canDouble = new ExtendedBoolean(true);
+        ExtendedBoolean canDouble = new ExtendedBoolean(false);
         StringBuilder options = new StringBuilder();
 
         if(arg.length > 1) {
@@ -74,7 +74,11 @@ public class BlackJackCommand implements CommandExecutor {
         bank.add(deck.draw());
         players.get(0).add(deck.draw());
 
-        options.append("**`Hit`** **`Stand`** **`Double`**");
+        options.append("**`Hit`** **`Stand`**");
+        if(Money.getMoney(user) >= amount) {
+            options.append(" **`Double`**");
+            canDouble.set(true);
+        }
 
         //Check for split
         if(players.get(0).sameCardsInHand()) {
