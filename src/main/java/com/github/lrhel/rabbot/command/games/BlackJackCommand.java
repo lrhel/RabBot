@@ -198,14 +198,12 @@ public class BlackJackCommand implements CommandExecutor {
 
         bank.add(deck.draw());
 
-        if(doubling.isNot()) {
-            while (bank.getTotalValue() <= 16) {
-                if (bank.getTotalValue() > players.get(0).getTotalValue() || players.get(0).getTotalValue() > 21)
-                    break;
-                bank.add(deck.draw());
-            }
+        while (bank.getTotalValue() <= 16) {
+            if (bank.getTotalValue() > players.get(0).getTotalValue() || players.get(0).getTotalValue() > 21)
+                break;
+            bank.add(deck.draw());
         }
-        //if it hit the double
+
 
 
         EmbedBuilder embed = bank.addEmbed(getEmbed());
