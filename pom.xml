@@ -153,6 +153,11 @@
             <version>3.1</version>
         </dependency>
 
+		<dependency>
+			<groupId>com.github.Samuel-Maddock</groupId>
+			<artifactId>StrawPoll-Java-API</artifactId>
+			<version>1.0.3</version>
+		</dependency>
 
         <!-- Kaleidox Utility -->
 		<!--<dependency>-->
