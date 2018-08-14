@@ -49,13 +49,6 @@ public class Main {
                 .botId(Config.BOTID.toString())
                 .build();
 
-        api.addUserRoleAddListener(event-> {
-            if(event.getRole().getName().contains("Mute Roll") && event.getRole().getUsers().contains(api.getYourself())) {
-                event.getRole().removeUser(api.getYourself());
-
-            }
-        });
-
         //Command Handler & Option
         CommandHandler cmd = new JavacordHandler(api);
         cmd.setDefaultPrefix("rb.");
@@ -112,6 +105,7 @@ public class Main {
         cmd.registerCommand(new RabbitCommand());
         cmd.registerCommand(new UnsplashCommand());
         cmd.registerCommand(new SetServerCountCommand(discordBotListAPI, api));
+        cmd.registerCommand(new ResetCommand());
 
         // NSFW
         cmd.registerCommand(new PornhubCommand());

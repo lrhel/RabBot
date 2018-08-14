@@ -65,4 +65,61 @@ public class Sqlite {
             return 0;
         }
     }
+
+    public static boolean resetCatchTimestamp(User user) {
+        String sql = "UPDATE catch SET timestamp = 0 WHERE user_id = ?";
+        try {
+            PreparedStatement preparedStatement = getInstance().getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, user.getIdAsString());
+            return !preparedStatement.execute();
+        } catch (Exception ignored) { }
+        return false;
+    }
+
+    public static boolean resetCatchTimestamp() {
+        String sql = "UPDATE catch SET timestamp = 0";
+        try {
+            PreparedStatement preparedStatement = getInstance().getConnection().prepareStatement(sql);
+            return !preparedStatement.execute();
+        } catch (Exception ignored) { }
+        return false;
+    }
+
+    public static boolean resetDailyTimestamp(User user) {
+        String sql = "UPDATE money SET timestamp = 0 WHERE user_id = ?";
+        try {
+            PreparedStatement preparedStatement = getInstance().getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, user.getIdAsString());
+            return !preparedStatement.execute();
+        } catch (Exception ignored) { }
+        return false;
+    }
+
+    public static boolean resetDailyTimestamp() {
+        String sql = "UPDATE money SET timestamp = 0";
+        try {
+            PreparedStatement preparedStatement = getInstance().getConnection().prepareStatement(sql);
+            return !preparedStatement.execute();
+        } catch (Exception ignored) { }
+        return false;
+    }
+
+    public static boolean resetBonusTimestamp(User user) {
+        String sql = "UPDATE money SET bonus_timestamp = 0 WHERE user_id = ?";
+        try {
+            PreparedStatement preparedStatement = getInstance().getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, user.getIdAsString());
+            return !preparedStatement.execute();
+        } catch (Exception ignored) { }
+        return false;
+    }
+
+    public static boolean resetBonusTimestamp() {
+        String sql = "UPDATE money SET bonus_timestamp = 0";
+        try {
+            PreparedStatement preparedStatement = getInstance().getConnection().prepareStatement(sql);
+            return !preparedStatement.execute();
+        } catch (Exception ignored) { }
+        return false;
+    }
 }

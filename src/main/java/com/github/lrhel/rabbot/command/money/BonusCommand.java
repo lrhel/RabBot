@@ -2,6 +2,7 @@ package com.github.lrhel.rabbot.command.money;
 
 import com.github.lrhel.rabbot.Money;
 import com.github.lrhel.rabbot.command.pokemon.RabbotPokemon;
+import com.github.lrhel.rabbot.sqlite.Sqlite;
 import com.github.lrhel.rabbot.utility.Utility;
 import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
@@ -45,13 +46,6 @@ public class BonusCommand implements CommandExecutor {
 
         using.add(user);
 
-        if ((timestamp + INTERVAL) > now && (timestamp - now + INTERVAL) <= INTERVAL) {
-            int second = (timestamp - now + INTERVAL) / 1000;
-            textChannel.sendMessage("Try again in " + (second / 3600) + " hours and " + ((second / 60) % 60) + " minutes").thenAccept(Utility.getMessageDeleter(5, TimeUnit.SECONDS));
-            using.remove(user);
-            return;
-        }
-
         discordBotListAPI.hasVoted(user.getIdAsString()).whenComplete((aBoolean, throwable) -> {
             EmbedBuilder embedBuilder;
             //has voted
@@ -59,6 +53,13 @@ public class BonusCommand implements CommandExecutor {
                 Pokemon pokemon;
                 RabbotPokemon rabbotPokemon;
                 PokeApi pokeApi = new PokeApiClient();
+
+                if ((timestamp + INTERVAL) > now && (timestamp - now + INTERVAL) <= INTERVAL) {
+                    int second = (timestamp - now + INTERVAL) / 1000;
+                    textChannel.sendMessage("Try again in " + (second / 3600) + " hours and " + ((second / 60) % 60) + " minutes").thenAccept(Utility.getMessageDeleter(5, TimeUnit.SECONDS));
+                    using.remove(user);
+                    return;
+                }
 
                 Random rng = new Random(System.currentTimeMillis());
                 StringBuilder stringBuilder = new StringBuilder();
@@ -90,6 +91,7 @@ public class BonusCommand implements CommandExecutor {
             }
             //has not voted
             else {
+                Sqlite.resetBonusTimestamp(user);
                 embedBuilder = new EmbedBuilder()
                         .setAuthor("RabBot's Bonus", "https://discordbots.org/bot/441010449757110273", api.getYourself().getAvatar())
                         .addField("Unlock the daily Bonus", "[Click here to vote for RabBot and unlock the daily Bonus](https://discordbots.org/bot/441010449757110273/vote)")

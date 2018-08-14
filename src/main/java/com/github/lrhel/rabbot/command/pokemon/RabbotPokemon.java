@@ -31,26 +31,6 @@ public class RabbotPokemon {
         this.pokedex = pokedex;
     }
 
-    public int getPokemonId() {
-        return pokemonId;
-    }
-
-    public String getPokemonName() {
-        return pokemonName;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public String getImageShiny() {
-        return imageShiny;
-    }
-
-    public String getPokedex() {
-        return pokedex;
-    }
-
     public static RabbotPokemon getPokemon(int id) {
         String sql = "SELECT pkmn, pkmn_name, image, image_shiny, pokedex " +
                 "FROM catch WHERE pkmn = ? AND pkmn_name NOT LIKE '%Shiny%'" +
@@ -144,16 +124,52 @@ public class RabbotPokemon {
     }
 
     public static int totalUniqueCatchedPokemon() throws SQLException {
-        String sql = "SELECT COUNT(DISTINCT PKMN_NAME) as count FROM catch";
+        String sql = "SELECT COUNT(DISTINCT PKMN) as count FROM catch";
         PreparedStatement preparedStatement = Sqlite.getInstance().getConnection().prepareStatement(sql);
         return preparedStatement.executeQuery().getInt("count");
     }
 
     public static int totalUniqueCatchedPokemon(User user) throws SQLException {
-        String sql  = "SELECT COUNT(DISTINCT PKMN_NAME) as count FROM catch WHERE discord_id = ?";
+        String sql  = "SELECT COUNT(DISTINCT PKMN) as count FROM catch WHERE discord_id = ?";
         PreparedStatement preparedStatement = Sqlite.getInstance().getConnection().prepareStatement(sql);
         preparedStatement.setString(1, user.getIdAsString());
         return preparedStatement.executeQuery().getInt("count");
+    }
+
+    public static int totalUniqueCatchedShinyPokemon() throws SQLException {
+        String sql = "SELECT COUNT(DISTINCT PKMN) as count FROM catch WHERE pkmn_name LIKE 'Shiny%'";
+        PreparedStatement preparedStatement = Sqlite.getInstance().getConnection().prepareStatement(sql);
+        return preparedStatement.executeQuery().getInt("count");
+    }
+
+    public static int totalUniqueCatchedShinyPokemon(User user) throws SQLException {
+        String sql  = "SELECT COUNT(DISTINCT PKMN) as count FROM catch WHERE discord_id = ? AND pkmn_name LIKE 'Shiny%'";
+        PreparedStatement preparedStatement = Sqlite.getInstance().getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, user.getIdAsString());
+        return preparedStatement.executeQuery().getInt("count");
+    }
+
+
+
+
+    public int getPokemonId() {
+        return pokemonId;
+    }
+
+    public String getPokemonName() {
+        return pokemonName;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public String getImageShiny() {
+        return imageShiny;
+    }
+
+    public String getPokedex() {
+        return pokedex;
     }
 
     /*
