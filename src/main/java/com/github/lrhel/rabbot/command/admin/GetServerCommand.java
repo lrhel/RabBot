@@ -9,7 +9,7 @@ import org.javacord.api.entity.user.User;
 import java.util.ArrayList;
 
 public class GetServerCommand implements CommandExecutor {
-    @Command(aliases = {"getserver", "gs"}, description = "Get List of all Server", showInHelpPage = false)
+    @Command(aliases = {"getserver", "gs"}, description = "Get List of all Server", showInHelpPage = false, async = true)
     public String onGetServerCommand(User user, DiscordApi api) {
         if (user.isBot()) { return ""; }
 
@@ -22,12 +22,12 @@ public class GetServerCommand implements CommandExecutor {
             list += server.getName().length() > 16 ? server.getName().subSequence(0, 16) : server.getName();
             for (int i = 16 - server.getName().length(); i > 0; i--)
                 list += " ";
-            list += " | ";
-            try {
-                list += server.getInvites().join().iterator().next().getUrl().toExternalForm();
-            } catch (Exception e){
-                list += "No invitation";
-            }
+//            list += " | ";
+//            try {
+//                list += server.getInvites().join().iterator().next().getUrl().toExternalForm();
+//            } catch (Exception e){
+//                list += "No invitation";
+//            }
             list += "\n";
         }
         list += "```";

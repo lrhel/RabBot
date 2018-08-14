@@ -27,7 +27,7 @@ public class GetCommand implements CommandExecutor {
         this.discordBotListAPI = api;
     }
 
-    @Command(aliases = {"get"}, showInHelpPage = false)
+    @Command(aliases = {"get"}, showInHelpPage = false, async = true)
     public String onGetCommand(User user, String[] arg, DiscordApi api, Message message, TextChannel textChannel){
         if (user.isBot()) { return ""; }
 

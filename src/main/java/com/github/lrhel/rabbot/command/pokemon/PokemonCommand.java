@@ -184,9 +184,7 @@ public class PokemonCommand implements CommandExecutor {
                 }
             }).removeAfter(5, TimeUnit.MINUTES));
         } catch (Exception ignored) { }
-        if(rabbotPokemon != null) {
-            System.out.println("cached");
-        }
+
         playing.remove(user);
     }
 
