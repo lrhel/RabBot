@@ -150,9 +150,9 @@ public class StrawpollCommand implements CommandExecutor {
 
         response.append("```")
 
-                .append("**URL: **`")
+                .append("**URL: **")
                 .append(strawPoll.getPollURL())
-                .append("`\n")
+                .append("\n")
         ;
 
         textChannel.sendMessage(response.toString());
