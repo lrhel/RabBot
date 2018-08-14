@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import static com.github.lrhel.rabbot.command.pokemon.RabbotPokemon.totalCatchedPokemon;
 import static com.github.lrhel.rabbot.command.pokemon.RabbotPokemon.totalUniqueCatchedPokemon;
+import static com.github.lrhel.rabbot.command.pokemon.RabbotPokemon.totalUniqueCatchedShinyPokemon;
 
 public class GetCommand implements CommandExecutor {
     DiscordBotListAPI discordBotListAPI;
@@ -81,7 +82,8 @@ public class GetCommand implements CommandExecutor {
 
                     }
                     sb.append("Total catch Pokemon: ").append(totalCatchedPokemon()).append("\n");
-                    sb.append("Total unique catch Pokemon: ").append(totalUniqueCatchedPokemon());
+                    sb.append("Total unique catch Pokemon: ").append(totalUniqueCatchedPokemon()).append("\n");
+                    sb.append("Total unique Shiny catch: ").append(totalUniqueCatchedShinyPokemon()).append("\n");
                     return sb.toString();
                 } catch (Exception ignored) { }
             case "hasvoted":
