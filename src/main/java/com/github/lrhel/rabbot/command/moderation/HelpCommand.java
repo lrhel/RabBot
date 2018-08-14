@@ -87,6 +87,7 @@ public class HelpCommand implements CommandExecutor {
         sb.append("**rb.image** *Get a Random Picture*\n");
         sb.append("**rb.shitposting** *Get a random shitpost*\n");
         sb.append("**rb.copypasta** *Get a random copypasta*\n");
+        sb.append("**rb.vote** *Retrieve the RabBot vote link\n");
         return embedBuilder.addField("__Misc__", sb.toString());
     }
 

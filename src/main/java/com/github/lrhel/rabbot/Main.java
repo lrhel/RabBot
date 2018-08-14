@@ -106,6 +106,7 @@ public class Main {
         cmd.registerCommand(new UnsplashCommand());
         cmd.registerCommand(new SetServerCountCommand(discordBotListAPI, api));
         cmd.registerCommand(new ResetCommand());
+        cmd.registerCommand(new VoteCommand());
 
         // NSFW
         cmd.registerCommand(new PornhubCommand());
