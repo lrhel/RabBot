@@ -9,6 +9,7 @@ import me.sargunvohra.lib.pokekotlin.client.PokeApiClient;
 import me.sargunvohra.lib.pokekotlin.model.Pokemon;
 import me.sargunvohra.lib.pokekotlin.model.PokemonSpeciesFlavorText;
 import org.discordbots.api.client.DiscordBotListAPI;
+import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -41,7 +42,7 @@ public class PokemonCommand implements CommandExecutor {
     }
 
     @Command(aliases = {"pokemon", "pkmn"}, description = "Catch a Pokemon", async = true)
-    public void onPokemonCommand(User user, TextChannel textChannel) {
+    public void onPokemonCommand(User user, TextChannel textChannel, DiscordApi api) {
         if (user.isBot()) { return ; }
 
         PokeApi pokeApi = new PokeApiClient();
@@ -184,6 +185,13 @@ public class PokemonCommand implements CommandExecutor {
                 }
             }).removeAfter(5, TimeUnit.MINUTES));
         } catch (Exception ignored) { }
+
+        /* Logging */
+        if(shiny.is()) {
+            if(api.getTextChannelById("478991822102724620").isPresent()) {
+                api.getTextChannelById("478991822102724620").get().sendMessage(catchPokemonEmbed);
+            }
+        }
 
         playing.remove(user);
     }
