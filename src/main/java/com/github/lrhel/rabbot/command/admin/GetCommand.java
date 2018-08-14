@@ -1,6 +1,7 @@
 package com.github.lrhel.rabbot.command.admin;
 
 import com.github.lrhel.rabbot.Money;
+import com.github.lrhel.rabbot.command.pokemon.RabbotPokemon;
 import com.github.lrhel.rabbot.config.Config;
 import com.github.lrhel.rabbot.dblApi.DblApi;
 import de.btobastian.sdcf4j.Command;
@@ -72,8 +73,11 @@ public class GetCommand implements CommandExecutor {
                     sb = new StringBuilder();
                     for (User usr : message.getMentionedUsers()) {
                         sb.append(usr.getName()).append(": ").append(totalCatchedPokemon(usr))
-                                .append("(Unique Pokemon: ").append(totalUniqueCatchedPokemon(usr))
-                                .append(")").append("\n");
+                                .append(" (Unique Pokemon: ").append(totalUniqueCatchedPokemon(usr))
+                                .append(") [Shiny: ").append(RabbotPokemon.totalUniqueCatchedShinyPokemon(user))
+                                .append("]")
+                                .append("\n");
+
 
                     }
                     sb.append("Total catch Pokemon: ").append(totalCatchedPokemon()).append("\n");

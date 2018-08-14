@@ -95,7 +95,7 @@ public class BonusCommand implements CommandExecutor {
                 embedBuilder = new EmbedBuilder()
                         .setAuthor("RabBot's Bonus", "https://discordbots.org/bot/441010449757110273", api.getYourself().getAvatar())
                         .addField("Unlock the daily Bonus", "[Click here to vote for RabBot and unlock the daily Bonus](https://discordbots.org/bot/441010449757110273/vote)")
-                        .setFooter("Also don't forget to re-run the command after voting and a few time")
+                        .setFooter("Also don't forget to re-run the command after voting and 1 or 2 minutes (o.o")
                 ;
             }
 
