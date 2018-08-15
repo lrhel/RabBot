@@ -55,8 +55,11 @@ public class BlackJackCommand implements CommandExecutor {
             return "Try with a positive amount";
         } else if (amount > Money.getMoney(user)) {
             System.out.println(user.getName() + ": Blackjack: not enough money");
-            Money.setMoney(user, 0, 0);
-            return "Not enough money, try the **daily** command";
+            if(Money.getMoney(user) <= 0) {
+                Money.setMoney(user, 0, 0);
+                return "Not enough money, try the **daily** command";
+            }
+            return "Not enough money, try a smaller amount";
         }
 
         if(using.contains(user))

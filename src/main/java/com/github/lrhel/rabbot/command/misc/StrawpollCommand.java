@@ -149,7 +149,6 @@ public class StrawpollCommand implements CommandExecutor {
         }
 
         response.append("```")
-
                 .append("**URL: **")
                 .append(strawPoll.getPollURL())
                 .append("\n")
