@@ -76,20 +76,20 @@ public class PokemonCommand implements CommandExecutor {
             try {
                 pokemon = pokeApi.getPokemon(pokemonId);
             } catch (Exception e) {
-                textChannel.sendMessage("Sorry... The PokeAPI is down...").thenAccept(getMessageDeleter(5, TimeUnit.SECONDS));
+                textChannel.sendMessage("Sorry... The PokeAPI is down...").thenAccept(getMessageDeleter(30, TimeUnit.SECONDS));
                 playing.remove(user);
                 return;
             }
         }
 
 
-        if(rng.nextInt(SHINY_RATE) == 444) {
+        if(rng.nextInt(SHINY_RATE) >= 3900) {
             shiny.set(true);
         }
         else {
             discordBotListAPI.hasVoted(user.getIdAsString()).whenComplete((aBoolean, throwable) -> {
                 if (aBoolean.booleanValue()) {
-                    if (rng.nextInt(SHINY_RATE) >= 3700) {
+                    if (rng.nextInt(SHINY_RATE) >= 3900) {
                         shiny.set(true);
                     }
                     hasVoted.set(true);
@@ -189,7 +189,7 @@ public class PokemonCommand implements CommandExecutor {
         /* Logging */
         if(shiny.is()) {
             if(api.getTextChannelById("478991822102724620").isPresent()) {
-                api.getTextChannelById("478991822102724620").get().sendMessage(catchPokemonEmbed);
+                api.getTextChannelById("478991822102724620").get().sendMessage(catchPokemonEmbed).join();
             }
         }
 
