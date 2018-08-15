@@ -10,7 +10,7 @@ import org.javacord.api.entity.user.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Optional;
+import java.util.*;
 
 import static com.github.lrhel.rabbot.sqlite.Sqlite.getTimestampFromSql;
 import static com.github.lrhel.rabbot.utility.Utility.firstUpper;
@@ -44,7 +44,7 @@ public class RabbotPokemon {
                 String image = resultSet.getString("image");
                 String imageShiny = resultSet.getString("image_shiny");
                 String pokedex = resultSet.getString("pokedex");
-                return new RabbotPokemon(id, pkmnName, image, imageShiny, pokedex);
+                return new RabbotPokemonBuilder().setPokemonId(id).setPokemonName(pkmnName).setImage(image).setImageShiny(imageShiny).setPokedex(pokedex).createRabbotPokemon();
             } else {
                 return null;
             }
@@ -149,6 +149,25 @@ public class RabbotPokemon {
         return preparedStatement.executeQuery().getInt("count");
     }
 
+    public static Map<RabbotPokemon, Integer> getDoublePokemonFromUser(User user) throws SQLException {
+        Map<RabbotPokemon, Integer> rabbotPokemonIntegerMap = new TreeMap<>();
+        String sql = "SELECT *, COUNT(*) as count FROM CATCH WHERE discord_id = ? GROUP BY pkmn_name HAVING COUNT(*) >= 2";
+        PreparedStatement preparedStatement = Sqlite.getInstance().getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, user.getIdAsString());
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            RabbotPokemon pokemon = new RabbotPokemonBuilder()
+                    .setPokemonId(resultSet.getInt("pkmn"))
+                    .setPokemonName(resultSet.getString("pkmn_name"))
+                    .setImage(resultSet.getString("image"))
+                    .setImageShiny(resultSet.getString("image_shiny"))
+                    .setPokedex(resultSet.getString("pokedex"))
+                    .build();
+            Integer count = resultSet.getInt("count");
+            rabbotPokemonIntegerMap.put(pokemon, count);
+        }
+        return rabbotPokemonIntegerMap;
+    }
 
 
 
@@ -182,4 +201,41 @@ public class RabbotPokemon {
         return getTimestampFromSql(user,  sql);
     }
 
+    public static class RabbotPokemonBuilder {
+
+        private int pokemonId;
+        private String pokemonName;
+        private String image;
+        private String imageShiny;
+        private String pokedex;
+
+        public RabbotPokemonBuilder setPokemonId(int pokemonId) {
+            this.pokemonId = pokemonId;
+            return this;
+        }
+
+        public RabbotPokemonBuilder setPokemonName(String pokemonName) {
+            this.pokemonName = pokemonName;
+            return this;
+        }
+
+        public RabbotPokemonBuilder setImage(String image) {
+            this.image = image;
+            return this;
+        }
+
+        public RabbotPokemonBuilder setImageShiny(String imageShiny) {
+            this.imageShiny = imageShiny;
+            return this;
+        }
+
+        public RabbotPokemonBuilder setPokedex(String pokedex) {
+            this.pokedex = pokedex;
+            return this;
+        }
+
+        public RabbotPokemon build() {
+            return new RabbotPokemon(pokemonId, pokemonName, image, imageShiny, pokedex);
+        }
+    }
 }
