@@ -15,6 +15,7 @@ import com.github.lrhel.rabbot.command.nsfw.PornhubCommand;
 import com.github.lrhel.rabbot.command.nsfw.RedTubeCommand;
 import com.github.lrhel.rabbot.command.nsfw.Tube8Command;
 import com.github.lrhel.rabbot.command.nsfw.YouPornCommand;
+import com.github.lrhel.rabbot.command.pokemon.DuplicateCommand;
 import com.github.lrhel.rabbot.command.pokemon.InventoryCommand;
 import com.github.lrhel.rabbot.command.pokemon.PokemonCommand;
 import com.github.lrhel.rabbot.config.Config;
@@ -80,6 +81,7 @@ public class Main {
         cmd.registerCommand(new PokemonCommand(discordBotListAPI));
         cmd.registerCommand(new InventoryCommand());
         cmd.registerCommand(new BonusCommand(discordBotListAPI));
+        cmd.registerCommand(new DuplicateCommand());
 
         //Updating/Restarting stuff
         cmd.registerCommand(new UpdateCommand());
