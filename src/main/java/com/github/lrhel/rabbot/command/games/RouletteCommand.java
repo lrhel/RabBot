@@ -32,9 +32,9 @@ public class RouletteCommand implements CommandExecutor {
             try {
                 amount = param.length == 1 ? 1 : Integer.parseInt(param[0]);
             } catch (NumberFormatException nfe) {
-                Message lm = textChannel.sendMessage("Sorry **" + user.getDisplayName(server) +  "**, not a valid!")
+                Message lm = textChannel.sendMessage("Sorry **" + user.getDisplayName(server) +  "**, not a valid bet!")
                         .join();
-                lm.addMessageEditListener(e -> {}).removeAfter(5, TimeUnit.SECONDS)
+                lm.addMessageEditListener(e -> {}).removeAfter(10, TimeUnit.SECONDS)
                         .addRemoveHandler(() -> lm.delete().join());
                 return "";
             }
@@ -69,16 +69,16 @@ public class RouletteCommand implements CommandExecutor {
             if(rs.next()){
                 int money = rs.getInt("money");
                 if(amount <= 0) {
-                    Message lm = textChannel.sendMessage("Sorry **" + user.getDisplayName(server) +  "**, not a valid!")
+                    Message lm = textChannel.sendMessage("Sorry **" + user.getDisplayName(server) +  "**, not a valid bet!")
                             .join();
-                    lm.addMessageEditListener(e -> {}).removeAfter(5, TimeUnit.SECONDS)
+                    lm.addMessageEditListener(e -> {}).removeAfter(10, TimeUnit.SECONDS)
                             .addRemoveHandler(() -> lm.delete().join());
                     return "";
                 }
                 if(money < amount){
                     Message lm = textChannel.sendMessage("Sorry **" + user.getDisplayName(server) +  "**, not enough money!")
                             .join();
-                    lm.addMessageEditListener(e -> {}).removeAfter(5, TimeUnit.SECONDS)
+                    lm.addMessageEditListener(e -> {}).removeAfter(10, TimeUnit.SECONDS)
                             .addRemoveHandler(() -> lm.delete().join());
                     return "";
                 }
