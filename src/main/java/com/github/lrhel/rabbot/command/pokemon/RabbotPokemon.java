@@ -149,8 +149,8 @@ public class RabbotPokemon {
         return preparedStatement.executeQuery().getInt("count");
     }
 
-    public static Map<RabbotPokemon, Integer> getDoublePokemonFromUser(User user) throws SQLException {
-        Map<RabbotPokemon, Integer> rabbotPokemonIntegerMap = new TreeMap<>();
+    public static LinkedHashMap<RabbotPokemon, Integer> getDoublePokemonFromUser(User user) throws SQLException {
+        LinkedHashMap<RabbotPokemon, Integer> rabbotPokemonIntegerMap = new LinkedHashMap<>();
         String sql = "SELECT *, COUNT(*) as count FROM CATCH WHERE discord_id = ? GROUP BY pkmn_name HAVING COUNT(*) >= 2";
         PreparedStatement preparedStatement = Sqlite.getInstance().getConnection().prepareStatement(sql);
         preparedStatement.setString(1, user.getIdAsString());
