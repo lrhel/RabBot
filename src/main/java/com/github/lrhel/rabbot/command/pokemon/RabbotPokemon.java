@@ -44,7 +44,7 @@ public class RabbotPokemon {
                 String image = resultSet.getString("image");
                 String imageShiny = resultSet.getString("image_shiny");
                 String pokedex = resultSet.getString("pokedex");
-                return new RabbotPokemonBuilder().setPokemonId(id).setPokemonName(pkmnName).setImage(image).setImageShiny(imageShiny).setPokedex(pokedex).createRabbotPokemon();
+                return new RabbotPokemonBuilder().setPokemonId(id).setPokemonName(pkmnName).setImage(image).setImageShiny(imageShiny).setPokedex(pokedex).build();
             } else {
                 return null;
             }
@@ -168,8 +168,6 @@ public class RabbotPokemon {
         }
         return rabbotPokemonIntegerMap;
     }
-
-
 
     public int getPokemonId() {
         return pokemonId;
