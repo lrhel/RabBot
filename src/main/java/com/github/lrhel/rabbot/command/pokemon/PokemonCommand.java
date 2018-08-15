@@ -86,16 +86,16 @@ public class PokemonCommand implements CommandExecutor {
         if(rng.nextInt(SHINY_RATE) >= 3900) {
             shiny.set(true);
         }
-        else {
-            discordBotListAPI.hasVoted(user.getIdAsString()).whenComplete((aBoolean, throwable) -> {
-                if (aBoolean.booleanValue()) {
-                    if (rng.nextInt(SHINY_RATE) >= 3900) {
-                        shiny.set(true);
-                    }
-                    hasVoted.set(true);
+
+        discordBotListAPI.hasVoted(user.getIdAsString()).whenComplete((aBoolean, throwable) -> {
+            if (aBoolean.booleanValue()) {
+                if (rng.nextInt(SHINY_RATE) >= 3900) {
+                    shiny.set(true);
                 }
-            }).toCompletableFuture().join();
-        }
+                hasVoted.set(true);
+            }
+        }).toCompletableFuture().join();
+
 
         if (rabbotPokemon == null && pokemon != null) {
             name = shiny.is() ? "Shiny " + firstUpper(pokemon.getName()) : firstUpper(pokemon.getName());
