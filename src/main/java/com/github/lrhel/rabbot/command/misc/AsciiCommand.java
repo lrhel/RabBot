@@ -16,7 +16,7 @@ public class AsciiCommand implements CommandExecutor {
 
     private String randomRabbit() {
         Random rng = new Random(System.currentTimeMillis());
-        switch (rng.nextInt(6)) {
+        switch (rng.nextInt(7)) {
             case 0: return "```\n" +
                     "             ,\n" +
                     "            /|      __\n" +
@@ -37,7 +37,8 @@ public class AsciiCommand implements CommandExecutor {
                     "     l       I     !\n" +
                     "     ]\\      _\\    /\"\\\n" +
                     "    (\" ~----( ~   Y.  )\n" +
-                    "~~~~~~~~~~~~~~~~~~~~~~~~~~```";
+                    "~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+                    "```";
             case 1: return "```" +
                     "                          .\".\n" +
                     "                         /  |\n" +
@@ -55,10 +56,10 @@ public class AsciiCommand implements CommandExecutor {
                     "         Y       )( / /(,/\n" +
                     "        ,|      /     )\n" +
                     "       ( |     /     /\n" +
-                    "        \" \\_  (__   (__        \n" +
+                    "        \" \\_  (__   (__  [nabis]\n" +
                     "            \"-._,)--._,)\n" +
                     "```";
-            case 2: return "```" +
+            case 2: return "```\n" +
                     "               (`.         ,-,\n" +
                     "               `\\ `.    ,;' /\n" +
                     "                \\`. \\ ,'/ .'\n" +
@@ -72,7 +73,8 @@ public class AsciiCommand implements CommandExecutor {
                     "    `    ,   )   .'\n" +
                     "     `._ ,  '   /_\n" +
                     "        ; ,''-,;' ``-\n" +
-                    "         ``-..__\\``--`  ```";
+                    "         ``-..__\\``--`  fl\n" +
+                    "\n```";
             case 3: return "```" +
                     "            .--,_\n" +
                     "           / ,/ /\n" +
@@ -86,11 +88,11 @@ public class AsciiCommand implements CommandExecutor {
                     "         `.'  \"  .  .-'    \" ;\n" +
                     "          : .     .'          ;\n" +
                     "          `.   ' :     '   '  ;\n" +
-                    "            )  _.\". \"     .  \";\n" +
+                    "     jgs    )  _.\". \"     .  \";\n" +
                     "          .'_.'   .'   '  __.,`.\n" +
-                    "         '\"      \"\"''---'`    \"'```";
-            case 4: return "```" +
-                    "  \n" +
+                    "         '\"      \"\"''---'`    \"'" +
+                    "\n```";
+            case 4: return "```\n" +
                     "              ,-\"\"-.\n" +
                     "             /  _  _\\\n" +
                     "            /  /_; ;_\\\n" +
@@ -103,7 +105,8 @@ public class AsciiCommand implements CommandExecutor {
                     "        ,  /    -,/\\ \\\n" +
                     "      ,{ \\/       `\\`\"'\n" +
                     "      { (        __/__\n" +
-                    "      `{ /\\_________)))```";
+                    "  jgs `{ /\\_________)))\n" +
+                    "```";
             case 5: return "```" +
                     "    /| |\\\n" +
                     "   ( |-| )\n" +
@@ -111,9 +114,31 @@ public class AsciiCommand implements CommandExecutor {
                     "   (>(Y)<)\n" +
                     "    )   (\n" +
                     "   /     \\\n" +
-                    "  ( (m|m) )  \n" +
-                    ",-.),___.(,-.`\n" +
-                    "`---'   `---'```";
+                    "  ( (m|m) )  hjw\n" +
+                    ",-.),___.(,-.`97\n" +
+                    "`---'   `---'\n" +
+                    "```";
+            case 6: return "```\n" +
+                    "   ***\n" +
+                    "  ** **\n" +
+                    " **   **\n" +
+                    " **   **         ****\n" +
+                    " **   **       **   ****\n" +
+                    " **  **       *   **   **\n" +
+                    "  **  *      *  **  ***  **\n" +
+                    "   **  *    *  **     **  *\n" +
+                    "    ** **  ** **        **\n" +
+                    "    **   **  **\n" +
+                    "   *           *\n" +
+                    "  *             *\n" +
+                    " *    0     0    *\n" +
+                    " *   /   @   \\   *\n" +
+                    " *   \\__/ \\__/   *\n" +
+                    "   *     W     *\n" +
+                    "     **     **\n" +
+                    "       *****\n" +
+                    "```";
+            case 7:
             default: return "";
         }
     }
