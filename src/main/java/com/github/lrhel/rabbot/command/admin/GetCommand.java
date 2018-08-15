@@ -70,18 +70,19 @@ public class GetCommand implements CommandExecutor {
                 }
                 return sb.toString();
             case "pokemon":
+            case "pkmn":
                 try {
                     sb = new StringBuilder();
                     for (User usr : message.getMentionedUsers()) {
                         sb.append(usr.getName()).append(": ").append(totalCatchedPokemon(usr))
                                 .append(" (Unique Pokemon: ").append(totalUniqueCatchedPokemon(usr))
-                                .append(") [Shiny: ").append(RabbotPokemon.totalUniqueCatchedShinyPokemon(user))
+                                .append(") [Shiny: ").append(RabbotPokemon.totalUniqueCatchedShinyPokemon(usr))
                                 .append("]")
                                 .append("\n");
 
 
                     }
-                    sb.append("Total catch Pokemon: ").append(totalCatchedPokemon()).append("\n");
+                    sb.append("\nTotal catch Pokemon: ").append(totalCatchedPokemon()).append("\n");
                     sb.append("Total unique catch Pokemon: ").append(totalUniqueCatchedPokemon()).append("\n");
                     sb.append("Total unique Shiny catch: ").append(totalUniqueCatchedShinyPokemon()).append("\n");
                     return sb.toString();
