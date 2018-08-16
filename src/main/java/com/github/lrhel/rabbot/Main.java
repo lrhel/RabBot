@@ -35,7 +35,7 @@ public class Main {
 
         //set logger and tracer
         FallbackLoggerConfiguration.setDebug(true);
-        FallbackLoggerConfiguration.setTrace(true);
+        FallbackLoggerConfiguration.setTrace(false);
 
         DiscordApi api = new DiscordApiBuilder().setToken(Config.DISCORD.toString()).login().join();
         System.out.println("Logged in!");
@@ -82,6 +82,7 @@ public class Main {
         cmd.registerCommand(new InventoryCommand());
         cmd.registerCommand(new BonusCommand(discordBotListAPI));
         cmd.registerCommand(new DuplicateCommand());
+        cmd.registerCommand(new AddPokemonCommand());
 
         //Updating/Restarting stuff
         cmd.registerCommand(new UpdateCommand());
