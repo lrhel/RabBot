@@ -34,8 +34,8 @@ public class Main {
     public static void main(String[] args) {
 
         //set logger and tracer
-        FallbackLoggerConfiguration.setDebug(false);
-        FallbackLoggerConfiguration.setTrace(false);
+        FallbackLoggerConfiguration.setDebug(true);
+        FallbackLoggerConfiguration.setTrace(true);
 
         DiscordApi api = new DiscordApiBuilder().setToken(Config.DISCORD.toString()).login().join();
         System.out.println("Logged in!");
