@@ -1,7 +1,6 @@
 package com.github.lrhel.rabbot.sqlite;
 
 import org.javacord.api.entity.user.User;
-import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -69,8 +68,11 @@ public class Sqlite {
 
     public static boolean resetCatchTimestamp(User user) {
         String sql = "UPDATE catch SET timestamp = 0 WHERE user_id = ?";
-        PreparedStatement preparedStatement = executeTimestampReset(user, sql);
-        if (preparedStatement != null) return preparedStatement;
+        try {
+            PreparedStatement preparedStatement = getInstance().getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, user.getIdAsString());
+            return !preparedStatement.execute();
+        } catch (Exception e) { e.printStackTrace();}
         return false;
     }
 
@@ -85,8 +87,11 @@ public class Sqlite {
 
     public static boolean resetDailyTimestamp(User user) {
         String sql = "UPDATE money SET timestamp = 0 WHERE user_id = ?";
-        PreparedStatement preparedStatement = executeTimestampReset(user, sql);
-        if (preparedStatement != null) return preparedStatement;
+        try {
+            PreparedStatement preparedStatement = getInstance().getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, user.getIdAsString());
+            return !preparedStatement.execute();
+        } catch (Exception e) { e.printStackTrace(); }
         return false;
     }
 
@@ -101,19 +106,12 @@ public class Sqlite {
 
     public static boolean resetBonusTimestamp(User user) {
         String sql = "UPDATE money SET bonus_timestamp = 0 WHERE user_id = ?";
-        Boolean preparedStatement = executeTimestampReset(user, sql);
-        if (preparedStatement != null) return preparedStatement;
-        return false;
-    }
-
-    @Nullable
-    private static Boolean executeTimestampReset(User user, String sql) {
         try {
             PreparedStatement preparedStatement = getInstance().getConnection().prepareStatement(sql);
             preparedStatement.setString(1, user.getIdAsString());
             return !preparedStatement.execute();
         } catch (Exception e) { e.printStackTrace();}
-        return null;
+        return false;
     }
 
     public static boolean resetBonusTimestamp() {
