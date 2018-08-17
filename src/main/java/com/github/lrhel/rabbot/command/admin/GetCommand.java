@@ -109,6 +109,28 @@ public class GetCommand implements CommandExecutor {
                     memberCount += server.getMemberCount();
                 }
                 return "Total members: " + memberCount;
+            case "stats":
+                int memberCount = 0;
+                int serverCount = api.getServers().size();
+                int totalCatch = 0;
+                int totalUniqueCatch = 0;
+                int totalUniqueShiny = 0;
+
+                try {
+                    totalUniqueShiny = RabbotPokemon.totalUniqueCatchedShinyPokemon();
+                    totalCatch = RabbotPokemon.totalCatchedPokemon();
+                    totalUniqueCatch = RabbotPokemon.totalUniqueCatchedPokemon();
+                } catch (Exception ignored) { }
+
+                for(Server server : api.getServers()) {
+                    memberCount += server.getMemberCount();
+                }
+
+                return "Total member count: " + memberCount + "\n" +
+                "Total server count: " + serverCount + "\n" +
+                "Total Pokemon catched" + totalCatch + "\n" +
+                "Total Unique catched Pokemon" + totalUniqueCatch + "\n" +
+                "Total Unique Shiny catched Pokemon" + totalUniqueShiny + "\n";
         }
         return "";
     }
