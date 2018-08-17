@@ -119,7 +119,7 @@ public class GetCommand implements CommandExecutor {
                 AtomicReference<Integer> totalVotes = new AtomicReference<>();
 
 
-                discordBotListAPI.getBot(Long.toString(api.getClientId())).whenComplete((bot, throwable) -> {
+                discordBotListAPI.getBot("441010449757110273").whenComplete((bot, throwable) -> {
                     totalVotes.set(bot.getPoints());
                     totalVotesMonth.set(bot.getMonthlyPoints());
                 });
