@@ -24,6 +24,25 @@ public class DblApi {
         return this;
     }
 
+    public long getPoints() throws Exception {
+        JSONParser parser = new JSONParser();
+        StringBuilder url = new StringBuilder(URL_BASE);
+        url.append("bots/").append(this.botID);
+        JSONObject obj = (JSONObject) parser.parse(new BufferedReader(new InputStreamReader(new URL(url.toString()).openStream())));
+        return (Long) obj.get("points");
+    }
+
+    public long getMonthlyPoints() throws Exception {
+        JSONParser parser = new JSONParser();
+        StringBuilder url = new StringBuilder(URL_BASE);
+        url.append("bots/").append(this.botID);
+        JSONObject obj = (JSONObject) parser.parse(new BufferedReader(new InputStreamReader(new URL(url.toString()).openStream())));
+
+        return (Long) obj.get("monthlyPoints");
+    }
+
+
+
     public ArrayList<DblUser> getVotes() throws Exception {
         JSONParser parser = new JSONParser();
         StringBuilder url = new StringBuilder(URL_BASE);

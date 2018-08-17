@@ -16,11 +16,8 @@ import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReference;
 
-import static com.github.lrhel.rabbot.command.pokemon.RabbotPokemon.totalCatchedPokemon;
-import static com.github.lrhel.rabbot.command.pokemon.RabbotPokemon.totalUniqueCatchedPokemon;
-import static com.github.lrhel.rabbot.command.pokemon.RabbotPokemon.totalUniqueCatchedShinyPokemon;
+import static com.github.lrhel.rabbot.command.pokemon.RabbotPokemon.*;
 
 public class GetCommand implements CommandExecutor {
     DiscordBotListAPI discordBotListAPI;
@@ -115,19 +112,15 @@ public class GetCommand implements CommandExecutor {
                 int totalCatch = 0;
                 int totalUniqueCatch = 0;
                 int totalUniqueShiny = 0;
-                AtomicReference<Integer> totalVotesMonth = new AtomicReference<>();
-                AtomicReference<Integer> totalVotes = new AtomicReference<>();
-
-
-                discordBotListAPI.getBot("441010449757110273").whenComplete((bot, throwable) -> {
-                    totalVotes.set(bot.getPoints());
-                    totalVotesMonth.set(bot.getMonthlyPoints());
-                });
+                long totalVotes = 0;
+                long totalVotesMonth = 0;
                 try {
                     totalUniqueShiny = RabbotPokemon.totalUniqueCatchedShinyPokemon();
                     totalCatch = RabbotPokemon.totalCatchedPokemon();
                     totalUniqueCatch = RabbotPokemon.totalUniqueCatchedPokemon();
-                } catch (Exception ignored) { }
+                    totalVotes = dblApi.getPoints();
+                    totalVotesMonth = dblApi.getMonthlyPoints();
+                } catch (Exception ignored) { ignored.printStackTrace();}
 
                 for(Server server : api.getServers()) {
                     memberCount += server.getMemberCount();
@@ -135,11 +128,11 @@ public class GetCommand implements CommandExecutor {
 
                 return "Total member count: " + memberCount + "\n" +
                         "Total server count: " + serverCount + "\n" +
-                        "Total Pokemon catched" + totalCatch + "\n" +
-                        "Total Unique catched Pokemon" + totalUniqueCatch + "\n" +
-                        "Total Unique Shiny catched Pokemon" + totalUniqueShiny + "\n" +
-                        "Total Votes: " + totalVotes.get() + "\n" +
-                        "Total Monthly Votes " + totalVotesMonth.get() + "\n";
+                        "Total Pokemon catched: " + totalCatch + "\n" +
+                        "Total Unique catched Pokemon: " + totalUniqueCatch + "\n" +
+                        "Total Unique Shiny catched Pokemon: " + totalUniqueShiny + "\n" +
+                        "Total Votes: " + totalVotes + "\n" +
+                        "Total Monthly Votes: " + totalVotesMonth + "\n";
         }
         return "";
     }
