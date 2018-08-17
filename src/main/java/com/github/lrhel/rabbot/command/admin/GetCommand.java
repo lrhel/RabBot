@@ -35,6 +35,7 @@ public class GetCommand implements CommandExecutor {
         StringBuilder sb;
         DblApi dblApi = new DblApi().setId(Config.BOTID.toString());
 
+        int memberCount = 0;
 
         if (!user.isBotOwner() || arg.length == 0)
             return "";
@@ -104,13 +105,11 @@ public class GetCommand implements CommandExecutor {
                 } catch (Exception ignored) { }
             case "members":
             case "member":
-                int memberCount = 0;
                 for(Server server : api.getServers()) {
                     memberCount += server.getMemberCount();
                 }
                 return "Total members: " + memberCount;
             case "stats":
-                int memberCount = 0;
                 int serverCount = api.getServers().size();
                 int totalCatch = 0;
                 int totalUniqueCatch = 0;
