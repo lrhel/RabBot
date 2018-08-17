@@ -86,13 +86,13 @@ public class PokemonCommand implements CommandExecutor {
         }
 
 
-        if(rng.nextInt(SHINY_RATE) >= 3900) {
+        if(rng.nextInt(SHINY_RATE) >= 3950) {
             shiny.set(true);
         }
 
         discordBotListAPI.hasVoted(user.getIdAsString()).whenComplete((aBoolean, throwable) -> {
             if (aBoolean.booleanValue()) {
-                if (rng.nextInt(SHINY_RATE) >= 3900) {
+                if (rng.nextInt(SHINY_RATE) >= 3950) {
                     shiny.set(true);
                 }
                 hasVoted.set(true);
