@@ -102,6 +102,13 @@ public class GetCommand implements CommandExecutor {
                     }
                     return "";
                 } catch (Exception ignored) { }
+            case "members":
+            case "member":
+                int memberCount = 0;
+                for(Server server : api.getServers()) {
+                    memberCount += server.getMemberCount();
+                }
+                return "Total members: " + memberCount;
         }
         return "";
     }
