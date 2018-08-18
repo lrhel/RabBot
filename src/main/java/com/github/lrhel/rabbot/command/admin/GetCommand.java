@@ -6,7 +6,6 @@ import com.github.lrhel.rabbot.config.Config;
 import com.github.lrhel.rabbot.dblApi.DblApi;
 import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
-import okhttp3.*;
 import org.discordbots.api.client.DiscordBotListAPI;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.TextChannel;
@@ -134,31 +133,7 @@ public class GetCommand implements CommandExecutor {
                         "Total Unique Shiny catched Pokemon: " + totalUniqueShiny + "\n" +
                         "Total Votes: " + totalVotes + "\n" +
                         "Total Monthly Votes: " + totalVotesMonth + "\n";
-            case "pw":
-                //discord.pw
-                OkHttpClient client = new OkHttpClient();
-                StringBuilder url = new StringBuilder("https://bots.discord.pw/api")
-                        .append("/bots")
-                        .append("/").append(Config.BOTID).append("/");
-                url.append("stats/");
-                StringBuilder json = new StringBuilder()
-                        .append("{" +
-                                "    \"server_count\": " + api.getServers().size() +
-                                "}");
-                System.out.println(url.toString());
-                try {
-                    Request request = new Request.Builder()
-                            .header("Authorization", Config.PW.toString())
-                            .post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
-                                    json.toString()))
-                            .url(url.toString())
-                            .build();
-                    Response response = client.newCall(request).execute();
-                    System.out.println(response.toString());
-                    return response.toString();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
         }
         return "";
     }

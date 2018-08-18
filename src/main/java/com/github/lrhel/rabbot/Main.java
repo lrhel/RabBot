@@ -21,6 +21,7 @@ import com.github.lrhel.rabbot.command.pokemon.PokemonCommand;
 import com.github.lrhel.rabbot.config.Config;
 import de.btobastian.sdcf4j.CommandHandler;
 import de.btobastian.sdcf4j.handler.JavacordHandler;
+import okhttp3.*;
 import org.discordbots.api.client.DiscordBotListAPI;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
@@ -132,6 +133,28 @@ public class Main {
 
     public static void postServerCount(DiscordBotListAPI discordBotListAPI, DiscordApi discordApi) {
         discordBotListAPI.setStats(discordApi.getServers().size());
+
+        //discord.pw
+        OkHttpClient client = new OkHttpClient();
+        StringBuilder url = new StringBuilder("https://bots.discord.pw/api")
+                .append("/bots")
+                .append("/").append(Config.BOTID).append("/");
+        url.append("stats/");
+        StringBuilder json = new StringBuilder()
+                .append("{" +
+                        "    \"server_count\": " + discordApi.getServers().size() +
+                        "}");
+        try {
+            Request request = new Request.Builder()
+                    .header("Authorization", Config.PW.toString())
+                    .post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+                            json.toString()))
+                    .url(url.toString())
+                    .build();
+            client.newCall(request).execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
