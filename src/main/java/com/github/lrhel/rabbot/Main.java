@@ -71,6 +71,7 @@ public class Main {
         cmd.registerCommand(new AsciiCommand());
         cmd.registerCommand(new ChuckCommand());
         cmd.registerCommand(new QuoteCommand());
+        cmd.registerCommand(new TrumpCommand());
 
         //Money Stuff
         cmd.registerCommand(new DailyCommand());
