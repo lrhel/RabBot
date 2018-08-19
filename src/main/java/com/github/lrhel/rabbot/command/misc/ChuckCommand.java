@@ -6,11 +6,14 @@ import de.btobastian.sdcf4j.CommandExecutor;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
+import org.javacord.api.entity.user.User;
 import org.json.JSONObject;
 
 public class ChuckCommand implements CommandExecutor {
     @Command(aliases = {"chuck"}, description = "Chuck Norris Joke")
-    public void onChuckCommand(Message message, TextChannel textChannel) {
+    public void onChuckCommand(User user, Message message, TextChannel textChannel) {
+        if (user.isBot()) { return ; }
+
         if(message.getServerTextChannel().isPresent()) { //if send in a server
             if(!message.getServerTextChannel().get().isNsfw()) { //if it's not labelled nsfw
                 textChannel.sendMessage(getJoke(false));

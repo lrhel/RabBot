@@ -8,11 +8,14 @@ import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
+import org.javacord.api.entity.user.User;
 import org.json.JSONObject;
 
 public class QuoteCommand implements CommandExecutor {
     @Command(aliases = {"quote"}, description = "Get a random quote")
-    public void onQuoteCommand(TextChannel textChannel) {
+    public void onQuoteCommand(User user, TextChannel textChannel) {
+        if (user.isBot()) { return ; }
+
         textChannel.sendMessage(getQuote());
     }
 

@@ -8,11 +8,14 @@ import de.btobastian.sdcf4j.Command;
 import de.btobastian.sdcf4j.CommandExecutor;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
+import org.javacord.api.entity.user.User;
 import org.json.JSONObject;
 
 public class TrumpCommand implements CommandExecutor {
     @Command(aliases = "trump", description = "Get a Random Trump quote")
-    public void onTrumpCommand(TextChannel textChannel) {
+    public void onTrumpCommand(User user, TextChannel textChannel) {
+        if (user.isBot()) { return ; }
+
         textChannel.sendMessage(getTrumpQuote());
     }
 
