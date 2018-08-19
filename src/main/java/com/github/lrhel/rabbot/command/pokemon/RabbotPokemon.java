@@ -51,6 +51,54 @@ public class RabbotPokemon {
         } catch (Exception ignored) { ignored.printStackTrace();return null; }
     }
 
+    public static void tradePokemon(User userA, int idA, User userB, int idB) throws SQLException {
+        String sql = "SELECT count(*) as count FROM catch WHERE discord_id = ? and pkmn = ?";
+        PreparedStatement preparedStatement = Sqlite.getInstance().getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, userA.getIdAsString());
+        preparedStatement.setInt(2, idA);
+        int pkmnIdA;
+        int pkmnIdB;
+        if (preparedStatement.executeQuery().getInt("count") >= 1) {
+
+            sql = "SELECT count(*) as count FROM catch WHERE discord_id = ? and pkmn = ?";
+            preparedStatement = Sqlite.getInstance().getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, userB.getIdAsString());
+            preparedStatement.setInt(2, idB);
+
+            if (preparedStatement.executeQuery().getInt("count") >= 1) {
+                sql = "SELECT id FROM catch WHERE discord_id = ? and pkmn = ?";
+                preparedStatement = Sqlite.getInstance().getConnection().prepareStatement(sql);
+                preparedStatement.setString(1, userA.getIdAsString());
+                preparedStatement.setInt(2, idA);
+                ResultSet rs = preparedStatement.executeQuery();
+                if(rs.next()) {
+                    pkmnIdA = rs.getInt("id");
+                    sql = "SELECT id FROM catch WHERE discord_id = ? and pkmn = ?";
+                    preparedStatement = Sqlite.getInstance().getConnection().prepareStatement(sql);
+                    preparedStatement.setString(1, userB.getIdAsString());
+                    preparedStatement.setInt(2, idB);
+                    rs = preparedStatement.executeQuery();
+                    if(rs.next()) {
+                        pkmnIdB = rs.getInt("id");
+
+                        sql = "UPDATE catch SET discord_id = ? WHERE id = ?";
+                        preparedStatement = Sqlite.getInstance().getConnection().prepareStatement(sql);
+                        preparedStatement.setString(1, userA.getIdAsString());
+                        preparedStatement.setInt(2, pkmnIdB);
+                        preparedStatement.execute();
+
+                        sql = "UPDATE catch SET discord_id = ? WHERE id = ?";
+                        preparedStatement = Sqlite.getInstance().getConnection().prepareStatement(sql);
+                        preparedStatement.setString(1, userB.getIdAsString());
+                        preparedStatement.setInt(2, pkmnIdA);
+                        preparedStatement.execute();
+                    }
+
+                }
+            }
+        }
+    }
+
     public static void addPokemon(User user, Pokemon pokemon, boolean shiny) throws SQLException {
         String sql = "INSERT INTO CATCH(DISCORD_ID, PKMN, PKMN_NAME, TIMESTAMP, image, image_shiny, pokedex) " +
                 "VALUES(?,?,?,?,?,?,?)";
