@@ -69,6 +69,7 @@ public class Main {
         cmd.registerCommand(new EchoCommand());
         cmd.registerCommand(new StrawpollCommand());
         cmd.registerCommand(new AsciiCommand());
+        cmd.registerCommand(new ChuckCommand());
 
         //Money Stuff
         cmd.registerCommand(new DailyCommand());

@@ -10,6 +10,7 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.permission.PermissionType;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
@@ -48,7 +49,7 @@ public class HelpCommand implements CommandExecutor {
 
     }
 
-    private EmbedBuilder getInfo(EmbedBuilder embedBuilder) {
+    private EmbedBuilder getInfo(@NotNull EmbedBuilder embedBuilder) {
         StringBuilder sb = new StringBuilder();
         sb.append("**rb.info** *Show the info page*\n");
         sb.append("**rb.help** *Show this help page*\n");
@@ -56,16 +57,16 @@ public class HelpCommand implements CommandExecutor {
         return embedBuilder.addField("__Info__", sb.toString());
     }
 
-    private EmbedBuilder getGames(EmbedBuilder embedBuilder) {
+    private EmbedBuilder getGames(@NotNull EmbedBuilder embedBuilder) {
         StringBuilder sb = new StringBuilder();
         sb.append("**rb.blackjack** *Play BlackJack against the Bot*\n");
         sb.append("**rb.roulette** *Play Europea Roulette*\n");
         sb.append("**rb.slotmachine** *Play Slotmachine 777*\n");
-        sb.append("**rb.akinator** *[beta] Play with Akinator*\n");
+        sb.append("**rb.akinator** *[Beta] Play with Akinator ~~really broky~~*\n");
         return embedBuilder.addField("__Games__", sb.toString());
     }
 
-    private EmbedBuilder getMoney(EmbedBuilder embedBuilder) {
+    private EmbedBuilder getMoney(@NotNull EmbedBuilder embedBuilder) {
         StringBuilder sb = new StringBuilder();
         sb.append("**rb.daily** *Get your daily money*\n");
         sb.append("**rb.bonus** *Get a Bonus for Voting*\n");
@@ -73,25 +74,27 @@ public class HelpCommand implements CommandExecutor {
         return embedBuilder.addField("__Money__", sb.toString());
     }
 
-    private EmbedBuilder getPokemon(EmbedBuilder embedBuilder) {
+    private EmbedBuilder getPokemon(@NotNull EmbedBuilder embedBuilder) {
         StringBuilder sb = new StringBuilder();
         sb.append("**rb.pokemon** *Catch a random Pokemon*\n");
         sb.append("**rb.inventory** *View your Pokemon inventory*\n");
         return embedBuilder.addField("__Pokemon__", sb.toString());
     }
 
-    private EmbedBuilder getMisc(EmbedBuilder embedBuilder) {
+    private EmbedBuilder getMisc(@NotNull EmbedBuilder embedBuilder) {
         StringBuilder sb = new StringBuilder();
         sb.append("**rb.strawpoll** *Make or Check a StrawPoll");
         sb.append("**rb.rabbit** *Get a Rabbit Picture* :rabbit:\n");
         sb.append("**rb.image** *Get a Random Picture*\n");
         sb.append("**rb.shitposting** *Get a random shitpost*\n");
         sb.append("**rb.copypasta** *Get a random copypasta*\n");
+        sb.append("**rb.ascii** *Get a random ASCII picture*\n");
+        sb.append("**rb.chuck** *Get a ~~joke~~ fact about Chuck Norris");
         sb.append("**rb.vote** *Retrieve the RabBot vote link\n");
         return embedBuilder.addField("__Misc__", sb.toString());
     }
 
-    private EmbedBuilder getModeration(EmbedBuilder embedBuilder, User user, Server server) {
+    private EmbedBuilder getModeration(EmbedBuilder embedBuilder, User user, @NotNull Server server) {
         StringBuilder sb = new StringBuilder();
         if (server.getPermissions(user).getAllowedPermission().contains(PermissionType.MANAGE_MESSAGES)) {
             sb.append("**rb.purge** *Purge message from the channel*\n");
@@ -106,14 +109,14 @@ public class HelpCommand implements CommandExecutor {
         return embedBuilder.addField("__Moderation__", sb.toString());
     }
 
-    private EmbedBuilder getNsfw(EmbedBuilder embedBuilder, Server server) {
+    private EmbedBuilder getNsfw(EmbedBuilder embedBuilder, @NotNull Server server) {
         if(server.getTextChannels().stream().anyMatch(ServerTextChannel::isNsfw)) {
             StringBuilder sb = new StringBuilder();
             sb.append("*Only in nsfw channel ;)*\n");
             sb.append("**rb.pornhub** *Get a random video from PornHub*\n");
             sb.append("**rb.youporn** *Get a random video from YouPorn*\n");
             sb.append("**rb.redtube** *Get a random video from RedTube*\n");
-            sb.append("**rb.tube8** *Get a random video from Tube8*\n");
+            sb.append("**rb.tube8** *[Beta] Get a random video from Tube8*\n");
 
             return embedBuilder.addField("__Nsfw__", sb.toString());
         }
