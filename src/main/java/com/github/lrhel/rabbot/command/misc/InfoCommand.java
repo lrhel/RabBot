@@ -51,6 +51,8 @@ public class InfoCommand implements CommandExecutor {
         stringBuilder.append("[DBL Java Library](https://github.com/DiscordBotList/DBL-Java-Library)\n");
         stringBuilder.append("[ASCII Art](https://asciiart.website)\n");
         stringBuilder.append("[StrawPoll Java API](https://github.com/Samuel-Maddock/StrawPoll-Java-API)\n");
+        stringBuilder.append("[Mashape](https://market.mashape.com)\n");
+        stringBuilder.append("[ICNDb](http://icndb.com)\n");
 
 
 
