@@ -139,10 +139,14 @@ public class Main {
 
         //discord.pw
         OkHttpClient client = new OkHttpClient();
-        StringBuilder url = new StringBuilder("https://bots.discord.pw/api")
+        StringBuilder urlPw = new StringBuilder("https://bots.discord.pw/api")
                 .append("/bots")
                 .append("/").append(Config.BOTID).append("/");
-        url.append("stats/");
+        urlPw.append("stats/");
+
+        StringBuilder urlBfs = new StringBuilder("https://botsfordiscord.com/api/v1/")
+                .append("bots")
+                .append("/").append(Config.BOTID).append("/");
         StringBuilder json = new StringBuilder()
                 .append("{" +
                         "    \"server_count\": " + discordApi.getServers().size() +
@@ -152,7 +156,15 @@ public class Main {
                     .header("Authorization", Config.PW.toString())
                     .post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
                             json.toString()))
-                    .url(url.toString())
+                    .url(urlPw.toString())
+                    .build();
+            client.newCall(request).execute();
+
+            request = new Request.Builder()
+                    .header("Authorization", Config.BFD.toString())
+                    .post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+                            json.toString()))
+                    .url(urlBfs.toString())
                     .build();
             client.newCall(request).execute();
         } catch (Exception e) {
