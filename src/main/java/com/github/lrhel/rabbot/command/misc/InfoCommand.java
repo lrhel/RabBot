@@ -34,7 +34,7 @@ public class InfoCommand implements CommandExecutor {
                 .addInlineField("Github's page", "[RabBot's Respository](https://github.com/lrhel/RabBot)")
                 .addInlineField("Invite link", "[Bot's invite link](" + invite + ")")
                 .addInlineField("Upvote", "[Vote4RabBot!](https://discordbots.org/bot/441010449757110273/vote)")
-                .addField("API", apiList().toString())
+                .addField("And an happy thank to the API", apiList().toString())
                 ;
         textChannel.sendMessage(embed);
         return "";
@@ -53,6 +53,7 @@ public class InfoCommand implements CommandExecutor {
         stringBuilder.append("[StrawPoll Java API](https://github.com/Samuel-Maddock/StrawPoll-Java-API)\n");
         stringBuilder.append("[Mashape](https://market.mashape.com)\n");
         stringBuilder.append("[ICNDb](http://icndb.com)\n");
+        stringBuilder.append("[BFD](https://botsfordiscord.com)\n");
 
 
 
