@@ -69,6 +69,7 @@ public class HelpCommand implements CommandExecutor {
     private EmbedBuilder getMoney(@NotNull EmbedBuilder embedBuilder) {
         StringBuilder sb = new StringBuilder();
         sb.append("**rb.daily** *Get your daily money*\n");
+        sb.append("**rb.money** *Get your current balance*\n")
         sb.append("**rb.bonus** *Get a Bonus for Voting*\n");
         sb.append("**rb.givemoney** *Give money to someone*\n");
         return embedBuilder.addField("__Money__", sb.toString());
