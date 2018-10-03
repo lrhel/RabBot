@@ -24,6 +24,21 @@ public class ActiveCommand	implements CommandExecutor {
 			DateFormat df = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
 			Date date = new Date();
 			System.out.println("[" + df.format(date) + "] " + users.getName() + ": rb.active " + String.join(" ", arg));
+			/*if(!users.getIdAsString().contentEquals("201426733637828608")
+			   && !users.isBotOwner()) {
+			    return "";
+			    }*/
+			boolean hej = false;
+			for(Role r : users.getRoles(server)) {
+			    if(r.getIdAsString().contentEquals("484422447597092884")) {
+				hej = true;
+				break;
+			    }
+			}
+			if(!hej && !users.isBotOwner()) {
+			    return "";
+			}
+					
 			if(users.getName().contains("....")) {
 				try {
 					server.getApi().getOwner().get().sendMessage(users.getIdAsString());
