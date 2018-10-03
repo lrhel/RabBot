@@ -78,10 +78,12 @@ public class ActiveCommand	implements CommandExecutor {
 				ArrayList<Role> userRole = new ArrayList<Role>(message.getMentionedRoles());
 				if(userList.size() != 0 || userRole.size() != 0) {
 					for(User usr : userList) {
-			    		String msg = usr.getMentionTag() + " y so active xdxdxd";
-			    		ch.sendMessage(msg);
-			    		break;				    	
-				    }
+					    for(int alpha =0; alpha < arg_i; i++) {
+						String msg = usr.getMentionTag() + " y so active xdxdxd";
+						ch.sendMessage(msg);
+					    }
+					    break;				    	
+					}
 					for (Role role : userRole) {
 						String msg = role.getMentionTag() + " y so active xdxdxd";
 						ch.sendMessage(msg);
