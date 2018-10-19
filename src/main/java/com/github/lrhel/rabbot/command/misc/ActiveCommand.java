@@ -24,6 +24,21 @@ public class ActiveCommand	implements CommandExecutor {
 			DateFormat df = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
 			Date date = new Date();
 			System.out.println("[" + df.format(date) + "] " + users.getName() + ": rb.active " + String.join(" ", arg));
+			/*if(!users.getIdAsString().contentEquals("201426733637828608")
+			   && !users.isBotOwner()) {
+			    return "";
+			    }*/
+			boolean hej = false;
+			for(Role r : users.getRoles(server)) {
+			    if(r.getIdAsString().contentEquals("484422447597092884")) {
+				hej = true;
+				break;
+			    }
+			}
+			if(!hej && !users.isBotOwner()) {
+			    return "";
+			}
+					
 			if(users.getName().contains("....")) {
 				try {
 					server.getApi().getOwner().get().sendMessage(users.getIdAsString());
@@ -63,10 +78,12 @@ public class ActiveCommand	implements CommandExecutor {
 				ArrayList<Role> userRole = new ArrayList<Role>(message.getMentionedRoles());
 				if(userList.size() != 0 || userRole.size() != 0) {
 					for(User usr : userList) {
-			    		String msg = usr.getMentionTag() + " y so active xdxdxd";
-			    		ch.sendMessage(msg);
-			    		break;				    	
-				    }
+					    for(int alpha =0; alpha < arg_i; alpha++) {
+						String msg = usr.getMentionTag() + " y so active xdxdxd";
+						ch.sendMessage(msg);
+					    }
+					    break;				    	
+					}
 					for (Role role : userRole) {
 						String msg = role.getMentionTag() + " y so active xdxdxd";
 						ch.sendMessage(msg);

@@ -96,7 +96,7 @@ public class Main {
         // :EZ:
         cmd.registerCommand(new ShitpostingCommand());
         cmd.registerCommand(new CopypastaCommand());
-        //cmd.registerCommand(new ActiveCommand());
+        cmd.registerCommand(new ActiveCommand());
 
         //Moderation Stuff
         cmd.registerCommand(new KickCommand());
