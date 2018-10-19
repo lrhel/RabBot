@@ -62,7 +62,7 @@ public class HelpCommand implements CommandExecutor {
         sb.append("**rb.blackjack** *Play BlackJack against the Bot*\n");
         sb.append("**rb.roulette** *Play Europea Roulette*\n");
         sb.append("**rb.slotmachine** *Play Slotmachine 777*\n");
-        sb.append("**rb.akinator** *[Beta] Play with Akinator ~~really broky~~*\n");
+        //sb.append("**rb.akinator** *[Beta] Play with Akinator ~~really broky~~*\n");
         return embedBuilder.addField("__Games__", sb.toString());
     }
 
@@ -84,14 +84,14 @@ public class HelpCommand implements CommandExecutor {
 
     private EmbedBuilder getMisc(@NotNull EmbedBuilder embedBuilder) {
         StringBuilder sb = new StringBuilder();
-        sb.append("**rb.strawpoll** *Make or Check a StrawPoll\n");
+        sb.append("**rb.strawpoll** *Make or Check a StrawPoll*\n");
         sb.append("**rb.rabbit** *Get a Rabbit Picture* :rabbit:\n");
         sb.append("**rb.image** *Get a Random Picture*\n");
         sb.append("**rb.shitposting** *Get a random shitpost*\n");
         sb.append("**rb.copypasta** *Get a random copypasta*\n");
         sb.append("**rb.ascii** *Get a random ASCII picture*\n");
-        sb.append("**rb.chuck** *Get a ~~joke~~ fact about Chuck Norris\n");
-        sb.append("**rb.vote** *Retrieve the RabBot vote link\n");
+        sb.append("**rb.chuck** *Get a ~~joke~~ fact about Chuck Norris*\n");
+        sb.append("**rb.vote** *Retrieve the RabBot vote link*\n");
         return embedBuilder.addField("__Misc__", sb.toString());
     }
 
