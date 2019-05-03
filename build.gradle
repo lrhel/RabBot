@@ -3,8 +3,15 @@ apply plugin: 'application'
 group 'com.github.lrhel'
 version '1.0.0'
 
+apply from: "gradle/ext.gradle"
+
 sourceCompatibility = 9
 targetCompatibility = 9
+
+wrapper {
+    gradleVersion = '5.2'
+    distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
+}
 
 repositories {
     jcenter() // MavenCentral Repo as top priority
