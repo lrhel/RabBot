@@ -36,7 +36,23 @@ You can also define those permission to RabBot for more functionality
 <center>
 
 [![Invite Link](http://image.noelshack.com/fichiers/2018/32/6/1533999452-bouton-invite-link.png)](https://discordapp.com/oauth2/authorize?client_id=441010449757110273&scope=bot&permissions=117824) [![Support Server](http://image.noelshack.com/fichiers/2018/32/6/1533999452-bouton-support-server.png)](https://discord.gg/g88Wrfa) [![Vote](http://image.noelshack.com/fichiers/2018/32/5/1533934610-bouton-vote-for-rabbot.png)](https://discordbots.org/bot/441010449757110273/vote)
-
 [![Discord Bots](https://discordbots.org/api/widget/441010449757110273.svg)](https://discordbots.org/bot/441010449757110273)
 
 </center>
+
+#### Running the bot ####
+To run the bot, you need to have a file called `const.properties` at runtime root, that looks something like this: 
+```properties
+# Please fill in the values required
+token={token}
+pw-token={pw-token}
+bfd-token={bfd-token}
+mashape-token={mashape-token}
+challonge-token={challonge-token}
+unsplash-token={unsplash-token}
+discordlist-token={discordlist-token}
+bot-id={bot-id}
+smath-id={smath-id}
+thuga-id={thuga-id}
+```
+Please don't forget to add the required parameters to your `const.properties` file.
