@@ -1,19 +1,19 @@
 package com.github.lrhel.rabbot.command.pokemon;
 
-import com.github.lrhel.rabbot.utility.Offset;
-import com.vdurmont.emoji.EmojiParser;
-import de.btobastian.sdcf4j.Command;
-import de.btobastian.sdcf4j.CommandExecutor;
-import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.message.Message;
-import org.javacord.api.entity.user.User;
-
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class DuplicateCommand implements CommandExecutor {
+import de.kaleidox.javacord.util.commands.Command;
+
+import com.github.lrhel.rabbot.utility.Offset;
+import com.vdurmont.emoji.EmojiParser;
+import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.user.User;
+
+public class DuplicateCommand {
     private static int LIMIT = 20;
 
     @Command(aliases = {"duplication", "duplicate", "dup"})
@@ -27,16 +27,13 @@ public class DuplicateCommand implements CommandExecutor {
             msg.addReaction(EmojiParser.parseToUnicode(":x:"));//X cross
 
             msg.addReactionAddListener(event -> {
-                if (event.getEmoji().equalsEmoji(EmojiParser.parseToUnicode(":arrow_left:")) && event.getUser().getId() == user.getId())
-                { //left arrow
-                    if (offset.getOffset() != 0)
-                    {
+                if (event.getEmoji().equalsEmoji(EmojiParser.parseToUnicode(":arrow_left:")) && event.getUser().getId() == user.getId()) { //left arrow
+                    if (offset.getOffset() != 0) {
                         offset.minusOffset(LIMIT);
                         msg.edit(getDuplicateOffset(map, offset)).join();
                     }
                 }
-                if (event.getEmoji().equalsEmoji(EmojiParser.parseToUnicode(":arrow_right:")) && event.getUser().getId() == user.getId())
-                { //right arrow
+                if (event.getEmoji().equalsEmoji(EmojiParser.parseToUnicode(":arrow_right:")) && event.getUser().getId() == user.getId()) { //right arrow
                     offset.plusOffset(LIMIT);
                     msg.edit(getDuplicateOffset(map, offset)).join();
                 }
@@ -44,18 +41,19 @@ public class DuplicateCommand implements CommandExecutor {
                     msg.delete();
                 }
             }).removeAfter(5, TimeUnit.MINUTES);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     private static String getDuplicateOffset(LinkedHashMap<RabbotPokemon, Integer> pokemonMap, Offset offset) {
         StringBuilder sb = new StringBuilder();
-        if(offset.getOffset() >= pokemonMap.size()) {
+        if (offset.getOffset() >= pokemonMap.size()) {
             offset.minusOffset(LIMIT);
         }
         int i = 0;
         Iterator<Map.Entry<RabbotPokemon, Integer>> iterator = pokemonMap.entrySet().iterator();
         while (iterator.hasNext()) {
-            if(i == offset.getOffset()) {
+            if (i == offset.getOffset()) {
                 break;
             }
             iterator.next();

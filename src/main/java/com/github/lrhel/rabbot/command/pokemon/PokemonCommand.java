@@ -1,9 +1,15 @@
 package com.github.lrhel.rabbot.command.pokemon;
 
+import java.util.ArrayList;
+import java.util.Optional;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
+
+import de.kaleidox.javacord.util.commands.Command;
+
 import com.github.lrhel.rabbot.utility.ExtendedBoolean;
 import com.vdurmont.emoji.EmojiParser;
-import de.btobastian.sdcf4j.Command;
-import de.btobastian.sdcf4j.CommandExecutor;
 import me.sargunvohra.lib.pokekotlin.client.PokeApi;
 import me.sargunvohra.lib.pokekotlin.client.PokeApiClient;
 import me.sargunvohra.lib.pokekotlin.model.Pokemon;
@@ -16,19 +22,13 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.util.event.ListenerManager;
 
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
-
 import static com.github.lrhel.rabbot.command.pokemon.RabbotPokemon.addPokemon;
 import static com.github.lrhel.rabbot.command.pokemon.RabbotPokemon.getTimestamp;
 import static com.github.lrhel.rabbot.utility.Utility.firstUpper;
 import static com.github.lrhel.rabbot.utility.Utility.getMessageDeleter;
 
 
-public class PokemonCommand implements CommandExecutor {
+public class PokemonCommand {
     public static int TOTAL_PKMN = 802;
     private static int INTERVAL = 30 * 1000;
     private static int SHINY_RATE = 4096;
@@ -41,12 +41,13 @@ public class PokemonCommand implements CommandExecutor {
         this.discordBotListAPI = dbl;
     }
 
-    @Command(aliases = {"pokemon", "pkmn"}, description = "Catch a Pokemon", async = true)
+    @Command(aliases = {"pokemon", "pkmn"}, description = "Catch a Pokemon")
     public void onPokemonCommand(User user, TextChannel textChannel, DiscordApi api) {
         if (user.isBot()) {
             api.getOwner().whenComplete((owner, throwable) -> owner.sendMessage(user.getNicknameMentionTag() +
                     " (" + user.getId() + "): Pokemon Command as Bot"));
-            return ; }
+            return;
+        }
 
         PokeApi pokeApi = new PokeApiClient();
         Random rng = new Random(System.currentTimeMillis());
@@ -86,7 +87,7 @@ public class PokemonCommand implements CommandExecutor {
         }
 
 
-        if(rng.nextInt(SHINY_RATE) >= 3950) {
+        if (rng.nextInt(SHINY_RATE) >= 3950) {
             shiny.set(true);
         }
 
@@ -115,8 +116,7 @@ public class PokemonCommand implements CommandExecutor {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             name = shiny.is() ? "Shiny " + firstUpper(rabbotPokemon.getPokemonName()) : firstUpper(rabbotPokemon.getPokemonName());
 
             try {
@@ -136,8 +136,7 @@ public class PokemonCommand implements CommandExecutor {
             if (flavourOptional.isPresent()) {
                 flavour = flavourOptional.get().getFlavorText();
             }
-        }
-        else {
+        } else {
             flavour = rabbotPokemon.getPokedex();
         }
 
@@ -152,24 +151,21 @@ public class PokemonCommand implements CommandExecutor {
         EmbedBuilder catchPokemonEmbed = new EmbedBuilder()
                 .setTitle("You've caught a Pokemon!!")
                 .setDescription("You've caught a " + name)
-                .setAuthor("Congratulation " + user.getName() + "!!", url, "https://image.noelshack.com/fichiers/2018/29/1/1531772093-pokeball.png")
-                ;
+                .setAuthor("Congratulation " + user.getName() + "!!", url, "https://image.noelshack.com/fichiers/2018/29/1/1531772093-pokeball.png");
         setEmbedThumbnail(pokemon, rabbotPokemon, shiny, catchPokemonEmbed);
         setFooter(catchPokemonEmbed, hasVoted);
 
         EmbedBuilder pokedexEntryEmbed = new EmbedBuilder()
                 .setTitle("Pokedex entry for " + name)
                 .setDescription(flavour)
-                .setAuthor("Congratulation " + user.getName() + "!!", url, "https://image.noelshack.com/fichiers/2018/29/1/1531772093-pokeball.png")
-                ;
+                .setAuthor("Congratulation " + user.getName() + "!!", url, "https://image.noelshack.com/fichiers/2018/29/1/1531772093-pokeball.png");
         setEmbedThumbnail(pokemon, rabbotPokemon, shiny, pokedexEntryEmbed);
         setFooter(pokedexEntryEmbed, hasVoted);
 
         EmbedBuilder finalEmbed = new EmbedBuilder()
                 .setTitle(name)
                 .setDescription("")
-                .setAuthor("Congratulation " + user.getName() + "!!", url, "https://image.noelshack.com/fichiers/2018/29/1/1531772093-pokeball.png")
-                ;
+                .setAuthor("Congratulation " + user.getName() + "!!", url, "https://image.noelshack.com/fichiers/2018/29/1/1531772093-pokeball.png");
         setEmbedThumbnail(pokemon, rabbotPokemon, shiny, finalEmbed);
         setFooter(finalEmbed, hasVoted);
 
@@ -189,15 +185,17 @@ public class PokemonCommand implements CommandExecutor {
                     message.edit(finalEmbed);
                     try {
                         message.removeAllReactions().join();
-                    } catch (Exception ignored) { }
+                    } catch (Exception ignored) {
+                    }
                     lm2.get().remove();
                 }
             }).removeAfter(5, TimeUnit.MINUTES));
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
 
         /* Logging */
-        if(shiny.is()) {
-            if(api.getTextChannelById("478991822102724620").isPresent()) {
+        if (shiny.is()) {
+            if (api.getTextChannelById("478991822102724620").isPresent()) {
                 api.getTextChannelById("478991822102724620").get().sendMessage(catchPokemonEmbed).join();
             }
         }
@@ -207,18 +205,15 @@ public class PokemonCommand implements CommandExecutor {
 
     private void setEmbedThumbnail(Pokemon pokemon, RabbotPokemon rabbotPokemon, ExtendedBoolean shiny, EmbedBuilder finalEmbed) {
         if (shiny.is()) {
-            if(rabbotPokemon == null) {
+            if (rabbotPokemon == null) {
                 finalEmbed.setThumbnail(pokemon.getSprites().getFrontShiny());
-            }
-            else {
+            } else {
                 finalEmbed.setThumbnail(rabbotPokemon.getImageShiny());
             }
-        }
-        else {
-            if(rabbotPokemon == null) {
+        } else {
+            if (rabbotPokemon == null) {
                 finalEmbed.setThumbnail(pokemon.getSprites().getFrontDefault());
-            }
-            else {
+            } else {
                 finalEmbed.setThumbnail(rabbotPokemon.getImage());
             }
         }
@@ -227,8 +222,7 @@ public class PokemonCommand implements CommandExecutor {
     private EmbedBuilder setFooter(EmbedBuilder embedBuilder, ExtendedBoolean extendedBoolean) {
         if (extendedBoolean.isNot()) {
             return embedBuilder.setFooter("More chances to catch a Shiny? Try the rb.bonus command");
-        }
-        else {
+        } else {
             return embedBuilder;
         }
     }

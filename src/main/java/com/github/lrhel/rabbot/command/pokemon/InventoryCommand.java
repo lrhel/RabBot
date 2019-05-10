@@ -1,23 +1,25 @@
 package com.github.lrhel.rabbot.command.pokemon;
 
-import com.github.lrhel.rabbot.sqlite.Sqlite;
-import com.vdurmont.emoji.EmojiParser;
-import de.btobastian.sdcf4j.Command;
-import de.btobastian.sdcf4j.CommandExecutor;
-import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.message.Message;
-import org.javacord.api.entity.user.User;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
-public class InventoryCommand implements CommandExecutor {
+import de.kaleidox.javacord.util.commands.Command;
+
+import com.github.lrhel.rabbot.sqlite.Sqlite;
+import com.vdurmont.emoji.EmojiParser;
+import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.user.User;
+
+public class InventoryCommand {
     @Command(aliases = {"inventory", "inv"}, description = "Pokemon inventory")
-    public String onCommand(User user, TextChannel textChannel){
-        if (user.isBot()) { return ""; }
+    public String onCommand(User user, TextChannel textChannel) {
+        if (user.isBot()) {
+            return "";
+        }
 
         try {
             final String sql = "SELECT PKMN, PKMN_NAME, COUNT(*) as NB FROM CATCH WHERE DISCORD_ID = ? GROUP BY PKMN_NAME ORDER BY PKMN LIMIT ? OFFSET ?";
@@ -33,7 +35,7 @@ public class InventoryCommand implements CommandExecutor {
             pstmt.setInt(2, limit);
             pstmt.setInt(3, offset.getOffset());
             ResultSet rs = pstmt.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 result.append("#");
                 result.append(rs.getString("PKMN"));
                 result.append(Integer.parseInt(rs.getString("PKMN")) < 100 ? " " : "");
@@ -76,23 +78,22 @@ public class InventoryCommand implements CommandExecutor {
                         ResultSet rs1 = pstmt1.executeQuery();
                         result1.append("```css\n");
                         getResult(rs1, result1);
-                        if(!result1.toString().contentEquals("```css\n")) {
+                        if (!result1.toString().contentEquals("```css\n")) {
                             result1.append("```");
                             msg.edit(result1.toString());
-                        }
-                        else
+                        } else
                             offset.minusOffset(limit);
                     }
                     if (event.getEmoji().equalsEmoji(EmojiParser.parseToUnicode(":x:")) && event.getUser().getId() == user.getId()) { //X Cross
                         msg.delete();
                     }
-                } catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }).removeAfter(5, TimeUnit.MINUTES);
 
 
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return "";
@@ -110,10 +111,10 @@ public class InventoryCommand implements CommandExecutor {
         }
     }
 
-    private class Offset{
+    private class Offset {
         private int offset;
 
-        Offset(){
+        Offset() {
             this.offset = 0;
         }
 

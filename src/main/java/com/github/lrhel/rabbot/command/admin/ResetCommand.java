@@ -1,16 +1,16 @@
 package com.github.lrhel.rabbot.command.admin;
 
+import java.util.ArrayList;
+
+import de.kaleidox.javacord.util.commands.Command;
+
 import com.github.lrhel.rabbot.sqlite.Sqlite;
-import de.btobastian.sdcf4j.Command;
-import de.btobastian.sdcf4j.CommandExecutor;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.user.User;
 
-import java.util.ArrayList;
-
-public class ResetCommand implements CommandExecutor {
-    @Command(aliases = "reset")
-    public String onResetCommand(User user, String[] args, Message message) {
+public class ResetCommand {
+    @Command
+    public String reset(User user, String[] args, Message message) {
         if (user.isBotOwner()) {
             if (args.length == 0) {
                 return "What do you wanna reset? [catch|daily|bonus]";
@@ -22,18 +22,15 @@ public class ResetCommand implements CommandExecutor {
                     if (mention.size() == 0) {
                         if (Sqlite.resetCatchTimestamp()) {
                             return "Catch time has been reset";
-                        }
-                        else {
+                        } else {
                             return "Error occurred";
                         }
-                    }
-                    else {
+                    } else {
                         for (User users : mention) {
-                            if(Sqlite.resetCatchTimestamp(users)) {
+                            if (Sqlite.resetCatchTimestamp(users)) {
                                 sb.append(users.getName())
                                         .append(" got his catch time reset\n");
-                            }
-                            else {
+                            } else {
                                 sb.append(users.getName())
                                         .append(": error occurred. . .\n");
                             }
@@ -44,18 +41,15 @@ public class ResetCommand implements CommandExecutor {
                     if (mention.size() == 0) {
                         if (Sqlite.resetDailyTimestamp()) {
                             return "Daily time has been reset";
-                        }
-                        else {
+                        } else {
                             return "Error occurred";
                         }
-                    }
-                    else {
+                    } else {
                         for (User users : mention) {
-                            if(Sqlite.resetDailyTimestamp(users)) {
+                            if (Sqlite.resetDailyTimestamp(users)) {
                                 sb.append(users.getName())
                                         .append(" got his daily time reset\n");
-                            }
-                            else {
+                            } else {
                                 sb.append(users.getName())
                                         .append(": error occurred. . .\n");
                             }
@@ -66,18 +60,15 @@ public class ResetCommand implements CommandExecutor {
                     if (mention.size() == 0) {
                         if (Sqlite.resetBonusTimestamp()) {
                             return "Bonus time has been reset";
-                        }
-                        else {
+                        } else {
                             return "Error occurred";
                         }
-                    }
-                    else {
+                    } else {
                         for (User users : mention) {
-                            if(Sqlite.resetBonusTimestamp(users)) {
+                            if (Sqlite.resetBonusTimestamp(users)) {
                                 sb.append(users.getName())
                                         .append(" got his bonus time reset\n");
-                            }
-                            else {
+                            } else {
                                 sb.append(users.getName())
                                         .append(": error occurred. . .\n");
                             }

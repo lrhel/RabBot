@@ -1,19 +1,21 @@
 package com.github.lrhel.rabbot.command.pokemon;
 
-import de.btobastian.sdcf4j.Command;
-import de.btobastian.sdcf4j.CommandExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
+
+import de.kaleidox.javacord.util.commands.Command;
+
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.util.event.ListenerManager;
 
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
-
-public class TradeCommand implements CommandExecutor {
-    @Command(aliases = {"trade"}, description = "Trade Pokemon", async = true)
+public class TradeCommand {
+    @Command(aliases = {"trade"}, description = "Trade Pokemon")
     public void onTradeCommand(User user, TextChannel textChannel) {
-        if(user.isBot()) { return; }
+        if (user.isBot()) {
+            return;
+        }
 
         AtomicReference<Boolean> response = new AtomicReference<>(false);
         AtomicReference<Boolean> response1 = new AtomicReference<>(false);
@@ -45,7 +47,8 @@ public class TradeCommand implements CommandExecutor {
                     pkmnA.set(Integer.parseInt(message.getContent()));
                     response1.set(true);
                     lm.get().remove();
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                }
             }
         }).removeAfter(5, TimeUnit.MINUTES));
         lm.get().addRemoveHandler(() -> response.set(true));
@@ -61,7 +64,8 @@ public class TradeCommand implements CommandExecutor {
                     pkmnB.set(Integer.parseInt(message.getContent()));
                     response2.set(true);
                     lm.get().remove();
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                }
             }
         }).removeAfter(5, TimeUnit.MINUTES));
         lm.get().addRemoveHandler(() -> response.set(true));
@@ -71,6 +75,9 @@ public class TradeCommand implements CommandExecutor {
 
         try {
             RabbotPokemon.tradePokemon(user, pkmnA.get(), userToTrade.get(), pkmnB.get());
-        } catch (Exception e) { e.printStackTrace(); textChannel.sendMessage("something went wrong"); }
+        } catch (Exception e) {
+            e.printStackTrace();
+            textChannel.sendMessage("something went wrong");
+        }
     }
 }

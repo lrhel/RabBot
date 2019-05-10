@@ -1,17 +1,16 @@
 package com.github.lrhel.rabbot.command.misc;
 
-import de.btobastian.sdcf4j.Command;
-import de.btobastian.sdcf4j.CommandExecutor;
-
 import java.util.ArrayList;
 import java.util.Random;
 
+import de.kaleidox.javacord.util.commands.Command;
 
-public class VoteCommand implements CommandExecutor {
+
+public class VoteCommand {
     public static String voteLink = "https://discordbots.org/bot/441010449757110273/vote";
 
-    @Command(aliases = {"vote"})
-    public String onVoteCommand() {
+    @Command
+    public String vote() {
         ArrayList<String> slogan = new ArrayList<>();
         slogan.add("Yeahhh Vote for RabBot ");
         slogan.add("RabBot 4 President ");

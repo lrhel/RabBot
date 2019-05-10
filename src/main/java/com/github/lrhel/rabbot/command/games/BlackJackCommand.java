@@ -1,32 +1,31 @@
 package com.github.lrhel.rabbot.command.games;
 
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
+
+import de.kaleidox.javacord.util.commands.Command;
+
 import com.github.lrhel.rabbot.Cards;
 import com.github.lrhel.rabbot.Money;
 import com.github.lrhel.rabbot.utility.ExtendedBoolean;
-import de.btobastian.sdcf4j.Command;
-import de.btobastian.sdcf4j.CommandExecutor;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.util.event.ListenerManager;
 
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
+public enum BlackJackCommand {
+    INSTANCE;
 
-public class BlackJackCommand implements CommandExecutor {
     private static final int INTERVAL = 30 * 1000;
     private static ArrayList<User> using = new ArrayList<>();
 
-
-    private static EmbedBuilder getEmbed(){
-        return new EmbedBuilder().setAuthor("BlackJack 21", "", "");
-    }
-
-    @Command(aliases = {"blackjack", "21", "bj"}, description = "BlackJack 21", async = true)
+    @Command(aliases = {"blackjack", "21", "bj"}, description = "BlackJack 21")
     public String onBlackJackCommand(User user, TextChannel textChannel, String[] arg, DiscordApi api) {
-        if (user.isBot()) { return ""; }
+        if (user.isBot()) {
+            return "";
+        }
 
         int amounts;
         Cards deck = new Cards();
@@ -39,7 +38,7 @@ public class BlackJackCommand implements CommandExecutor {
         ExtendedBoolean canDouble = new ExtendedBoolean(false);
         StringBuilder options = new StringBuilder();
 
-        if(arg.length > 1) {
+        if (arg.length > 1) {
             System.out.println(user.getName() + ": Blackjack: arg lenght not 1, value: " + arg.length);
 
             return showHelp();
@@ -55,14 +54,14 @@ public class BlackJackCommand implements CommandExecutor {
             return "Try with a positive amount";
         } else if (amount > Money.getMoney(user)) {
             System.out.println(user.getName() + ": Blackjack: not enough money");
-            if(Money.getMoney(user) <= 0) {
+            if (Money.getMoney(user) <= 0) {
                 Money.setMoney(user, 0, 0);
                 return "Not enough money, try the **daily** command";
             }
             return "Not enough money, try a smaller amount";
         }
 
-        if(using.contains(user))
+        if (using.contains(user))
             return "";
         else
             using.add(user);
@@ -78,13 +77,13 @@ public class BlackJackCommand implements CommandExecutor {
         players.get(0).add(deck.draw());
 
         options.append("**`Hit`** **`Stand`**");
-        if(Money.getMoney(user) >= amount) {
+        if (Money.getMoney(user) >= amount) {
             options.append(" **`Double`**");
             canDouble.set(true);
         }
 
         //Check for split
-        if(players.get(0).sameCardsInHand()) {
+        if (players.get(0).sameCardsInHand()) {
             options.append(" **`Split`**");
             canSplit.set(true);
         }
@@ -117,12 +116,10 @@ public class BlackJackCommand implements CommandExecutor {
                         textChannel.sendMessage("**`Hit`** **`Stand`**");
                     }
 
-                }
-                else if (e.getMessage().getContent().equalsIgnoreCase("stand")) {
+                } else if (e.getMessage().getContent().equalsIgnoreCase("stand")) {
                     stand.set(true);
                     lm.get().remove();
-                }
-                else if (canSplit.is() && splitted.isNot() && e.getMessage().getContent().equalsIgnoreCase("split")) {
+                } else if (canSplit.is() && splitted.isNot() && e.getMessage().getContent().equalsIgnoreCase("split")) {
                     Money.removeMoney(user, amount);
                     players.add(players.get(0).split());
                     for (Player ply : players)
@@ -136,7 +133,7 @@ public class BlackJackCommand implements CommandExecutor {
                     splitted.set(true);
                 }
                 //doubling
-                else if(canDouble.is() && e.getMessage().getContent().equalsIgnoreCase("double")) {
+                else if (canDouble.is() && e.getMessage().getContent().equalsIgnoreCase("double")) {
                     Money.removeMoney(user, amount);
                     players.get(0).add(deck.draw());
                     doubling.set(true);
@@ -153,7 +150,7 @@ public class BlackJackCommand implements CommandExecutor {
         lm.get().remove();
 
         //if splitted
-        if(splitted.is()) {
+        if (splitted.is()) {
             EmbedBuilder embed = bank.addEmbed(getEmbed());
             for (Player ply : players) {
                 embed = ply.addEmbed(embed);
@@ -208,7 +205,6 @@ public class BlackJackCommand implements CommandExecutor {
         }
 
 
-
         EmbedBuilder embed = bank.addEmbed(getEmbed());
         for (Player ply : players) {
             embed = ply.addEmbed(embed);
@@ -222,14 +218,14 @@ public class BlackJackCommand implements CommandExecutor {
         StringBuilder winner = new StringBuilder();
 
 
-        for(Player ply : players) {
+        for (Player ply : players) {
             int playerGame = ply.getTotalValue();
 
             winner.append(ply.getName());
             winner.append(" game: ");
             if (playerGame > 21) {
                 winner.append("You lose!");
-            } else if((playerGame == 21) && ((bankGame < 21) || (bankGame > 21)) && splitted.isNot() && (ply.getHandCards() == 2)) {
+            } else if ((playerGame == 21) && ((bankGame < 21) || (bankGame > 21)) && splitted.isNot() && (ply.getHandCards() == 2)) {
                 winner.append("You win! [BlackJack]");
                 totalWin += amount * 3;
             } else if (playerGame == bankGame) {
@@ -237,8 +233,7 @@ public class BlackJackCommand implements CommandExecutor {
                     if (bank.getHandCards() == 2) {
                         winner.append("Draw!");
                         totalWin += amount;
-                    }
-                    else {
+                    } else {
                         winner.append("You win! [BlackJack]");
                         totalWin += amount * 3;
                     }
@@ -257,7 +252,7 @@ public class BlackJackCommand implements CommandExecutor {
             }
             winner.append("\n");
         }
-        if(doubling.is()) {
+        if (doubling.is()) {
             totalWin *= 2;
         }
         winner.append("Total win: **");
@@ -272,6 +267,9 @@ public class BlackJackCommand implements CommandExecutor {
         return "**Usage:**\n```Rb.blackjack [amount]```";
     }
 
+    private static EmbedBuilder getEmbed() {
+        return new EmbedBuilder().setAuthor("BlackJack 21", "", "");
+    }
 
     private class Player {
         private ArrayList<Cards.Card> hand;
@@ -284,6 +282,17 @@ public class BlackJackCommand implements CommandExecutor {
         Player(String username) {
             this();
             this.name = username;
+        }
+
+        @Override
+        public synchronized String toString() {
+            StringBuilder string = new StringBuilder();
+
+            for (Cards.Card card : hand) {
+                string.append(card.toString());
+                string.append("\n");
+            }
+            return string.toString();
         }
 
         void add(Cards.Card card) {
@@ -316,29 +325,17 @@ public class BlackJackCommand implements CommandExecutor {
         }
 
         boolean sameCardsInHand() {
-            if(this.getHandCards() == 2)
+            if (this.getHandCards() == 2)
                 return this.hand.get(0).getValue() == this.hand.get(1).getValue();
             return false;
         }
-
 
         String getName() {
             return name;
         }
 
         synchronized EmbedBuilder addEmbed(EmbedBuilder embedBuilder) {
-            return embedBuilder.addField(this.getName() + "'s hand", this.toString() + "\n").addInlineField("Total: " + String.valueOf(this.getTotalValue()), "\u200b");
-        }
-
-        @Override
-        public synchronized String toString(){
-            StringBuilder string = new StringBuilder();
-
-            for(Cards.Card card : hand) {
-                string.append(card.toString());
-                string.append("\n");
-            }
-            return string.toString();
+            return embedBuilder.addField(this.getName() + "'s hand", this.toString() + "\n").addInlineField("Total: " + this.getTotalValue(), "\u200b");
         }
 
     }

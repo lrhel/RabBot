@@ -1,13 +1,13 @@
 package com.github.lrhel.rabbot.command.admin;
 
+import de.kaleidox.javacord.util.commands.Command;
+
 import com.github.lrhel.rabbot.Main;
-import de.btobastian.sdcf4j.Command;
-import de.btobastian.sdcf4j.CommandExecutor;
 import org.discordbots.api.client.DiscordBotListAPI;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.user.User;
 
-public class SetServerCountCommand implements CommandExecutor {
+public class SetServerCountCommand {
     DiscordApi api;
     DiscordBotListAPI dblapi;
 
@@ -16,11 +16,13 @@ public class SetServerCountCommand implements CommandExecutor {
         this.api = api;
     }
 
-    @Command(aliases = {"setservercount"})
-    public String onSetServerCountCommand(User user) {
-        if (user.isBot()) { return ""; }
+    @Command
+    public String setservercount(User user) {
+        if (user.isBot()) {
+            return "";
+        }
 
-        if(user.isBotOwner()) {
+        if (user.isBotOwner()) {
             Main.postServerCount(dblapi, api);
             return "Done";
         }

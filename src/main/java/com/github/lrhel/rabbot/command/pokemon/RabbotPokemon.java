@@ -1,16 +1,17 @@
 package com.github.lrhel.rabbot.command.pokemon;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.LinkedHashMap;
+import java.util.Optional;
+
 import com.github.lrhel.rabbot.sqlite.Sqlite;
 import me.sargunvohra.lib.pokekotlin.client.PokeApi;
 import me.sargunvohra.lib.pokekotlin.client.PokeApiClient;
 import me.sargunvohra.lib.pokekotlin.model.Pokemon;
 import me.sargunvohra.lib.pokekotlin.model.PokemonSpeciesFlavorText;
 import org.javacord.api.entity.user.User;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
 
 import static com.github.lrhel.rabbot.sqlite.Sqlite.getTimestampFromSql;
 import static com.github.lrhel.rabbot.utility.Utility.firstUpper;
@@ -31,6 +32,26 @@ public class RabbotPokemon {
         this.pokedex = pokedex;
     }
 
+    public int getPokemonId() {
+        return pokemonId;
+    }
+
+    public String getPokemonName() {
+        return pokemonName;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public String getImageShiny() {
+        return imageShiny;
+    }
+
+    public String getPokedex() {
+        return pokedex;
+    }
+
     public static RabbotPokemon getPokemon(int id) {
         String sql = "SELECT pkmn, pkmn_name, image, image_shiny, pokedex " +
                 "FROM catch WHERE pkmn = ? AND pkmn_name NOT LIKE '%Shiny%'" +
@@ -39,7 +60,7 @@ public class RabbotPokemon {
             PreparedStatement preparedStatement = Sqlite.getInstance().getConnection().prepareStatement(sql);
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 String pkmnName = resultSet.getString("pkmn_name");
                 String image = resultSet.getString("image");
                 String imageShiny = resultSet.getString("image_shiny");
@@ -48,7 +69,10 @@ public class RabbotPokemon {
             } else {
                 return null;
             }
-        } catch (Exception ignored) { ignored.printStackTrace();return null; }
+        } catch (Exception ignored) {
+            ignored.printStackTrace();
+            return null;
+        }
     }
 
     public static void tradePokemon(User userA, int idA, User userB, int idB) throws SQLException {
@@ -71,14 +95,14 @@ public class RabbotPokemon {
                 preparedStatement.setString(1, userA.getIdAsString());
                 preparedStatement.setInt(2, idA);
                 ResultSet rs = preparedStatement.executeQuery();
-                if(rs.next()) {
+                if (rs.next()) {
                     pkmnIdA = rs.getInt("id");
                     sql = "SELECT id FROM catch WHERE discord_id = ? and pkmn = ?";
                     preparedStatement = Sqlite.getInstance().getConnection().prepareStatement(sql);
                     preparedStatement.setString(1, userB.getIdAsString());
                     preparedStatement.setInt(2, idB);
                     rs = preparedStatement.executeQuery();
-                    if(rs.next()) {
+                    if (rs.next()) {
                         pkmnIdB = rs.getInt("id");
 
                         sql = "UPDATE catch SET discord_id = ? WHERE id = ?";
@@ -158,15 +182,15 @@ public class RabbotPokemon {
         addPokemon(user, pokemon, false);
     }
 
-    public static int totalCatchedPokemon(User user) throws  SQLException {
-        String sql  = "SELECT COUNT(*) as count FROM catch WHERE discord_id = ?";
+    public static int totalCatchedPokemon(User user) throws SQLException {
+        String sql = "SELECT COUNT(*) as count FROM catch WHERE discord_id = ?";
         PreparedStatement preparedStatement = Sqlite.getInstance().getConnection().prepareStatement(sql);
         preparedStatement.setString(1, user.getIdAsString());
         return preparedStatement.executeQuery().getInt("count");
     }
 
     public static int totalCatchedPokemon() throws SQLException {
-        String sql  = "SELECT COUNT(*) as count FROM catch";
+        String sql = "SELECT COUNT(*) as count FROM catch";
         PreparedStatement preparedStatement = Sqlite.getInstance().getConnection().prepareStatement(sql);
         return preparedStatement.executeQuery().getInt("count");
     }
@@ -178,7 +202,7 @@ public class RabbotPokemon {
     }
 
     public static int totalUniqueCatchedPokemon(User user) throws SQLException {
-        String sql  = "SELECT COUNT(DISTINCT PKMN) as count FROM catch WHERE discord_id = ?";
+        String sql = "SELECT COUNT(DISTINCT PKMN) as count FROM catch WHERE discord_id = ?";
         PreparedStatement preparedStatement = Sqlite.getInstance().getConnection().prepareStatement(sql);
         preparedStatement.setString(1, user.getIdAsString());
         return preparedStatement.executeQuery().getInt("count");
@@ -191,7 +215,7 @@ public class RabbotPokemon {
     }
 
     public static int totalUniqueCatchedShinyPokemon(User user) throws SQLException {
-        String sql  = "SELECT COUNT(DISTINCT PKMN) as count FROM catch WHERE discord_id = ? AND pkmn_name LIKE 'Shiny%'";
+        String sql = "SELECT COUNT(DISTINCT PKMN) as count FROM catch WHERE discord_id = ? AND pkmn_name LIKE 'Shiny%'";
         PreparedStatement preparedStatement = Sqlite.getInstance().getConnection().prepareStatement(sql);
         preparedStatement.setString(1, user.getIdAsString());
         return preparedStatement.executeQuery().getInt("count");
@@ -217,26 +241,6 @@ public class RabbotPokemon {
         return rabbotPokemonIntegerMap;
     }
 
-    public int getPokemonId() {
-        return pokemonId;
-    }
-
-    public String getPokemonName() {
-        return pokemonName;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public String getImageShiny() {
-        return imageShiny;
-    }
-
-    public String getPokedex() {
-        return pokedex;
-    }
-
     /*
      * Get the timestamp of the last time the given user used the pokemon command
      * @param user
@@ -244,7 +248,7 @@ public class RabbotPokemon {
      */
     public static int getTimestamp(User user) {
         String sql = "SELECT * FROM catch WHERE discord_id = ? ORDER BY id DESC LIMIT 0, 1";
-        return getTimestampFromSql(user,  sql);
+        return getTimestampFromSql(user, sql);
     }
 
     public static class RabbotPokemonBuilder {

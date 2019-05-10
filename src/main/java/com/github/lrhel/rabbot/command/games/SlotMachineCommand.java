@@ -1,21 +1,21 @@
 package com.github.lrhel.rabbot.command.games;
 
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+import de.kaleidox.javacord.util.commands.Command;
+
 import com.github.lrhel.rabbot.Money;
-import de.btobastian.sdcf4j.Command;
-import de.btobastian.sdcf4j.CommandExecutor;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.user.User;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-
 import static com.github.lrhel.rabbot.utility.Utility.getMessageDeleter;
 
-public class SlotMachineCommand implements CommandExecutor {
-    private static String[] array =  {
+public class SlotMachineCommand {
+    private static String[] array = {
             ":game_die:", ":trophy:", ":slot_machine:", ":rabbit:", ":zap:",
             ":zap:", ":zap:", ":zap:", ":zap:", ":zap:", ":zap:", ":zap:", ":zap:", ":zap:", ":zap:", ":zap:",
             ":zap:", ":zap:", ":zap:", ":zap:", ":zap:", ":zap:", ":zap:", ":zap:", ":zap:", ":zap:", ":zap:",
@@ -53,21 +53,23 @@ public class SlotMachineCommand implements CommandExecutor {
 
     private static ArrayList<User> isPlaying = new ArrayList<>();
 
-    @Command(aliases = {"slotmachine", "slot", "spin", "slots"}, description = "Slotmachine 7 7 7", async = true)
+    @Command(aliases = {"slotmachine", "slot", "spin", "slots"}, description = "Slotmachine 7 7 7")
     public String onSlotMachineCommand(User user, TextChannel textChannel, String[] arg) {
-        if (user.isBot()) { return ""; }
+        if (user.isBot()) {
+            return "";
+        }
 
         int amount;
         int option;
 
-        if(isPlaying.contains(user)) {
+        if (isPlaying.contains(user)) {
             return "";
         }
 
-        if(arg.length > 1) {
+        if (arg.length > 1) {
             return showHelp();
         }
-        if(arg.length > 0 && arg[0].equalsIgnoreCase("help")) {
+        if (arg.length > 0 && arg[0].equalsIgnoreCase("help")) {
             return showHelp();
         }
 
@@ -79,7 +81,7 @@ public class SlotMachineCommand implements CommandExecutor {
 
         option = 3;
 
-        if(Money.getMoney(user) < amount) {
+        if (Money.getMoney(user) < amount) {
             textChannel.sendMessage("Not enough money. . .").thenAccept(getMessageDeleter(5, TimeUnit.SECONDS));
             return "";
         }
@@ -100,7 +102,8 @@ public class SlotMachineCommand implements CommandExecutor {
 
         try {
             Thread.sleep(750);
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
 
         slotMachine.spin();
 
@@ -114,7 +117,8 @@ public class SlotMachineCommand implements CommandExecutor {
 
         try {
             Thread.sleep(750);
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
 
         slotMachine.spin();
 
@@ -127,11 +131,10 @@ public class SlotMachineCommand implements CommandExecutor {
         message.edit(messageBuilder.getStringBuilder().toString()).join();
 
         int win = slotMachine.win(option);
-        if(win > 0) {
+        if (win > 0) {
             Money.addMoney(user, amount * win);
             messageBuilder.append("\nYou have won **" + amount * win + "$**");
-        }
-        else {
+        } else {
             messageBuilder.append("You have lost **" + amount + "$**");
         }
 
@@ -175,12 +178,6 @@ public class SlotMachineCommand implements CommandExecutor {
             pointerBand3 = rng.nextInt(10);
         }
 
-        private void fillBand(ArrayList<String> band) {
-            for(int i = 0; i < 10; i++) {
-                band.add(i, array[rng.nextInt(array.length)]);
-            }
-        }
-
         public String toString() {
             StringBuilder sb = new StringBuilder();
 
@@ -204,17 +201,17 @@ public class SlotMachineCommand implements CommandExecutor {
         }
 
         /**
-         *
          * @param option 1 = only line 2
          *               2 = line 1 2 3
          *               3 = line 1 2 3 + diagonal
+         *
          * @return multiplicator of the win
          */
         public int win(int option) {
             int multiplicator = 0;
             switch (option) {
                 case 3:
-                    if(band1.get(pointerBand1).equalsIgnoreCase(band2.get((pointerBand2 + 1) % 10))
+                    if (band1.get(pointerBand1).equalsIgnoreCase(band2.get((pointerBand2 + 1) % 10))
                             && band2.get((pointerBand2 + 1) % 10).equalsIgnoreCase(band3.get((pointerBand3 + 2) % 10))
                     ) {
                         multiplicator += gain(band1.get(pointerBand1));
@@ -225,24 +222,30 @@ public class SlotMachineCommand implements CommandExecutor {
                         multiplicator += gain(band3.get(pointerBand3));
                     }
                 case 2:
-                    if(band1.get(pointerBand1).equalsIgnoreCase(band1.get((pointerBand1 + 1) % 10))
+                    if (band1.get(pointerBand1).equalsIgnoreCase(band1.get((pointerBand1 + 1) % 10))
                             && band1.get(pointerBand1).equalsIgnoreCase(band1.get((pointerBand1 + 2) % 10))
                     ) {
                         multiplicator += gain(band1.get(pointerBand1));
                     }
-                    if(band3.get(pointerBand3).equalsIgnoreCase(band3.get((pointerBand3 + 1) % 10))
+                    if (band3.get(pointerBand3).equalsIgnoreCase(band3.get((pointerBand3 + 1) % 10))
                             && band3.get(pointerBand3).equalsIgnoreCase(band3.get((pointerBand3 + 2) % 10))
                     ) {
                         multiplicator += gain(band3.get(pointerBand3));
                     }
                 case 1:
-                    if(band2.get(pointerBand2).equalsIgnoreCase(band2.get((pointerBand2 + 1) % 10))
+                    if (band2.get(pointerBand2).equalsIgnoreCase(band2.get((pointerBand2 + 1) % 10))
                             && band2.get(pointerBand2).equalsIgnoreCase(band2.get((pointerBand2 + 2) % 10))
                     ) {
                         multiplicator += gain(band2.get(pointerBand2));
                     }
                 default:
                     return multiplicator;
+            }
+        }
+
+        private void fillBand(ArrayList<String> band) {
+            for (int i = 0; i < 10; i++) {
+                band.add(i, array[rng.nextInt(array.length)]);
             }
         }
 

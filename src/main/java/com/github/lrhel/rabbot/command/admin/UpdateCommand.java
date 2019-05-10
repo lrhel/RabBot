@@ -1,26 +1,28 @@
 package com.github.lrhel.rabbot.command.admin;
 
-import de.btobastian.sdcf4j.Command;
-import de.btobastian.sdcf4j.CommandExecutor;
-import org.javacord.api.entity.user.User;
-
 import java.io.IOException;
 
-public class UpdateCommand implements CommandExecutor {
-	@Command(aliases = {"update"}, privateMessages = false, description = "Update RabBot!", showInHelpPage = false)
-	public String onUpdateCommand(User user) {
-		if (user.isBot()) { return ""; }
+import de.kaleidox.javacord.util.commands.Command;
 
-		if(user.isBotOwner()) {
-			new Thread(() -> {
-				try {
-					new ProcessBuilder("/bin/sh", "update.sh").start();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}).start();
-			return "Updating... :thinking: :rabbit:";
-		}
-		return "";
-	}
+import org.javacord.api.entity.user.User;
+
+public class UpdateCommand {
+    @Command(enablePrivateChat = false, description = "Update RabBot!", shownInHelpCommand = false)
+    public String updates(User user) {
+        if (user.isBot()) {
+            return "";
+        }
+
+        if (user.isBotOwner()) {
+            new Thread(() -> {
+                try {
+                    new ProcessBuilder("/bin/sh", "update.sh").start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+            return "Updating... :thinking: :rabbit:";
+        }
+        return "";
+    }
 }

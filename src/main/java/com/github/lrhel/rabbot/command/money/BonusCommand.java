@@ -1,11 +1,16 @@
 package com.github.lrhel.rabbot.command.money;
 
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+import de.kaleidox.javacord.util.commands.Command;
+
 import com.github.lrhel.rabbot.Money;
 import com.github.lrhel.rabbot.command.pokemon.RabbotPokemon;
 import com.github.lrhel.rabbot.sqlite.Sqlite;
 import com.github.lrhel.rabbot.utility.Utility;
-import de.btobastian.sdcf4j.Command;
-import de.btobastian.sdcf4j.CommandExecutor;
 import me.sargunvohra.lib.pokekotlin.client.PokeApi;
 import me.sargunvohra.lib.pokekotlin.client.PokeApiClient;
 import me.sargunvohra.lib.pokekotlin.model.Pokemon;
@@ -15,32 +20,28 @@ import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.user.User;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-
 import static com.github.lrhel.rabbot.command.pokemon.PokemonCommand.TOTAL_PKMN;
 import static com.github.lrhel.rabbot.utility.Utility.firstUpper;
 
-public class BonusCommand implements CommandExecutor {
-    private DiscordBotListAPI discordBotListAPI;
+public class BonusCommand {
     private static int INTERVAL = 4 * 60 * 60 * 1000;
-
     private static ArrayList<User> using = new ArrayList<>(10);
+    private DiscordBotListAPI discordBotListAPI;
 
     public BonusCommand(DiscordBotListAPI dblapi) {
         this.discordBotListAPI = dblapi;
     }
 
-    @Command(aliases = {"bonus"}, description = "Bonus if you voted the Bot", async = true)
-    public void onBonusCommand(User user, TextChannel textChannel, DiscordApi api) {
-        if (user.isBot()) { return ; }
+    @Command(description = "Bonus if you voted the Bot")
+    public void bonus(User user, TextChannel textChannel, DiscordApi api) {
+        if (user.isBot()) {
+            return;
+        }
 
         int timestamp = Money.getBonusTimestamp(user);
         int now = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
 
-        if(using.contains(user)) {
+        if (using.contains(user)) {
             return;
         }
 
@@ -75,13 +76,14 @@ public class BonusCommand implements CommandExecutor {
                         stringBuilder.append("and a Shiny ").append(firstUpper(pokemon.getName()));
                         RabbotPokemon.addPokemon(user, pokemon, true);
                         embedBuilder.setThumbnail(pokemon.getSprites().getFrontShiny());
-                    } catch (Exception e) { }
-                }
-                else {
+                    } catch (Exception e) {
+                    }
+                } else {
                     stringBuilder.append("and a Shiny ").append(firstUpper(rabbotPokemon.getPokemonName()));
                     try {
                         RabbotPokemon.addPokemon(user, rabbotPokemon, true);
-                    } catch (Exception e) { }
+                    } catch (Exception e) {
+                    }
                     embedBuilder.setThumbnail(rabbotPokemon.getImageShiny());
                 }
                 embedBuilder.setAuthor("RabBot's Bonus", "https://discordbots.org/bot/441010449757110273", api.getYourself().getAvatar())

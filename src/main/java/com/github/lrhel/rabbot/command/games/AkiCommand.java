@@ -1,13 +1,18 @@
 package com.github.lrhel.rabbot.command.games;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
+
+import de.kaleidox.javacord.util.commands.Command;
+
 import com.github.lrhel.rabbot.utility.ExtendedBoolean;
 import com.markozajc.akiwrapper.Akiwrapper;
 import com.markozajc.akiwrapper.AkiwrapperBuilder;
 import com.markozajc.akiwrapper.core.entities.Guess;
 import com.markozajc.akiwrapper.core.entities.Question;
 import com.markozajc.akiwrapper.core.entities.Server;
-import de.btobastian.sdcf4j.Command;
-import de.btobastian.sdcf4j.CommandExecutor;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.channel.TextChannel;
@@ -15,19 +20,15 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.util.event.ListenerManager;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
-
-public class AkiCommand implements CommandExecutor {
+public class AkiCommand {
     private static ArrayList<User> using = new ArrayList<>();
 
 
-
-    @Command(aliases = {"akinator", "aki"}, description = "Play with Akinator", async = true)
+    @Command(aliases = {"akinator", "aki"}, description = "Play with Akinator")
     public void onAkiCommand(User user, TextChannel textChannel, String[] arg, DiscordApi api, ServerTextChannel serverTextChannel) {
-        if (user.isBot()) { return ; }
+        if (user.isBot()) {
+            return;
+        }
 
         AkiwrapperBuilder akiwrapperBuilder;
         Akiwrapper aki;
@@ -38,22 +39,21 @@ public class AkiCommand implements CommandExecutor {
         AtomicReference<Question> questionAtomicReference = new AtomicReference<>();
         AtomicReference<ListenerManager> listenerManagerAtomicReference = new AtomicReference<>();
 
-        if(using.contains(user)){
+        if (using.contains(user)) {
             return;
         } else {
             using.add(user);
         }
 
 
-        if(arg.length == 0) {
+        if (arg.length == 0) {
             akiwrapperBuilder = setLanguage("en");
-        }
-        else {
+        } else {
             String language = arg[0].toLowerCase();
             akiwrapperBuilder = setLanguage(language);
         }
 
-        if(serverTextChannel.isNsfw()) {
+        if (serverTextChannel.isNsfw()) {
             akiwrapperBuilder.setFilterProfanity(false);
         } else {
             akiwrapperBuilder.setFilterProfanity(true);
@@ -67,7 +67,7 @@ public class AkiCommand implements CommandExecutor {
 
         /* GAME LOOP */
         while (next.is()) {
-            if(questionCount.get() == 2) {
+            if (questionCount.get() == 2) {
                 using.remove(user);
                 textChannel.sendMessage("```rb.akinator: ended timout```");
                 return;
@@ -75,17 +75,17 @@ public class AkiCommand implements CommandExecutor {
             textChannel.sendMessage(questionAtomicReference.get().getQuestion()).join();
             ExtendedBoolean answered = new ExtendedBoolean(false);
             listenerManagerAtomicReference.set(textChannel.addMessageCreateListener(event -> {
-                if(event.getMessage().getUserAuthor().get().getId() == user.getId()) {
+                if (event.getMessage().getUserAuthor().get().getId() == user.getId()) {
                     try {
                         String content = event.getMessage().getContent().toLowerCase();
-                        if(content.equalsIgnoreCase("stop")) {
+                        if (content.equalsIgnoreCase("stop")) {
                             using.remove(user);
                             answered.set(true);
                             next.set(false);
                             return;
                         }
                         Akiwrapper.Answer answer = getAnswer(content);
-                        if(answer != null) {
+                        if (answer != null) {
                             questionAtomicReference.set(aki.answerCurrentQuestion(answer));
                             questionCount.set(0);
                             answered.set(true);
@@ -163,7 +163,7 @@ public class AkiCommand implements CommandExecutor {
                                     || content.equalsIgnoreCase("sim")
                                     || content.equalsIgnoreCase("si")
                                     || content.equalsIgnoreCase("nao")
-                                    ) {
+                            ) {
                                 switch (content) {
                                     case "y":
                                     case "yes":
@@ -206,7 +206,7 @@ public class AkiCommand implements CommandExecutor {
                 return;
             }
             //If the API doesn't have any question
-            if(questionAtomicReference.get() == null) {
+            if (questionAtomicReference.get() == null) {
                 // GUESSING BLOCK
                 try {
                     for (Guess guess : aki.getGuesses()) {
@@ -265,7 +265,7 @@ public class AkiCommand implements CommandExecutor {
                                         || content.equalsIgnoreCase("sim")
                                         || content.equalsIgnoreCase("si")
                                         || content.equalsIgnoreCase("nao")
-                                        ) {
+                                ) {
                                     switch (content) {
                                         case "y":
                                         case "yes":
@@ -333,7 +333,7 @@ public class AkiCommand implements CommandExecutor {
                 || toCheck.equalsIgnoreCase("idk")
                 || toCheck.equalsIgnoreCase("j")
                 || toCheck.equalsIgnoreCase("jsp")
-                ) {
+        ) {
             switch (toCheck) {
                 case "oui":
                 case "yes":
@@ -355,12 +355,10 @@ public class AkiCommand implements CommandExecutor {
                 case "jsp":
                     return Akiwrapper.Answer.DONT_KNOW;
             }
-        }
-        else if(toCheck.contains("pro") || toCheck.contains("p")) {
+        } else if (toCheck.contains("pro") || toCheck.contains("p")) {
             if (toCheck.contains("n")) {
                 return Akiwrapper.Answer.PROBABLY_NOT;
-            }
-            else {
+            } else {
                 return Akiwrapper.Answer.PROBABLY;
             }
         }

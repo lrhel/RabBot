@@ -1,11 +1,13 @@
 package com.github.lrhel.rabbot.command.admin;
 
+import java.util.ArrayList;
+
+import de.kaleidox.javacord.util.commands.Command;
+
 import com.github.lrhel.rabbot.Money;
 import com.github.lrhel.rabbot.command.pokemon.RabbotPokemon;
-import com.github.lrhel.rabbot.config.Config;
+import com.github.lrhel.rabbot.config.Const;
 import com.github.lrhel.rabbot.dblApi.DblApi;
-import de.btobastian.sdcf4j.Command;
-import de.btobastian.sdcf4j.CommandExecutor;
 import org.discordbots.api.client.DiscordBotListAPI;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.TextChannel;
@@ -15,23 +17,25 @@ import org.javacord.api.entity.permission.PermissionsBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 
-import java.util.ArrayList;
+import static com.github.lrhel.rabbot.command.pokemon.RabbotPokemon.totalCatchedPokemon;
+import static com.github.lrhel.rabbot.command.pokemon.RabbotPokemon.totalUniqueCatchedPokemon;
+import static com.github.lrhel.rabbot.command.pokemon.RabbotPokemon.totalUniqueCatchedShinyPokemon;
 
-import static com.github.lrhel.rabbot.command.pokemon.RabbotPokemon.*;
-
-public class GetCommand implements CommandExecutor {
+public class GetCommand {
     DiscordBotListAPI discordBotListAPI;
 
     public GetCommand(DiscordBotListAPI api) {
         this.discordBotListAPI = api;
     }
 
-    @Command(aliases = {"get"}, showInHelpPage = false, async = true)
-    public String onGetCommand(User user, String[] arg, DiscordApi api, Message message, TextChannel textChannel){
-        if (user.isBot()) { return ""; }
+    @Command(shownInHelpCommand = false)
+    public String get(User user, String[] arg, DiscordApi api, Message message, TextChannel textChannel) {
+        if (user.isBot()) {
+            return "";
+        }
 
         StringBuilder sb;
-        DblApi dblApi = new DblApi().setId(Config.BOTID.toString());
+        DblApi dblApi = new DblApi().setId(String.valueOf(Const.BOT_ID));
 
         int memberCount = 0;
 
@@ -65,7 +69,7 @@ public class GetCommand implements CommandExecutor {
             case "money":
                 sb = new StringBuilder();
                 for (User usr : message.getMentionedUsers()) {
-                    sb.append(usr.getName()).append(": ").append(String.valueOf(Money.getMoney(usr) + "$\n"));
+                    sb.append(usr.getName()).append(": ").append(Money.getMoney(usr) + "$\n");
                 }
                 return sb.toString();
             case "pokemon":
@@ -85,14 +89,15 @@ public class GetCommand implements CommandExecutor {
                     sb.append("Total unique catch Pokemon: ").append(totalUniqueCatchedPokemon()).append("\n");
                     sb.append("Total unique Shiny catch: ").append(totalUniqueCatchedShinyPokemon()).append("\n");
                     return sb.toString();
-                } catch (Exception ignored) { }
+                } catch (Exception ignored) {
+                }
             case "hasvoted":
                 final StringBuilder stringBuilder = new StringBuilder();
                 try {
                     for (User usr : message.getMentionedUsers()) {
                         stringBuilder.append(usr.getName()).append(": ");
                         discordBotListAPI.hasVoted(usr.getIdAsString()).whenComplete((voted, throwable) -> {
-                            if(voted) {
+                            if (voted) {
                                 textChannel.sendMessage(stringBuilder.append("voted").toString());
                             } else {
                                 textChannel.sendMessage(stringBuilder.append("not voted").toString());
@@ -100,10 +105,11 @@ public class GetCommand implements CommandExecutor {
                         });
                     }
                     return "";
-                } catch (Exception ignored) { }
+                } catch (Exception ignored) {
+                }
             case "members":
             case "member":
-                for(Server server : api.getServers()) {
+                for (Server server : api.getServers()) {
                     memberCount += server.getMemberCount();
                 }
                 return "Total members: " + memberCount;
@@ -120,9 +126,10 @@ public class GetCommand implements CommandExecutor {
                     totalUniqueCatch = RabbotPokemon.totalUniqueCatchedPokemon();
                     totalVotes = dblApi.getPoints();
                     totalVotesMonth = dblApi.getMonthlyPoints();
-                } catch (Exception ignored) { ignored.printStackTrace();}
-
-                for(Server server : api.getServers()) {
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                for (Server server : api.getServers()) {
                     memberCount += server.getMemberCount();
                 }
 

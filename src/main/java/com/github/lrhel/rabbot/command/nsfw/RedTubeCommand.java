@@ -1,25 +1,27 @@
 package com.github.lrhel.rabbot.command.nsfw;
 
+import java.util.concurrent.TimeUnit;
+
+import de.kaleidox.javacord.util.commands.Command;
+
 import com.github.lrhel.rabbot.nsfw.RedTubeApi;
 import com.github.lrhel.rabbot.nsfw.entity.RedTubeVideo;
 import com.github.lrhel.rabbot.utility.Utility;
-import de.btobastian.sdcf4j.Command;
-import de.btobastian.sdcf4j.CommandExecutor;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.user.User;
 
-import java.util.concurrent.TimeUnit;
-
-public class RedTubeCommand implements CommandExecutor {
+public class RedTubeCommand {
     @Command(aliases = {"redtube", "rt"})
     public void onRedTubeCommand(User user, Message message, TextChannel textChannel, String[] args) {
-        if (user.isBot()) { return ; }
+        if (user.isBot()) {
+            return;
+        }
 
-        if(message.getServerTextChannel().isPresent()) { //if send in a server
-            if(!message.getServerTextChannel().get().isNsfw()) { //if it's not labelled nsfw
+        if (message.getServerTextChannel().isPresent()) { //if send in a server
+            if (!message.getServerTextChannel().get().isNsfw()) { //if it's not labelled nsfw
                 return;
             }
         }

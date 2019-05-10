@@ -1,18 +1,20 @@
 package com.github.lrhel.rabbot.command.misc;
 
-import de.btobastian.sdcf4j.Command;
-import de.btobastian.sdcf4j.CommandExecutor;
+import de.kaleidox.javacord.util.commands.Command;
+
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.user.User;
 
-public class EchoCommand implements CommandExecutor {
-	@Command(aliases = {"echo"}, privateMessages = false, description = "Echo what I say!", showInHelpPage = false)
-	public String onEchoCommand(User user, String[] arg, Message msg) {
-		if (user.isBot()) { return ""; }
+public class EchoCommand {
+    @Command(aliases = {"echo"}, enablePrivateChat = false, description = "Echo what I say!", shownInHelpCommand = false)
+    public String onEchoCommand(User user, String[] arg, Message msg) {
+        if (user.isBot()) {
+            return "";
+        }
 
-		if(msg.canYouDelete())
-			msg.delete();
+        if (msg.canYouDelete())
+            msg.delete();
 
-		return String.join(" ", arg);
-	}
+        return String.join(" ", arg);
+    }
 }

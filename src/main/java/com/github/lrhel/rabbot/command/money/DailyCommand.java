@@ -1,20 +1,23 @@
 package com.github.lrhel.rabbot.command.money;
 
-import com.github.lrhel.rabbot.Money;
-import com.github.lrhel.rabbot.utility.Utility;
-import de.btobastian.sdcf4j.Command;
-import de.btobastian.sdcf4j.CommandExecutor;
-import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.user.User;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class DailyCommand implements CommandExecutor {
-    private static final int INTERVAL =  60 * 60 * 1000;
+import de.kaleidox.javacord.util.commands.Command;
 
-    @Command(aliases = {"daily"}, description = "Daily money!")
-    public void onDailyCommand(User user, TextChannel textChannel){
-        if (user.isBot()) { return ; }
+import com.github.lrhel.rabbot.Money;
+import com.github.lrhel.rabbot.utility.Utility;
+import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.user.User;
+
+public class DailyCommand {
+    private static final int INTERVAL = 60 * 60 * 1000;
+
+    @Command(description = "Daily money!")
+    public void daily(User user, TextChannel textChannel) {
+        if (user.isBot()) {
+            return;
+        }
 
         Random rng = new Random(System.currentTimeMillis());
         int totalMoney = Money.getMoney(user);
@@ -22,13 +25,11 @@ public class DailyCommand implements CommandExecutor {
         int now = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
         int money = 0;
 
-        if(rng.nextInt(100) < 20) {
+        if (rng.nextInt(100) < 20) {
             money += 4000;
-        }
-        else if(rng.nextInt(100) < 50) {
+        } else if (rng.nextInt(100) < 50) {
             money += 2000;
-        }
-        else {
+        } else {
             money += 1000;
         }
 

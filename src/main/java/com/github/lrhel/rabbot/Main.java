@@ -1,5 +1,8 @@
 package com.github.lrhel.rabbot;
 
+import de.kaleidox.javacord.util.commands.CommandHandler;
+import de.kaleidox.javacord.util.embed.DefaultEmbedFactory;
+
 import com.github.lrhel.rabbot.command.admin.*;
 import com.github.lrhel.rabbot.command.games.AkiCommand;
 import com.github.lrhel.rabbot.command.games.BlackJackCommand;
@@ -18,9 +21,7 @@ import com.github.lrhel.rabbot.command.nsfw.YouPornCommand;
 import com.github.lrhel.rabbot.command.pokemon.DuplicateCommand;
 import com.github.lrhel.rabbot.command.pokemon.InventoryCommand;
 import com.github.lrhel.rabbot.command.pokemon.PokemonCommand;
-import com.github.lrhel.rabbot.config.Config;
-import de.btobastian.sdcf4j.CommandHandler;
-import de.btobastian.sdcf4j.handler.JavacordHandler;
+import com.github.lrhel.rabbot.config.Const;
 import okhttp3.*;
 import org.discordbots.api.client.DiscordBotListAPI;
 import org.javacord.api.DiscordApi;
@@ -33,27 +34,30 @@ import org.javacord.api.util.logging.FallbackLoggerConfiguration;
 public class Main {
 
     public static void main(String[] args) {
-
         //set logger and tracer
         FallbackLoggerConfiguration.setDebug(true);
         FallbackLoggerConfiguration.setTrace(false);
 
-        DiscordApi api = new DiscordApiBuilder().setToken(Config.DISCORD.toString()).login().join();
+        DiscordApi api = new DiscordApiBuilder().setToken(Const.TOKEN).login().join();
         System.out.println("Logged in!");
         System.out.println(api.createBotInvite(new PermissionsBuilder().setAllowed(
-                PermissionType.READ_MESSAGES, PermissionType.ATTACH_FILE,
-                PermissionType.SEND_MESSAGES, PermissionType.EMBED_LINKS,
-                PermissionType.ADD_REACTIONS, PermissionType.READ_MESSAGE_HISTORY
+                PermissionType.READ_MESSAGES,
+                PermissionType.ATTACH_FILE,
+                PermissionType.SEND_MESSAGES,
+                PermissionType.EMBED_LINKS,
+                PermissionType.ADD_REACTIONS,
+                PermissionType.READ_MESSAGE_HISTORY
         ).build()));
 
         DiscordBotListAPI discordBotListAPI = new DiscordBotListAPI.Builder()
-                .token(Config.DISCORDLIST.toString())
-                .botId(Config.BOTID.toString())
+                .token(Const.DISCORDLIST.toString())
+                .botId(Const.BOTID.toString())
                 .build();
 
         //Command Handler & Option
-        CommandHandler cmd = new JavacordHandler(api);
-        cmd.setDefaultPrefix("rb.");
+        CommandHandler cmd = new CommandHandler(api);
+        cmd.prefixes = new String[]{"rb."};
+        cmd.useDefaultHelp(null); // null to use DefaultEmbedFactory class
         api.updateActivity("rb.help");
 
         //Information
