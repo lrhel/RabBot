@@ -15,9 +15,7 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.util.event.ListenerManager;
 
-public enum BlackJackCommand {
-    INSTANCE;
-
+public class BlackJackCommand {
     private static final int INTERVAL = 30 * 1000;
     private static ArrayList<User> using = new ArrayList<>();
 
